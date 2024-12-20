@@ -99,6 +99,11 @@ void Game::RenderWalls(uint32_t currentImage)
 
 void Game::RenderLights(uint32_t currentImage)
 {
+	for (int i = 0; i < numOfLights; i++)
+	{
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(LightPositions[i].x, 0, LightPositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(LightRotationsX[i]), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1), glm::vec3(1.0f));
+		SetUboDs(currentImage, uboLights, DSLights, i);
+	}
 }
 
 void Game::RenderTowers(uint32_t currentImage)

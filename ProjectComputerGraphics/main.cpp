@@ -52,7 +52,7 @@ protected:
 	static const int numOfBushes = 400;
 	static const int numOfCastle = 1;
 	static const int numOfWalls = 4;
-	static const int numOfTowers = 2; 
+	static const int numOfTowers = 2;
 	static const int numOfLights = 12;
 	static const int numOfBiggerHouses = 6;
 	static const int numOfDoubleHouses = 2;
@@ -75,17 +75,17 @@ protected:
 	Texture TCharacter, TGround, TMedieval, TStone, TBush, TStartPanel;
 
 	// Descriptor sets
-	DescriptorSet DSGubo, DSCharacter, DSGround[4], DSHouses[numOfHouses], 
-				  DSAngleHouses[numOfAngleHouses], DSStones[numOfStones], DSBushes[numOfBushes],
-				  DSCastle[numOfCastle], DSWalls[numOfWalls], DSTowers[numOfTowers], DSLights[numOfLights],
-				  DSBiggerHouses[numOfBiggerHouses], DSDoubleHouses[numOfDoubleHouses], DSStartPanel;
+	DescriptorSet DSGubo, DSCharacter, DSGround[4], DSHouses[numOfHouses],
+		DSAngleHouses[numOfAngleHouses], DSStones[numOfStones], DSBushes[numOfBushes],
+		DSCastle[numOfCastle], DSWalls[numOfWalls], DSTowers[numOfTowers], DSLights[numOfLights],
+		DSBiggerHouses[numOfBiggerHouses], DSDoubleHouses[numOfDoubleHouses], DSStartPanel;
 
 	// Uniform Blocks //altri ?
 	GlobalUniformBlock gubo;
-	MeshUniformBlock uboCharacter, uboGround[4], uboHouses[numOfHouses], 
-					 uboAngleHouses[numOfAngleHouses], uboStones[numOfStones], uboBushes[numOfBushes], uboCastle[numOfCastle],
-					 uboWalls[numOfWalls], uboTowers[numOfTowers], uboLights[numOfLights], uboBiggerHouses[numOfBiggerHouses],
-					 uboDoubleHouses[numOfDoubleHouses];
+	MeshUniformBlock uboCharacter, uboGround[4], uboHouses[numOfHouses],
+		uboAngleHouses[numOfAngleHouses], uboStones[numOfStones], uboBushes[numOfBushes], uboCastle[numOfCastle],
+		uboWalls[numOfWalls], uboTowers[numOfTowers], uboLights[numOfLights], uboBiggerHouses[numOfBiggerHouses],
+		uboDoubleHouses[numOfDoubleHouses];
 	OverlayUniformBlock uboStartPanel;
 
 	// Text
@@ -102,7 +102,7 @@ protected:
 	glm::vec2 groundPositions[4] = { {-1, -1}, {-1, 0}, {0, -1}, {0, 0} };
 
 	glm::vec2 HousePositions[numOfHouses];
-	float HouseVisible[numOfHouses]; 
+	float HouseVisible[numOfHouses];
 	float HouseRotationsX[numOfHouses];
 	float HouseRotationsZ[numOfHouses];
 
@@ -123,7 +123,8 @@ protected:
 	float WallRotationsX[numOfWalls];
 	float WallRotationsZ[numOfWalls];
 
-	glm::vec2 LightPosition[numOfLights];
+	glm::vec2 LightPositions[numOfLights];
+	float LightRotationsX[numOfLights];
 
 	glm::vec2 TowerPositions[numOfTowers];
 	float TowerRotationsX[numOfWalls];
@@ -135,7 +136,7 @@ protected:
 
 
 
-	
+
 
 	////Jump params
 	//	bool isJumping = FALSE;
@@ -149,7 +150,7 @@ protected:
 	//	float VpickJump = VpickJumpIni;
 	//	float gAnimation = -10.0f;
 	//	int animationCounter = 0;
-	
+
 	// Collision Parameters ??
 	bool xCollision = false, yCollision = false, isCollision = false;
 	int thresholdIndex = 0;
@@ -185,8 +186,8 @@ protected:
 	void setDescriptorPool()
 	{
 		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses) * 2 + 4 + 1;
-		texturesInPool = 6 + 1 ;
-		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + 4 + 1 ;
+		texturesInPool = 6 + 1;
+		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + 4 + 1;
 	}
 
 	void localInit()
@@ -422,7 +423,7 @@ protected:
 		TMedieval.cleanup();
 		TStone.cleanup();
 		TBush.cleanup();
-		
+
 		TStartPanel.cleanup();
 		/*TEndPanel.cleanup();
 		TLosePanel.cleanup();
@@ -661,7 +662,7 @@ protected:
 		RenderCharacter(currentImage);
 		RenderEnvironment(currentImage);
 	}
-	
+
 	void CreateOverlayMesh(std::vector<VertexOverlay>& vDef, std::vector<uint32_t>& vIdx, float left = -1.0f, float right = 1.0f, float top = 1.0f, float bottom = -1.0f);
 	void RenderCharacter(uint32_t currentImage);
 	void RenderEnvironment(uint32_t currentImage);
@@ -677,7 +678,7 @@ protected:
 	void RenderDoubleHouses(uint32_t currentImage);
 	void RenderBiggerHouses(uint32_t currentImage);
 	/*cosa fa?*/void SetUboDs(uint32_t currentImage, MeshUniformBlock ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
-					float gamma = 80.0f, glm::vec3 sColor = glm::vec3(1.0f));
+		float gamma = 80.0f, glm::vec3 sColor = glm::vec3(1.0f));
 	void ObjectsParameters();
 	void Spectate();
 	void PlayerController(uint32_t currentImage);

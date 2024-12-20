@@ -20,8 +20,8 @@ void Game::Spectate()
 	bool fire = false;
 	getSixAxis(deltaT, m, r, fire);
 
-	Alpha   = Alpha - (ANGULAR_SPEED * deltaT * r.y);
-	Beta = Beta  - (ANGULAR_SPEED * deltaT * r.x);
+	Alpha = Alpha - (ANGULAR_SPEED * deltaT * r.y);
+	Beta = Beta - (ANGULAR_SPEED * deltaT * r.x);
 	if (Beta < glm::radians(-90.0f)) {
 		Beta = glm::radians(-90.0f);
 	}
@@ -61,7 +61,7 @@ void Game::PlayerController(uint32_t currentImage)
 	// Camera Pitch limits
 	const float minPitch = glm::radians(-60.0f);
 	const float maxPitch = glm::radians(60.0f);
-	
+
 	const float ANGULAR_SPEED = glm::radians(120.0f);
 	float LINEAR_SPEED = 5.0f;
 
@@ -83,12 +83,14 @@ void Game::PlayerController(uint32_t currentImage)
 
 
 
-	if (m.x != 0.0 && m.z != 0.0)
+	if (m.x != 0.0 || m.z != 0.0)
 	{
 		//characterRot.x = 0;
 		r.y = m.x;
-		if (m.z == -1.0)
+		if (m.z == -1.0) {
+			LINEAR_SPEED = 1.0f;//nel caso cammini all'indietro
 			r.y = -m.x;
+		}
 		m.x = 0;
 	}
 
@@ -133,9 +135,9 @@ void Game::PlayerController(uint32_t currentImage)
 		characterRot.x += 360;
 	}*/
 
-	
+
 	pos += uy * LINEAR_SPEED * m.y * deltaT;
-	
+
 	//std::cout << "post before: \n" << pos.y;
 	//PickAnimation(deltaT, pos);
 	//std::cout << "post after: \n"<< pos.y;
