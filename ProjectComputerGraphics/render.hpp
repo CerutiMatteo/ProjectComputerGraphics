@@ -23,6 +23,13 @@ void Game::RenderEnvironment(uint32_t currentImage)
 	RenderAngleHouses(currentImage);
 	RenderStones(currentImage);
 	RenderBushes(currentImage);
+	RenderCastle(currentImage);
+	RenderWalls(currentImage);
+	RenderLights(currentImage);
+	RenderTowers(currentImage);
+	RenderDoubleHouses(currentImage);
+	RenderBiggerHouses(currentImage);
+
 }
 
 void Game::RenderGround(uint32_t currentImage)
@@ -39,7 +46,7 @@ void Game::RenderHouses(uint32_t currentImage)
 	for (int i = 0; i < numOfHouses; i++)
 	{
 		if (HouseVisible[i] == 1) {
-			GWorld = glm::translate(glm::mat4(1), glm::vec3(HousePositions[i].x, 0, HousePositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(HouseRotations[i]), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1), glm::vec3(0.4f));
+			GWorld = glm::translate(glm::mat4(1), glm::vec3(HousePositions[i].x, 0, HousePositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(HouseRotationsX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(HouseRotationsZ[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(0.4f));
 		}
 		SetUboDs(currentImage, uboHouses, DSHouses, i, 0.7f);
 	}
@@ -72,6 +79,44 @@ void Game::RenderBushes(uint32_t currentImage)
 	}
 }
 
+void Game::RenderCastle(uint32_t currentImage)
+{
+	for (int i = 0; i < numOfCastle; i++)
+	{
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(CastlePositions[i].x, 0, CastlePositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(CastleRotationsX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(CastleRotationsZ[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(0.6f, 0.4f, 0.4f));
+		SetUboDs(currentImage, uboCastle, DSCastle, i);
+	}
+}
+
+void Game::RenderWalls(uint32_t currentImage)
+{
+	for (int i = 0; i < numOfWalls; i++)
+	{
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(WallPositions[i].x, 0, WallPositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(WallRotationsX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(WallRotationsZ[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(3.0f, 0.5f, 0.5f));
+		SetUboDs(currentImage, uboWalls, DSWalls, i);
+	}
+}
+
+void Game::RenderLights(uint32_t currentImage)
+{
+}
+
+void Game::RenderTowers(uint32_t currentImage)
+{
+	for (int i = 0; i < numOfTowers; i++)
+	{
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(TowerPositions[i].x, 0, TowerPositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(TowerRotationsX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(TowerRotationsZ[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(0.5f));
+		SetUboDs(currentImage, uboTowers, DSTowers, i);
+	}
+}
+
+void Game::RenderDoubleHouses(uint32_t currentImage)
+{
+}
+
+void Game::RenderBiggerHouses(uint32_t currentImage)
+{
+}
 
 void Game::SetUboDs(uint32_t currentImage, MeshUniformBlock ubo[], DescriptorSet DS[], int index, float visible, float amb, float gamma, glm::vec3 sColor)
 {

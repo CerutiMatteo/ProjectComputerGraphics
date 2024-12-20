@@ -43,13 +43,19 @@ class Game : public BaseProject
 {
 protected:
 	// Constant Parameters
-	static const int mapScale = 10;
+	static const int mapScale = 13;
 	static const int objectNumScale = 10;
 	static const int mapSize = 5 * mapScale;
 	static const int numOfAngleHouses = 4;
 	static const int numOfHouses = 5 * objectNumScale - 10;
 	static const int numOfStones = 1300;
 	static const int numOfBushes = 400;
+	static const int numOfCastle = 1;
+	static const int numOfWalls = 4;
+	static const int numOfTowers = 2; 
+	static const int numOfLights = 12;
+	static const int numOfBiggerHouses = 6;
+	static const int numOfDoubleHouses = 2;
 	static const int numOfCollisions = (numOfAngleHouses + numOfHouses) * objectNumScale;
 
 	// Descriptor Set Layouts
@@ -62,7 +68,7 @@ protected:
 	Pipeline PToon, PToonPhong, POverlay;
 
 	// Models
-	Model<VertexMesh> MCharacter, MGround, MHouses, MAngleHouses, MStones, MBushes;
+	Model<VertexMesh> MCharacter, MGround, MHouses, MAngleHouses, MStones, MBushes, MCastle, MWalls, MTowers, MLights, MBiggerHouses, MDoubleHouses;
 	Model<VertexOverlay> MStartPanel;
 
 	// Textures //altri ?
@@ -71,12 +77,15 @@ protected:
 	// Descriptor sets
 	DescriptorSet DSGubo, DSCharacter, DSGround[4], DSHouses[numOfHouses], 
 				  DSAngleHouses[numOfAngleHouses], DSStones[numOfStones], DSBushes[numOfBushes],
-				  DSStartPanel;
+				  DSCastle[numOfCastle], DSWalls[numOfWalls], DSTowers[numOfTowers], DSLights[numOfLights],
+				  DSBiggerHouses[numOfBiggerHouses], DSDoubleHouses[numOfDoubleHouses], DSStartPanel;
 
 	// Uniform Blocks //altri ?
 	GlobalUniformBlock gubo;
 	MeshUniformBlock uboCharacter, uboGround[4], uboHouses[numOfHouses], 
-					 uboAngleHouses[numOfAngleHouses], uboStones[numOfStones], uboBushes[numOfBushes];
+					 uboAngleHouses[numOfAngleHouses], uboStones[numOfStones], uboBushes[numOfBushes], uboCastle[numOfCastle],
+					 uboWalls[numOfWalls], uboTowers[numOfTowers], uboLights[numOfLights], uboBiggerHouses[numOfBiggerHouses],
+					 uboDoubleHouses[numOfDoubleHouses];
 	OverlayUniformBlock uboStartPanel;
 
 	// Text
@@ -91,15 +100,39 @@ protected:
 	// Environment Parameters
 	float X, Y, Rot, Z;
 	glm::vec2 groundPositions[4] = { {-1, -1}, {-1, 0}, {0, -1}, {0, 0} };
+
 	glm::vec2 HousePositions[numOfHouses];
 	float HouseVisible[numOfHouses]; 
-	float HouseRotations[numOfHouses];
+	float HouseRotationsX[numOfHouses];
+	float HouseRotationsZ[numOfHouses];
+
 	glm::vec2 AngleHousePositions[numOfAngleHouses];
 	float AngleHouseRotationsX[numOfAngleHouses];
 	float AngleHouseRotationsZ[numOfAngleHouses];
+
 	glm::vec2 StonePositions[numOfStones];
+
 	glm::vec2 BushPositions[numOfBushes];
 	float BushRotationsX[numOfBushes];
+
+	glm::vec2 CastlePositions[numOfCastle];
+	float CastleRotationsX[numOfCastle];
+	float CastleRotationsZ[numOfCastle];
+
+	glm::vec2 WallPositions[numOfWalls];
+	float WallRotationsX[numOfWalls];
+	float WallRotationsZ[numOfWalls];
+
+	glm::vec2 LightPosition[numOfLights];
+
+	glm::vec2 TowerPositions[numOfTowers];
+	float TowerRotationsX[numOfWalls];
+	float TowerRotationsZ[numOfWalls];
+
+	glm::vec2 DoubleHousePositions[numOfDoubleHouses];
+
+	glm::vec2 BiggerHousePositions[numOfBiggerHouses];
+
 
 
 	
@@ -151,9 +184,9 @@ protected:
 
 	void setDescriptorPool()
 	{
-		uniformBlocksInPool = 2 + 4 + numOfHouses * 2 + numOfAngleHouses * 2 + numOfStones * 2 + numOfBushes * 2 + 4 + 1;
+		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses) * 2 + 4 + 1;
 		texturesInPool = 6 + 1 ;
-		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + 4 + 1 ;
+		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + 4 + 1 ;
 	}
 
 	void localInit()
@@ -210,8 +243,12 @@ protected:
 				MAngleHouses.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/house2.mgcg", MGCG);
 				MStones.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/Stone1.mgcg", MGCG);
 				MBushes.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/Bush.mgcg", MGCG);
-				//MTowers.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/tower.mgcg", MGCG);
-				
+				MCastle.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/castle1.mgcg", MGCG);
+				MWalls.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/CastleWall.mgcg", MGCG);
+				MTowers.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/tower.mgcg", MGCG);
+				MLights.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/Light.mgcg", MGCG);
+				MBiggerHouses.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/house4.mgcg", MGCG);
+				MDoubleHouses.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/house3.mgcg", MGCG);
 				// Overlay Models
 				CreateOverlayMesh(MStartPanel.vertices, MStartPanel.indices);
 				MStartPanel.initMesh(this, &VOverlay);
@@ -285,6 +322,48 @@ protected:
 					{1, TEXTURE, 0, &TBush},
 				});
 		}
+		for (int i = 0; i < numOfCastle; i++)
+		{
+			DSCastle[i].init(this, &DSLToon, {
+					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{1, TEXTURE, 0, &TMedieval},
+				});
+		}
+		for (int i = 0; i < numOfWalls; i++)
+		{
+			DSWalls[i].init(this, &DSLToon, {
+					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{1, TEXTURE, 0, &TMedieval},
+				});
+		}
+		for (int i = 0; i < numOfTowers; i++)
+		{
+			DSTowers[i].init(this, &DSLToon, {
+					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{1, TEXTURE, 0, &TMedieval},
+				});
+		}
+		for (int i = 0; i < numOfLights; i++)
+		{
+			DSLights[i].init(this, &DSLToon, {
+					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{1, TEXTURE, 0, &TMedieval},
+				});
+		}
+		for (int i = 0; i < numOfDoubleHouses; i++)
+		{
+			DSDoubleHouses[i].init(this, &DSLToon, {
+					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{1, TEXTURE, 0, &TMedieval},
+				});
+		}
+		for (int i = 0; i < numOfBiggerHouses; i++)
+		{
+			DSBiggerHouses[i].init(this, &DSLToon, {
+					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{1, TEXTURE, 0, &TMedieval},
+				});
+		}
 
 		DSStartPanel.init(this, &DSLOverlay, {
 					{0, UNIFORM, sizeof(OverlayUniformBlock), nullptr},
@@ -317,6 +396,18 @@ protected:
 			DSStones[i].cleanup();
 		for (int i = 0; i < numOfBushes; i++)
 			DSBushes[i].cleanup();
+		for (int i = 0; i < numOfCastle; i++)
+			DSCastle[i].cleanup();
+		for (int i = 0; i < numOfWalls; i++)
+			DSWalls[i].cleanup();
+		for (int i = 0; i < numOfTowers; i++)
+			DSTowers[i].cleanup();
+		for (int i = 0; i < numOfLights; i++)
+			DSLights[i].cleanup();
+		for (int i = 0; i < numOfBiggerHouses; i++)
+			DSBiggerHouses[i].cleanup();
+		for (int i = 0; i < numOfDoubleHouses; i++)
+			DSDoubleHouses[i].cleanup();
 		DSStartPanel.cleanup();
 		/*DSEndPanel.cleanup();
 		DSLosePanel.cleanup();
@@ -346,7 +437,12 @@ protected:
 		MAngleHouses.cleanup();
 		MStones.cleanup();
 		MBushes.cleanup();
-		
+		MCastle.cleanup();
+		MWalls.cleanup();
+		MTowers.cleanup();
+		MLights.cleanup();
+		MDoubleHouses.cleanup();
+		MBiggerHouses.cleanup();
 		MStartPanel.cleanup();
 		/*MEndPanel.cleanup();
 		MLosePanel.cleanup();
@@ -409,6 +505,48 @@ protected:
 			DSBushes[i].bind(commandBuffer, PToon, 1, currentImage);
 			vkCmdDrawIndexed(commandBuffer,
 				static_cast<uint32_t>(MBushes.indices.size()), 1, 0, 0, 0);
+		}
+
+		MCastle.bind(commandBuffer);
+		for (int i = 0; i < numOfCastle; i++) {
+			DSCastle[i].bind(commandBuffer, PToon, 1, currentImage);
+			vkCmdDrawIndexed(commandBuffer,
+				static_cast<uint32_t>(MCastle.indices.size()), 1, 0, 0, 0);
+		}
+
+		MWalls.bind(commandBuffer);
+		for (int i = 0; i < numOfWalls; i++) {
+			DSWalls[i].bind(commandBuffer, PToon, 1, currentImage);
+			vkCmdDrawIndexed(commandBuffer,
+				static_cast<uint32_t>(MWalls.indices.size()), 1, 0, 0, 0);
+		}
+
+		MLights.bind(commandBuffer);
+		for (int i = 0; i < numOfLights; i++) {
+			DSLights[i].bind(commandBuffer, PToon, 1, currentImage);
+			vkCmdDrawIndexed(commandBuffer,
+				static_cast<uint32_t>(MLights.indices.size()), 1, 0, 0, 0);
+		}
+
+		MTowers.bind(commandBuffer);
+		for (int i = 0; i < numOfTowers; i++) {
+			DSTowers[i].bind(commandBuffer, PToon, 1, currentImage);
+			vkCmdDrawIndexed(commandBuffer,
+				static_cast<uint32_t>(MTowers.indices.size()), 1, 0, 0, 0);
+		}
+
+		MBiggerHouses.bind(commandBuffer);
+		for (int i = 0; i < numOfBiggerHouses; i++) {
+			DSBiggerHouses[i].bind(commandBuffer, PToon, 1, currentImage);
+			vkCmdDrawIndexed(commandBuffer,
+				static_cast<uint32_t>(MBiggerHouses.indices.size()), 1, 0, 0, 0);
+		}
+
+		MDoubleHouses.bind(commandBuffer);
+		for (int i = 0; i < numOfDoubleHouses; i++) {
+			DSDoubleHouses[i].bind(commandBuffer, PToon, 1, currentImage);
+			vkCmdDrawIndexed(commandBuffer,
+				static_cast<uint32_t>(MDoubleHouses.indices.size()), 1, 0, 0, 0);
 		}
 
 		DSGubo.bind(commandBuffer, PToonPhong, 0, currentImage);
@@ -534,6 +672,12 @@ protected:
 	void RenderAngleHouses(uint32_t currentImage);
 	void RenderStones(uint32_t currentImage);
 	void RenderBushes(uint32_t currentImage);
+	void RenderCastle(uint32_t currentImage);
+	void RenderWalls(uint32_t currentImage);
+	void RenderLights(uint32_t currentImage);
+	void RenderTowers(uint32_t currentImage);
+	void RenderDoubleHouses(uint32_t currentImage);
+	void RenderBiggerHouses(uint32_t currentImage);
 	/*cosa fa?*/void SetUboDs(uint32_t currentImage, MeshUniformBlock ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
 					float gamma = 80.0f, glm::vec3 sColor = glm::vec3(1.0f));
 	void ObjectsParameters();

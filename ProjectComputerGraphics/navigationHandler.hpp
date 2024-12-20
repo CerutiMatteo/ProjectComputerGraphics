@@ -59,7 +59,7 @@ void Game::PlayerController(uint32_t currentImage)
 	const float camHeight = 0.75;
 	const float camDist = 0.25;
 	// Camera Pitch limits
-	const float minPitch = glm::radians(-5.0f);
+	const float minPitch = glm::radians(-60.0f);
 	const float maxPitch = glm::radians(60.0f);
 	
 	const float ANGULAR_SPEED = glm::radians(120.0f);
