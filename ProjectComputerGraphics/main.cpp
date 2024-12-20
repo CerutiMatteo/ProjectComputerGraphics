@@ -229,37 +229,35 @@ protected:
 				});
 
 				// Initializing Pipelines
-				PToon.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/shaders/ToonVert.spv", "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/shaders/ToonFrag.spv", { &DSLGubo, &DSLToon });
-				PToonPhong.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/shaders/ToonPhongVert.spv", "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/shaders/ToonPhongFrag.spv", { &DSLGubo, &DSLToonPhong });
-				POverlay.init(this, &VOverlay, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/shaders/OverlayVert.spv", "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/shaders/OverlayFrag.spv", { &DSLOverlay });
+				PToon.init(this, &VMesh, "shaders/ToonVert.spv", "shaders/ToonFrag.spv", { &DSLGubo, &DSLToon });
+				PToonPhong.init(this, &VMesh, "shaders/ToonPhongVert.spv", "shaders/ToonPhongFrag.spv", { &DSLGubo, &DSLToonPhong });
+				POverlay.init(this, &VOverlay, "shaders/OverlayVert.spv", "shaders/OverlayFrag.spv", { &DSLOverlay });
 				POverlay.setAdvancedFeatures(VK_COMPARE_OP_LESS_OR_EQUAL, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, false);
 
 				// Initializing Models
-				MCharacter.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/horse.mgcg", MGCG);
-				//CreateSphereMesh(MCharacter.vertices, MCharacter.indices);
-				//MCharacter.initMesh(this, &VMesh);
-				MGround.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/ground.obj", OBJ);
-				MHouses.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/house1.mgcg", MGCG);
-				MAngleHouses.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/house2.mgcg", MGCG);
-				MStones.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/Stone1.mgcg", MGCG);
-				MBushes.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/Bush.mgcg", MGCG);
-				MCastle.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/castle1.mgcg", MGCG);
-				MWalls.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/CastleWall.mgcg", MGCG);
-				MTowers.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/tower.mgcg", MGCG);
-				MLights.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/Light.mgcg", MGCG);
-				MBiggerHouses.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/house4.mgcg", MGCG);
-				MDoubleHouses.init(this, &VMesh, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/Models/house3.mgcg", MGCG);
+				MCharacter.init(this, &VMesh, "Models/horse.mgcg", MGCG);
+				MGround.init(this, &VMesh, "Models/ground.obj", OBJ);
+				MHouses.init(this, &VMesh, "Models/house1.mgcg", MGCG);
+				MAngleHouses.init(this, &VMesh, "Models/house2.mgcg", MGCG);
+				MStones.init(this, &VMesh, "Models/Stone1.mgcg", MGCG);
+				MBushes.init(this, &VMesh, "Models/Bush.mgcg", MGCG);
+				MCastle.init(this, &VMesh, "Models/castle1.mgcg", MGCG);
+				MWalls.init(this, &VMesh, "Models/CastleWall.mgcg", MGCG);
+				MTowers.init(this, &VMesh, "Models/tower.mgcg", MGCG);
+				MLights.init(this, &VMesh, "Models/Light.mgcg", MGCG);
+				MBiggerHouses.init(this, &VMesh, "Models/house4.mgcg", MGCG);
+				MDoubleHouses.init(this, &VMesh, "Models/house3.mgcg", MGCG);
 				// Overlay Models
 				CreateOverlayMesh(MStartPanel.vertices, MStartPanel.indices);
 				MStartPanel.initMesh(this, &VOverlay);
 
 				// Initializing Textures
-				TCharacter.init(this, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/textures/animals.png");
-				TGround.init(this, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/textures/street2.png");
-				TMedieval.init(this, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/textures/medieval.png");
-				TStartPanel.init(this, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/textures/SchermataIniziale.png");
-				TStone.init(this, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/textures/street.png");
-				TBush.init(this, "C:/Users/Utente/Documents/VisualStudio/projects/ProjectComputerGraphics/ProjectComputerGraphics/textures/bush.png");
+				TCharacter.init(this, "textures/animals.png");
+				TGround.init(this, "textures/street2.png");
+				TMedieval.init(this, "textures/medieval.png");
+				TStartPanel.init(this, "textures/SchermataIniziale.png");
+				TStone.init(this, "textures/street.png");
+				TBush.init(this, "textures/bush.png");
 
 				//?sistemare txt.init(this, &text, -0.95, -0.95, 1.0 / 1200.0, 1.0 / 800.0);
 
