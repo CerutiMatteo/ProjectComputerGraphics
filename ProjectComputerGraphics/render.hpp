@@ -29,7 +29,7 @@ void Game::RenderEnvironment(uint32_t currentImage)
 	RenderTowers(currentImage);
 	RenderDoubleHouses(currentImage);
 	RenderBiggerHouses(currentImage);
-
+	RenderFlags(currentImage);
 }
 
 void Game::RenderGround(uint32_t currentImage)
@@ -117,6 +117,15 @@ void Game::RenderTowers(uint32_t currentImage)
 
 void Game::RenderDoubleHouses(uint32_t currentImage)
 {
+}
+
+void Game::RenderFlags(uint32_t currentImage)
+{
+	for (int i = 0; i < numOfFlags; i++)
+	{
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(FlagPositions[i].x, FlagPositions[i].y, FlagPositions[i].z)) * glm::rotate(glm::mat4(1.0f), glm::radians(FlagRotationsY[i]), glm::vec3(0, 1, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(FlagRotationsX[i]), glm::vec3(1, 0, 0))  * glm::rotate(glm::mat4(1.0f), glm::radians(FlagRotationsZ[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(FlagScales[i]));
+		SetUboDs(currentImage, uboFlags, DSFlags, i);
+	}
 }
 
 void Game::RenderBiggerHouses(uint32_t currentImage)

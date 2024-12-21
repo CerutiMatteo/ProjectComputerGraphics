@@ -30,7 +30,7 @@ void Game::ObjectsParameters()
 		}
 	}
 
-	// Angle Houses
+	// ANGLE_HOUSES
 	for (int i = 0; i < numOfAngleHouses; i++)
 	{
 		switch (i)
@@ -110,4 +110,9 @@ void Game::ObjectsParameters()
 		BiggerHouseRotationsZ[i] = -90.0f;
 	}
 
+	//FLAGS
+	FlagPositions[0] = { 21.0f, 11.0f, 10.0f }; FlagRotationsX[0] = 90.0f; FlagRotationsY[0] = 0.0f; FlagRotationsZ[0] = 90.0f; FlagScales[0] = 1.0f;//torre destra
+	FlagPositions[1] = { 21.0f, 11.0f, -10.0f }; FlagRotationsX[1] = 90.0f; FlagRotationsY[1] = 0.0f; FlagRotationsZ[1] = 90.0f; FlagScales[1] = 1.0f;//torre sinistra
+	FlagPositions[2] = { 20.0f, 7.0f, -4.0f }; FlagRotationsX[2] = 30.0f; FlagRotationsY[2] = 90.0f; FlagRotationsZ[2] = -90.0f; FlagScales[2] = 2.0f;//castello torre sinistra
+	FlagPositions[3] = { 20.0f, 7.0f, 4.0f }; FlagRotationsX[3] = 30.0f; FlagRotationsY[3] = 90.0f; FlagRotationsZ[3] = -90.0f; FlagScales[3] = 2.0f;//castello torre destra
 }
