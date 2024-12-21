@@ -51,8 +51,8 @@ void Game::Spectate()
 void Game::PlayerController(uint32_t currentImage)
 {
 
-	// Player starting point
-	const glm::vec3 startingPosition = glm::vec3(0.0, 0.0, 0.0);
+	// posizione di partenza personaggio
+	const glm::vec3 startingPosition = glm::vec3(15.0, 0.0, 0.0);//davanti al castello
 
 	// Camera target height and distance
 	const float camHeight = 0.75;
@@ -70,7 +70,9 @@ void Game::PlayerController(uint32_t currentImage)
 	getSixAxis(deltaT, m, r, fire);
 
 	static glm::vec3 pos = startingPosition;
-	static float yaw = 0, pitch = 0, roll = 0;
+	static float yaw = glm::radians(90.0f),//cosi parto girato verso il centro della mappa
+				 pitch = 0,
+				 roll = 0;
 	//static glm::quat rot = glm::quat(1, 0, 0, 0);
 	static glm::mat4 ViewPrjOld = glm::mat4(1);
 	static glm::mat4 camRy = glm::mat4(1);

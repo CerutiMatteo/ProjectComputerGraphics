@@ -12,7 +12,10 @@ void Game::ObjectsParameters()
 
 	int housesPerRow = numOfHouses / 5; // numOfHouse > 5
 	for (int row = 0; row < 5; row++) // Tre file
-	{
+	{	
+		if (row == 2) {//lascio libero lo spazio nel mezzo
+			continue;
+		}
 		for (int i = 0; i < housesPerRow; i++) // Case per fila
 		{
 			HouseVisible[row * housesPerRow + i] = 1;
