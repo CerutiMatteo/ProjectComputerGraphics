@@ -120,5 +120,5 @@ void Game::ObjectsParameters()
 	FlagPositions[3] = { 20.0f, 7.0f, 4.0f }; FlagRotationsX[3] = 30.0f; FlagRotationsY[3] = 90.0f; FlagRotationsZ[3] = -90.0f; FlagScales[3] = 2.0f;//castello torre destra
 
 	//CHEST
-	ChestPositions[0] = { 30.0f, 0.0f }; ChestRotationsX[0] = 90.0f;//aggiungere ceste e creare gli "spawn"
+	ChestPositions[0] = { 30.0f, 0.0f }; ChestRotationsX[0] = 90.0f;
 }

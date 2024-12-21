@@ -57,6 +57,7 @@ protected:
 	static const int numOfBiggerHouses = 5;
 	static const int numOfDoubleHouses = 2;
 	static const int numOfFlags = 4;
+	static const int numOfChests = 1;
 	static const int numOfCollisions = (numOfAngleHouses + numOfHouses) * objectNumScale;
 
 	// Descriptor Set Layouts
@@ -70,25 +71,25 @@ protected:
 
 	// Models
 	Model<VertexMesh> MCharacter, MGround, MHouses, MAngleHouses, MStones, MBushes, 
-					  MCastle, MWalls, MTowers, MLights, MBiggerHouses, MDoubleHouses, MFlags;
+					  MCastle, MWalls, MTowers, MLights, MBiggerHouses, MDoubleHouses, MFlags, MChests;
 	Model<VertexOverlay> MStartPanel;
 
 	// Textures
-	Texture TCharacter, TGround, TMedieval, TStone, TBush, TStartPanel, TWall;
+	Texture TCharacter, TGround, TMedieval, TStone, TBush, TStartPanel, TWall, TChest;
 
 	// Descriptor sets
 	DescriptorSet DSGubo, DSCharacter, DSGround[4], DSHouses[numOfHouses],
 		DSAngleHouses[numOfAngleHouses], DSStones[numOfStones], DSBushes[numOfBushes],
 		DSCastle[numOfCastle], DSWalls[numOfWalls], DSTowers[numOfTowers], DSLights[numOfLights],
 		DSBiggerHouses[numOfBiggerHouses], DSDoubleHouses[numOfDoubleHouses],
-		DSFlags[numOfFlags],DSStartPanel;
+		DSFlags[numOfFlags], DSChests[numOfChests], DSStartPanel;
 
 	// Uniform Blocks //altri ?
 	GlobalUniformBlock gubo;
 	MeshUniformBlock uboCharacter, uboGround[4], uboHouses[numOfHouses],
 		uboAngleHouses[numOfAngleHouses], uboStones[numOfStones], uboBushes[numOfBushes], uboCastle[numOfCastle],
 		uboWalls[numOfWalls], uboTowers[numOfTowers], uboLights[numOfLights], uboBiggerHouses[numOfBiggerHouses],
-		uboDoubleHouses[numOfDoubleHouses], uboFlags[numOfFlags];
+		uboDoubleHouses[numOfDoubleHouses], uboFlags[numOfFlags], uboChests[numOfChests];
 	OverlayUniformBlock uboStartPanel;
 
 	// Text
@@ -145,6 +146,8 @@ protected:
 	float FlagRotationsZ[numOfFlags];
 	float FlagScales[numOfFlags];
 
+	glm::vec2 ChestPositions[numOfChests];
+	float ChestRotationsX[numOfChests];
 
 
 	////Jump params
@@ -194,9 +197,9 @@ protected:
 
 	void setDescriptorPool()
 	{
-		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags) * 2 + 4 + 1;
-		texturesInPool = 7 + 1;
-		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + 4 + 1;
+		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests) * 2 + 4 + 1;
+		texturesInPool = 8 + 1;
+		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + 4 + 1;
 	}
 
 	void localInit()
@@ -258,6 +261,7 @@ protected:
 				MBiggerHouses.init(this, &VMesh, "Models/house4.mgcg", MGCG);
 				MDoubleHouses.init(this, &VMesh, "Models/house3.mgcg", MGCG);
 				MFlags.init(this, &VMesh, "Models/flag.mgcg", MGCG);
+				MChests.init(this, &VMesh, "Models/chest.mgcg", MGCG);
 				// Overlay Models
 				CreateOverlayMesh(MStartPanel.vertices, MStartPanel.indices);
 				MStartPanel.initMesh(this, &VOverlay);
@@ -270,7 +274,7 @@ protected:
 				TStone.init(this, "textures/street.png");
 				TBush.init(this, "textures/bush.png");
 				TWall.init(this, "textures/wall.png");
-
+				TChest.init(this, "textures/chest.png");
 				//?sistemare txt.init(this, &text, -0.95, -0.95, 1.0 / 1200.0, 1.0 / 800.0);
 
 				// Init local variables
@@ -381,6 +385,13 @@ protected:
 					{1, TEXTURE, 0, &TMedieval},
 				});
 		}
+		for (int i = 0; i < numOfChests; i++)
+		{
+			DSChests[i].init(this, &DSLToon, {
+					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{1, TEXTURE, 0, &TChest},
+				});
+		}
 		DSStartPanel.init(this, &DSLOverlay, {
 					{0, UNIFORM, sizeof(OverlayUniformBlock), nullptr},
 					{1, TEXTURE, 0, &TStartPanel}
@@ -422,6 +433,8 @@ protected:
 			DSDoubleHouses[i].cleanup();
 		for (int i = 0; i < numOfFlags; i++)
 			DSFlags[i].cleanup();
+		for (int i = 0; i < numOfChests; i++)
+			DSChests[i].cleanup();
 		DSStartPanel.cleanup();
 	}
 
@@ -433,6 +446,8 @@ protected:
 		TMedieval.cleanup();
 		TStone.cleanup();
 		TBush.cleanup();
+		TWall.cleanup();
+		TChest.cleanup();
 
 		TStartPanel.cleanup();
 		/*TEndPanel.cleanup();
@@ -453,6 +468,7 @@ protected:
 		MDoubleHouses.cleanup();
 		MBiggerHouses.cleanup();
 		MFlags.cleanup();
+		MChests.cleanup();
 		MStartPanel.cleanup();
 		/*MEndPanel.cleanup();
 		MLosePanel.cleanup();
@@ -564,6 +580,13 @@ protected:
 			DSFlags[i].bind(commandBuffer, PToon, 1, currentImage);
 			vkCmdDrawIndexed(commandBuffer,
 				static_cast<uint32_t>(MFlags.indices.size()), 1, 0, 0, 0);
+		}
+
+		MChests.bind(commandBuffer);
+		for (int i = 0; i < numOfChests; i++) {
+			DSChests[i].bind(commandBuffer, PToon, 1, currentImage);
+			vkCmdDrawIndexed(commandBuffer,
+				static_cast<uint32_t>(MChests.indices.size()), 1, 0, 0, 0);
 		}
 
 		DSGubo.bind(commandBuffer, PToonPhong, 0, currentImage);
@@ -696,6 +719,7 @@ protected:
 	void RenderDoubleHouses(uint32_t currentImage);
 	void RenderBiggerHouses(uint32_t currentImage);
 	void RenderFlags(uint32_t currentImage);
+	void RenderChests(uint32_t currentImage);
 	/*cosa fa?*/void SetUboDs(uint32_t currentImage, MeshUniformBlock ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
 		float gamma = 80.0f, glm::vec3 sColor = glm::vec3(1.0f));
 	void ObjectsParameters();
