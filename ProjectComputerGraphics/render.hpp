@@ -121,6 +121,11 @@ void Game::RenderDoubleHouses(uint32_t currentImage)
 
 void Game::RenderBiggerHouses(uint32_t currentImage)
 {
+	for (int i = 0; i < numOfBiggerHouses; i++)
+	{
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(BiggerHousePositions[i].x, 0, BiggerHousePositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(BiggerHouseRotationsX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(BiggerHouseRotationsZ[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(0.35f));
+		SetUboDs(currentImage, uboBiggerHouses, DSBiggerHouses, i);
+	}
 }
 
 void Game::SetUboDs(uint32_t currentImage, MeshUniformBlock ubo[], DescriptorSet DS[], int index, float visible, float amb, float gamma, glm::vec3 sColor)

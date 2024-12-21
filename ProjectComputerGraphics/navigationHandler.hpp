@@ -1,7 +1,6 @@
 //bool canPickItem = false;
 //bool isLost = false;
 glm::vec3 camPosition = glm::vec3(0.0, 1.5, 0.0);
-//glm::vec3 characterRot = { 0.0f, 0.0f , 0.0f };
 float Alpha = 0.0f, Beta = 0.0f;
 glm::vec3 realNormX = { 1, 0, 0 };
 glm::vec3 realNormY = { 0, 1, 0 };
@@ -83,16 +82,15 @@ void Game::PlayerController(uint32_t currentImage)
 
 
 
-	if (m.x != 0.0 || m.z != 0.0)
+	if (m.x != 0.0)
 	{
-		//characterRot.x = 0;
 		r.y = m.x;
-		if (m.z == -1.0) {
-			LINEAR_SPEED = 1.0f;//nel caso cammini all'indietro
-			r.y = -m.x;
-		}
-		m.x = 0;
 	}
+	if (m.z == -1.0) {
+		LINEAR_SPEED = 1.0f;//nel caso cammini all'indietro
+		r.y = -m.x;
+	}
+	m.x = 0;
 
 	glm::vec3 ux = glm::vec3(glm::rotate(glm::mat4(1), yaw, glm::vec3(0, 1, 0)) * glm::vec4(1, 0, 0, 1));
 	glm::vec3 uy = glm::vec3(0, 1.0f, 0);

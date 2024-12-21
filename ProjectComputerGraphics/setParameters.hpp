@@ -79,8 +79,8 @@ void Game::ObjectsParameters()
 	}
 
 	//WALLS
-	WallPositions[0] = { 27.0f, 0.0f }; WallRotationsX[0] = 90.0f;  WallRotationsZ[0] = 90.0f;
-	WallPositions[1] = { -27.0f, 0.0f }; WallRotationsX[1] = 90.0f;  WallRotationsZ[1] = -90.0f;
+	WallPositions[0] = { 27.0f, 0.0f }; WallRotationsX[0] = 90.0f;  WallRotationsZ[0] = -90.0f;
+	WallPositions[1] = { -27.0f, 0.0f }; WallRotationsX[1] = 90.0f;  WallRotationsZ[1] = 90.0f;
 	WallPositions[3] = { 0.0f, -27.0f }; WallRotationsX[3] = 90.0f;  WallRotationsZ[3] = 180.0f;
 	WallPositions[2] = { 0.0f, 27.0f }; WallRotationsX[2] = 90.0f;  WallRotationsZ[2] = 0.0f;
 
@@ -89,10 +89,8 @@ void Game::ObjectsParameters()
 	TowerPositions[1] = { 21.0f, -10.0f }; TowerRotationsX[1] = 90.0f; TowerRotationsZ[1] = 90.0f;
 
 	//LIGHTS
-	//float baseRotation = 90.0f; // Rotazione costante per tutte le case
-	float lightsSpacing = 10.0f; // Spaziatura tra le case
-
-	int lightsPerRow = numOfLights / 4; 
+	float lightsSpacing = 10.0f; // Spaziatura tra i lampioni
+	int lightsPerRow = numOfLights / 4; //lampioni per riga
 	for (int row = 0; row < 4; row++) 
 	{
 		for (int i = 0; i < lightsPerRow; i++) 
@@ -102,6 +100,14 @@ void Game::ObjectsParameters()
 			LightPositions[row * lightsPerRow + i] = {X,Y};
 			LightRotationsX[row * lightsPerRow + i] = 90.0f;
 		}
+	}
+
+	//BIGGER_HOUSES
+	for (int i = 0; i < numOfBiggerHouses; i++) {
+		BiggerHousePositions[i].x = -21.0f;
+		BiggerHousePositions[i].y = i * (spacing + 1) - 11;
+		BiggerHouseRotationsX[i] = 90.0f;
+		BiggerHouseRotationsZ[i] = -90.0f;
 	}
 
 }

@@ -54,7 +54,7 @@ protected:
 	static const int numOfWalls = 4;
 	static const int numOfTowers = 2;
 	static const int numOfLights = 12;
-	static const int numOfBiggerHouses = 6;
+	static const int numOfBiggerHouses = 5;
 	static const int numOfDoubleHouses = 2;
 	static const int numOfCollisions = (numOfAngleHouses + numOfHouses) * objectNumScale;
 
@@ -72,7 +72,7 @@ protected:
 	Model<VertexOverlay> MStartPanel;
 
 	// Textures //altri ?
-	Texture TCharacter, TGround, TMedieval, TStone, TBush, TStartPanel;
+	Texture TCharacter, TGround, TMedieval, TStone, TBush, TStartPanel, TWall;
 
 	// Descriptor sets
 	DescriptorSet DSGubo, DSCharacter, DSGround[4], DSHouses[numOfHouses],
@@ -133,6 +133,8 @@ protected:
 	glm::vec2 DoubleHousePositions[numOfDoubleHouses];
 
 	glm::vec2 BiggerHousePositions[numOfBiggerHouses];
+	float BiggerHouseRotationsX[numOfBiggerHouses];
+	float BiggerHouseRotationsZ[numOfBiggerHouses];
 
 
 
@@ -186,7 +188,7 @@ protected:
 	void setDescriptorPool()
 	{
 		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses) * 2 + 4 + 1;
-		texturesInPool = 6 + 1;
+		texturesInPool = 7 + 1;
 		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + 4 + 1;
 	}
 
@@ -259,6 +261,7 @@ protected:
 				TStartPanel.init(this, "textures/SchermataIniziale.png");
 				TStone.init(this, "textures/street.png");
 				TBush.init(this, "textures/bush.png");
+				TWall.init(this, "textures/wall.png");
 
 				//?sistemare txt.init(this, &text, -0.95, -0.95, 1.0 / 1200.0, 1.0 / 800.0);
 
@@ -332,7 +335,7 @@ protected:
 		{
 			DSWalls[i].init(this, &DSLToon, {
 					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
-					{1, TEXTURE, 0, &TMedieval},
+					{1, TEXTURE, 0, &TWall},
 				});
 		}
 		for (int i = 0; i < numOfTowers; i++)
