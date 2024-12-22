@@ -1890,10 +1890,11 @@ protected:
 		if (glfwGetKey(window, GLFW_KEY_W)) {
 			m.z = 1.0f;
 		}
-		if (glfwGetKey(window, GLFW_KEY_R)) {
+
+		if (glfwGetKey(window, GLFW_KEY_R) && scene == 1) {
 			m.y = 1.0f;
 		}
-		if (glfwGetKey(window, GLFW_KEY_F)) {
+		if (glfwGetKey(window, GLFW_KEY_F) && scene == 1) {
 			m.y = -1.0f;
 		}
 
