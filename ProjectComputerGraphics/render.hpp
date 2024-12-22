@@ -1,3 +1,6 @@
+#include <cstdlib>
+#include <ctime>
+
 void Game::RenderCharacter(uint32_t currentImage)
 {
 	glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0), glm::vec3(0, 0.0f, 0.0f));
@@ -18,6 +21,9 @@ void Game::RenderCharacter(uint32_t currentImage)
 
 void Game::RenderEnvironment(uint32_t currentImage)
 {
+
+	std::srand(static_cast<unsigned int>(std::time(nullptr)));
+
 	RenderGround(currentImage);
 	RenderHouses(currentImage);
 	RenderAngleHouses(currentImage);
@@ -34,6 +40,7 @@ void Game::RenderEnvironment(uint32_t currentImage)
 	RenderStatue1(currentImage);
 	RenderStatue2(currentImage);
 	RenderWell(currentImage);
+	RenderClouds(currentImage);
 }
 
 void Game::RenderGround(uint32_t currentImage)
@@ -174,6 +181,15 @@ void Game::RenderWell(uint32_t currentImage) {
 
 		GWorld = glm::translate(glm::mat4(1), glm::vec3(WellPosition[i].x, 0, WellPosition[i].y))* glm::rotate(glm::mat4(1.0f), glm::radians(WellRotation[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(WellRotation[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(0.6f));
 		SetUboDs(currentImage, uboWell, DSWell, i);
+	}
+}
+
+void Game::RenderClouds(uint32_t currentImage) {
+
+	for (int i = 0; i < numOfClouds; i++) {
+
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(CloudsPosition[i].x, CloudsPosition[i].y, CloudsPosition[i].z)) * glm::scale(glm::mat4(1), glm::vec3(CloudsSize[i]));
+		SetUboDs(currentImage, uboClouds, DSClouds, i);
 	}
 }
 

@@ -127,6 +127,16 @@ void Game::ObjectsParameters()
 	Statue2Positions[0] = { -5.0f,0.0f }; Statue2RotationsX[0] = 0.0f; Statue2RotationsY[0] = 90.0f;
 
 	//WELL
-
 	WellPosition[0] = { -10.0f,0.0f }; WellRotation[0] = 90.0f;
+
+	//CLOUDS
+	for (int i = 0; i < numOfClouds; i++) {
+
+		CloudsPosition[i].x = -27 + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX) / 54);
+		CloudsPosition[i].y = 15.0f;
+		CloudsPosition[i].z = -27 + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX) / 54);
+		CloudsSize[i] =  static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
+
+	}
+
 }
