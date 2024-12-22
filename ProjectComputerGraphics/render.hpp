@@ -31,6 +31,8 @@ void Game::RenderEnvironment(uint32_t currentImage)
 	RenderBiggerHouses(currentImage);
 	RenderFlags(currentImage);
 	RenderChests(currentImage);
+	RenderStatue1(currentImage);
+	RenderStatue2(currentImage);
 }
 
 void Game::RenderGround(uint32_t currentImage)
@@ -146,6 +148,26 @@ void Game::RenderChests(uint32_t currentImage)
 		SetUboDs(currentImage, uboChests, DSChests, i);
 	}
 }
+
+void Game::RenderStatue1(uint32_t currentImage)
+{
+	for (int i = 0; i < numOfStatue1; i++)
+	{
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(Statue1Positions[i].x, 0, Statue1Positions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(Statue1RotationsX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(Statue1RotationsY[i]), glm::vec3(0, 1, 0)) * glm::scale(glm::mat4(1), glm::vec3(2.0f));
+		SetUboDs(currentImage, uboStatue1, DSStatue1, i);
+	}
+}
+
+void Game::RenderStatue2(uint32_t currentImage)
+{
+	for (int i = 0; i < numOfStatue2; i++)
+	{
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(Statue2Positions[i].x, 0, Statue2Positions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(Statue2RotationsX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(Statue2RotationsY[i]), glm::vec3(0, 1, 0)) * glm::scale(glm::mat4(1), glm::vec3(2.0f));
+		SetUboDs(currentImage, uboStatue2, DSStatue2, i);
+	}
+}
+
+
 
 void Game::SetUboDs(uint32_t currentImage, MeshUniformBlock ubo[], DescriptorSet DS[], int index, float visible, float amb, float gamma, glm::vec3 sColor)
 {

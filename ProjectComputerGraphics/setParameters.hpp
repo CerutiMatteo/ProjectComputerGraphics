@@ -121,4 +121,8 @@ void Game::ObjectsParameters()
 
 	//CHEST
 	ChestPositions[0] = { 30.0f, 0.0f }; ChestRotationsX[0] = 90.0f;//aggiungere ceste e creare gli "spawn"
+
+	//STATUES 1,2
+	Statue1Positions[0] = { 5.0f,0.0f }; Statue1RotationsX[0] = 0.0f; Statue1RotationsY[0] = -90.0f;
+	Statue2Positions[0] = { -5.0f,0.0f }; Statue2RotationsX[0] = 0.0f; Statue2RotationsY[0] = 90.0f;
 }
