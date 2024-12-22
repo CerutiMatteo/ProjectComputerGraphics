@@ -49,7 +49,7 @@ void Game::ObjectsParameters()
 			AngleHouseRotationsZ[i] = 90.0f;
 			break;
 		case 2:
-			AngleHousePositions[i] = { -21.0f, 19.0f };
+			AngleHousePositions[i] = { -21.5f, 19.0f };
 			AngleHouseRotationsX[i] = 90.0f;
 			AngleHouseRotationsZ[i] = -90.0f;
 			break;
@@ -107,8 +107,8 @@ void Game::ObjectsParameters()
 
 	//BIGGER_HOUSES
 	for (int i = 0; i < numOfBiggerHouses; i++) {
-		BiggerHousePositions[i].x = -21.0f;
-		BiggerHousePositions[i].y = i * (spacing + 1) - 11;
+		BiggerHousePositions[i].x = -21.5f;
+		BiggerHousePositions[i].y = i * (spacing + 1) - 11.5f;
 		BiggerHouseRotationsX[i] = 90.0f;
 		BiggerHouseRotationsZ[i] = -90.0f;
 	}
@@ -125,4 +125,8 @@ void Game::ObjectsParameters()
 	//STATUES 1,2
 	Statue1Positions[0] = { 5.0f,0.0f }; Statue1RotationsX[0] = 0.0f; Statue1RotationsY[0] = -90.0f;
 	Statue2Positions[0] = { -5.0f,0.0f }; Statue2RotationsX[0] = 0.0f; Statue2RotationsY[0] = 90.0f;
+
+	//WELL
+
+	WellPosition[0] = { -10.0f,0.0f }; WellRotation[0] = 90.0f;
 }

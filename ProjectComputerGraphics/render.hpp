@@ -33,6 +33,7 @@ void Game::RenderEnvironment(uint32_t currentImage)
 	RenderChests(currentImage);
 	RenderStatue1(currentImage);
 	RenderStatue2(currentImage);
+	RenderWell(currentImage);
 }
 
 void Game::RenderGround(uint32_t currentImage)
@@ -164,6 +165,15 @@ void Game::RenderStatue2(uint32_t currentImage)
 	{
 		GWorld = glm::translate(glm::mat4(1), glm::vec3(Statue2Positions[i].x, 0, Statue2Positions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(Statue2RotationsX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(Statue2RotationsY[i]), glm::vec3(0, 1, 0)) * glm::scale(glm::mat4(1), glm::vec3(2.0f));
 		SetUboDs(currentImage, uboStatue2, DSStatue2, i);
+	}
+}
+
+void Game::RenderWell(uint32_t currentImage) {
+
+	for (int i = 0; i < numOfWell; i++) {
+
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(WellPosition[i].x, 0, WellPosition[i].y))* glm::rotate(glm::mat4(1.0f), glm::radians(WellRotation[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(WellRotation[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(0.6f));
+		SetUboDs(currentImage, uboWell, DSWell, i);
 	}
 }
 

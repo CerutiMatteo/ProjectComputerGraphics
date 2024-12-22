@@ -42,6 +42,7 @@
 #define SINFL_IMPLEMENTATION
 #include <sinfl.h>
 
+int scene = 0;
 
 
 const int MAX_FRAMES_IN_FLIGHT = 2;
@@ -1841,6 +1842,7 @@ protected:
 			r.x = -m_dy / MOUSE_RES;
 		}
 
+
 		//TASTI
 
 		if (glfwGetKey(window, GLFW_KEY_LEFT)) {
@@ -1862,10 +1864,24 @@ protected:
 			r.z = -1.0f;
 		}
 
-		if (glfwGetKey(window, GLFW_KEY_A) && glfwGetKey(window, GLFW_KEY_W)) {
+		if (glfwGetKey(window, GLFW_KEY_M)) {
+
+			if (scene == 0)
+				scene = 1;
+			else if (scene == 1)
+				scene = 0;
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_A) && glfwGetKey(window, GLFW_KEY_W) && scene == 0 ) {
 			m.x = -1.0f;
 		}
-		if (glfwGetKey(window, GLFW_KEY_D) && glfwGetKey(window, GLFW_KEY_W)) {
+		if (glfwGetKey(window, GLFW_KEY_D) && glfwGetKey(window, GLFW_KEY_W) && scene == 0) {
+			m.x = 1.0f;
+		}
+		if (glfwGetKey(window, GLFW_KEY_A) && scene == 1) {
+			m.x = -1.0f;
+		}
+		if (glfwGetKey(window, GLFW_KEY_D)&& scene == 1) {
 			m.x = 1.0f;
 		}
 		if(glfwGetKey(window, GLFW_KEY_S)) {
