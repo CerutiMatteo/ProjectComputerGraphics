@@ -56,12 +56,7 @@ void Game::RenderHouses(uint32_t currentImage)
 {
 	for (int i = 0; i < numOfHouses; i++)
 	{
-		if (HouseVisible[i] == 1) {
-			GWorld = glm::translate(glm::mat4(1), glm::vec3(HousePositions[i].x, 0, HousePositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(HouseRotationsX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(HouseRotationsZ[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(0.4f));
-		}
-		else {
-			GWorld = 0;
-		}
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(HousePositions[i].x, 0, HousePositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(HouseRotationsX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(HouseRotationsZ[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(0.4f));
 		SetUboDs(currentImage, uboHouses, DSHouses, i);
 	}
 }

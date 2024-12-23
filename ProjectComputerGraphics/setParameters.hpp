@@ -8,7 +8,7 @@ void Game::ObjectsParameters()
 
 	//HOUSES
 	float baseRotation = 90.0f; // Rotazione costante per tutte le case
-	float HouseSpacing = 6.0f; // Spaziatura tra le case
+	float HouseSpacing = 6.25f; // Spaziatura tra le case
 	int cont = 0;
 	int housesPerRow = 0; 
 	for (int row = 0; row < 4; row++) // 4 file, 2 interne e 2 esterne
@@ -21,26 +21,24 @@ void Game::ObjectsParameters()
 		}
 		for (int i = 0; i < housesPerRow; i++) {
 			if (row == 0) {
-				HousePositions[cont] = { i * HouseSpacing - 14, row * rowSpacing - 2 * rowSpacing };
-				HouseRotationsX[cont] = baseRotation; 
-				HouseVisible[cont] = 1;
+				HousePositions[cont] = { i * HouseSpacing - 15, row * rowSpacing - 2 * rowSpacing };
+				HouseRotationsX[cont] = baseRotation;
+				HouseRotationsZ[cont] = 0.0f;
 			}
 			if (row == 1) {
-				HousePositions[cont] = { (i+2) * HouseSpacing - 14 , row * rowSpacing - 2 * rowSpacing };
+				HousePositions[cont] = { (i+2) * HouseSpacing - 15 , row * rowSpacing - 2 * rowSpacing };
 				HouseRotationsX[cont] = baseRotation;
-				HouseVisible[cont] = 1;
+				HouseRotationsZ[cont] = 0.0f;
 			}
 			if (row == 2) {
-				HousePositions[cont] = { i * HouseSpacing - 14 , row * rowSpacing - 2 * rowSpacing + rowSpacing };
+				HousePositions[cont] = { i * HouseSpacing - 15 , row * rowSpacing - 2 * rowSpacing + rowSpacing };
 				HouseRotationsX[cont] = baseRotation;
 				HouseRotationsZ[cont] = 180.0f;
-				HouseVisible[cont] = 1;
 			}
 			if (row == 3) {
-				HousePositions[cont] = { i * HouseSpacing - 14 , row * rowSpacing - 2 * rowSpacing + rowSpacing };
+				HousePositions[cont] = { i * HouseSpacing - 15 , row * rowSpacing - 2 * rowSpacing + rowSpacing };
 				HouseRotationsX[cont] = baseRotation;
 				HouseRotationsZ[cont] = 180.0f;
-				HouseVisible[cont] = 1;
 			}
 			cont++;
 		}
@@ -62,12 +60,12 @@ void Game::ObjectsParameters()
 			AngleHouseRotationsZ[i] = 90.0f;
 			break;
 		case 2:
-			AngleHousePositions[i] = { -21.5f, 19.0f };
+			AngleHousePositions[i] = { -22.5f, 19.0f };
 			AngleHouseRotationsX[i] = 90.0f;
 			AngleHouseRotationsZ[i] = -90.0f;
 			break;
 		case 3:
-			AngleHousePositions[i] = { -21.0f, -20.0f };
+			AngleHousePositions[i] = { -22.0f, -20.0f };
 			AngleHouseRotationsX[i] = 90.0f;
 			AngleHouseRotationsZ[i] = 0.0f;
 			break;
@@ -95,7 +93,7 @@ void Game::ObjectsParameters()
 	}
 
 	//WALLS
-	WallPositions[0] = { 27.0f, 0.0f }; WallRotationsX[0] = 90.0f;  WallRotationsZ[0] = -90.0f;
+	WallPositions[0] = { 28.0f, 0.0f }; WallRotationsX[0] = 90.0f;  WallRotationsZ[0] = -90.0f;
 	WallPositions[1] = { -27.0f, 0.0f }; WallRotationsX[1] = 90.0f;  WallRotationsZ[1] = 90.0f;
 	WallPositions[2] = { 0.0f, 27.0f }; WallRotationsX[2] = 90.0f;  WallRotationsZ[2] = 0.0f;
 	WallPositions[3] = { 0.0f, -27.0f }; WallRotationsX[3] = 90.0f;  WallRotationsZ[3] = 180.0f;
@@ -120,8 +118,8 @@ void Game::ObjectsParameters()
 
 	//BIGGER_HOUSES
 	for (int i = 0; i < numOfBiggerHouses; i++) {
-		BiggerHousePositions[i].x = -21.5f;
-		BiggerHousePositions[i].y = i * (HouseSpacing) - 11.5f;
+		BiggerHousePositions[i].x = -22.5f;
+		BiggerHousePositions[i].y = i * (HouseSpacing) - 12.5f;
 		BiggerHouseRotationsX[i] = 90.0f;
 		BiggerHouseRotationsZ[i] = -90.0f;
 	}

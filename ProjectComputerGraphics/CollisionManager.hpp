@@ -14,15 +14,50 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 
 	//HOUSES
 	for (int i = 0; i < numOfHouses; i++) {
-		if (HouseVisible[i] == 0.0f) {
-			continue;
-		}
-		if (nextPos.x > HousePositions[i].x - 2.1f && nextPos.x < HousePositions[i].x + 2.1f &&
-			nextPos.z > HousePositions[i].y - 1.5f && nextPos.z < HousePositions[i].y + 1.5f) {
+		if (nextPos.x > HousePositions[i].x - 2.7f && nextPos.x < HousePositions[i].x + 2.7f &&
+			nextPos.z > HousePositions[i].y - 2.0f && nextPos.z < HousePositions[i].y + 2.0f) {
 			collision = true;
 			break;
 		}
 	}
 
-	//...
+	//ANGLE_HOUSES
+	for (int i = 0; i < numOfAngleHouses; i++) {
+		if (i == 0) {//vicino sx castello
+			if ((nextPos.x > AngleHousePositions[i].x - 2.7f && nextPos.x < AngleHousePositions[i].x + 2.7f &&
+				nextPos.z > AngleHousePositions[i].y - 2.0f && nextPos.z < AngleHousePositions[i].y + 2.0f) ||
+				(nextPos.x > AngleHousePositions[i].x - 0.5 && nextPos.x < AngleHousePositions[i].x + 2.7 &&
+				nextPos.z > AngleHousePositions[i].y - 2 * 2.0f && nextPos.z < AngleHousePositions[i].y + 2.0f)) {
+				collision = true;
+				break;
+			}
+		}
+		if (i == 1) {//vicino dx castello
+			if ((nextPos.x > AngleHousePositions[i].x - 2.0f && nextPos.x < AngleHousePositions[i].x + 2.0f &&
+				nextPos.z > AngleHousePositions[i].y - 2.7f && nextPos.z < AngleHousePositions[i].y + 2.7f)||
+				(nextPos.x > AngleHousePositions[i].x - 2 * 2.0f && nextPos.x < AngleHousePositions[i].x + 2.0f &&
+					nextPos.z > AngleHousePositions[i].y - 2.7f && nextPos.z < AngleHousePositions[i].y + 0.5f)) {
+				collision = true;
+				break;
+			}
+		}
+		if (i == 2) {//lontano sx castello
+			if ((nextPos.x > AngleHousePositions[i].x - 2.0f && nextPos.x < AngleHousePositions[i].x + 2.0f &&
+				nextPos.z > AngleHousePositions[i].y - 2.7f && nextPos.z < AngleHousePositions[i].y + 2.7f) ||
+				(nextPos.x > AngleHousePositions[i].x - 2.0f && nextPos.x < AngleHousePositions[i].x + 2 * 2.0f &&
+					nextPos.z > AngleHousePositions[i].y - 0.5f && nextPos.z < AngleHousePositions[i].y + 2.7f)) {
+				collision = true;
+				break;
+			}
+		}
+		if (i == 3) {//lontano dx castello
+			if ((nextPos.x > AngleHousePositions[i].x - 2.7f && nextPos.x < AngleHousePositions[i].x + 2.7f &&
+				nextPos.z > AngleHousePositions[i].y - 2.0f && nextPos.z < AngleHousePositions[i].y + 2.0f) ||
+				(nextPos.x > AngleHousePositions[i].x - 2.7f && nextPos.x < AngleHousePositions[i].x + 0.5f &&
+					nextPos.z > AngleHousePositions[i].y - 2.0f && nextPos.z < AngleHousePositions[i].y + 2 * 2.0f)) {
+				collision = true;
+				break;
+			}
+		}
+	}
 }

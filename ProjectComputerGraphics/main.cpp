@@ -46,21 +46,21 @@ protected:
 	static const int mapScale = 13;
 	static const int objectNumScale = 10;
 	static const int mapSize = 5 * mapScale;
-	static const int numOfAngleHouses = 4;
-	static const int numOfHouses = 18;//5 * objectNumScale - 10;
+	static const int numOfAngleHouses = 4;//m
+	static const int numOfHouses = 18;
 	static const int numOfStones = 1300;
 	static const int numOfBushes = 400;
-	static const int numOfCastle = 1;
+	static const int numOfCastle = 1;//f
 	static const int numOfWalls = 4;
-	static const int numOfTowers = 2;
+	static const int numOfTowers = 2;//m
 	static const int numOfLights = 12;
-	static const int numOfBiggerHouses = 5;
-	static const int numOfDoubleHouses = 2;
+	static const int numOfBiggerHouses = 5;//f
+	static const int numOfDoubleHouses = 2;//m
 	static const int numOfFlags = 4;
 	static const int numOfChests = 1;
-	static const int numOfStatue1 = 1;
-	static const int numOfStatue2 = 1;
-	static const int numOfWell = 1;
+	static const int numOfStatue1 = 1;//f
+	static const int numOfStatue2 = 1;//f
+	static const int numOfWell = 1;//m
 	static const int numOfClouds = 12;
 	static const int numOfCollisions = (numOfAngleHouses + numOfHouses) * objectNumScale;
 
@@ -113,7 +113,7 @@ protected:
 	glm::vec2 groundPositions[4] = { {-1, -1}, {-1, 0}, {0, -1}, {0, 0} };
 
 	glm::vec2 HousePositions[numOfHouses];
-	float HouseVisible[numOfHouses];
+	//float HouseVisible[numOfHouses];
 	float HouseRotationsX[numOfHouses];
 	float HouseRotationsZ[numOfHouses];
 
