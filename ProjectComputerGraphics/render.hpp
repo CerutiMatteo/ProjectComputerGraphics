@@ -128,6 +128,11 @@ void Game::RenderTowers(uint32_t currentImage)
 
 void Game::RenderDoubleHouses(uint32_t currentImage)
 {
+	for (int i = 0; i < numOfDoubleHouses; i++)
+	{
+		GWorld = glm::translate(glm::mat4(1), glm::vec3(DoubleHousePositions[i].x, 0, DoubleHousePositions[i].y))* glm::rotate(glm::mat4(1.0f), glm::radians(DoubleHousesRotationX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(DoubleHousesRotationZ[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(0.30f));
+		SetUboDs(currentImage, uboDoubleHouses, DSDoubleHouses, i);
+	}
 }
 
 void Game::RenderFlags(uint32_t currentImage)

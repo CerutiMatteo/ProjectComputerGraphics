@@ -142,6 +142,8 @@ protected:
 	float TowerRotationsZ[numOfWalls];
 
 	glm::vec2 DoubleHousePositions[numOfDoubleHouses];
+	float DoubleHousesRotationX[numOfDoubleHouses];
+	float DoubleHousesRotationZ[numOfDoubleHouses];
 
 	glm::vec2 BiggerHousePositions[numOfBiggerHouses];
 	float BiggerHouseRotationsX[numOfBiggerHouses];

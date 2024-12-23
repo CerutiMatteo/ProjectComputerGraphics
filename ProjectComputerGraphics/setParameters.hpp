@@ -21,9 +21,16 @@ void Game::ObjectsParameters()
 			HouseVisible[row * housesPerRow + i] = 1;
 			X = i * spacing - 14;
 			Y = row * rowSpacing - 2 * rowSpacing;
-			if ((i == housesPerRow - 1 and row > 0 and row < 4) || (row == 2 && i == housesPerRow - 2)) {
+			if ((i == housesPerRow - 1 and row > 0 and row < 4) ||  (i == housesPerRow -2 and ( row == 1 || row == 3))) {
 				HouseVisible[row * housesPerRow + i] = 0;
 			}
+
+			if((i == 0 || i == 1) and row == 1)
+				HouseVisible[row * housesPerRow + i] = 0;
+
+			if((i == housesPerRow - 3 || i == housesPerRow - 4) and row == 3)
+				HouseVisible[row * housesPerRow + i] = 0;
+
 			HouseRotationsZ[row * housesPerRow + i] = 0.0f;
 			if (row == 4 || row == 1) {
 				HouseRotationsZ[row * housesPerRow + i] = 180.0f;
@@ -63,14 +70,14 @@ void Game::ObjectsParameters()
 
 	//STONES
 	for (int i = 0; i < numOfStones; i++) {
-		StonePositions[i].x = -21.0f + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (22.0f - (-21.0f))));
-		StonePositions[i].y = -19.0f + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (20.0f - (-19.0f))));
+		StonePositions[i].x = -27 + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX) / 54);
+		StonePositions[i].y = -27 + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX) / 54);
 	}
 
 	//BUSHES
 	for (int i = 0; i < numOfBushes; i++) {
-		BushPositions[i].x = -21.0f + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (22.0f - (-21.0f))));
-		BushPositions[i].y = -19.0f + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (20.0f - (-19.0f))));
+		BushPositions[i].x = -27 + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX) / 54);
+		BushPositions[i].y = -27 + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX) / 54);
 		BushRotationsX[i] = 90.0f;
 	}
 
@@ -138,5 +145,11 @@ void Game::ObjectsParameters()
 		CloudsSize[i] =  static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
 
 	}
+
+	//DOUBLE HOUSE
+
+	DoubleHousePositions[0] = { -11.75f,-10.0f }; DoubleHousesRotationX[0] = 90.0f; DoubleHousesRotationZ[0] = 180.0f;
+	DoubleHousePositions[1] = { 6.25f,10.0f }; DoubleHousesRotationX[1] = 90.0f; DoubleHousesRotationZ[1] = 0.0f;
+
 
 }
