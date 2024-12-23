@@ -146,6 +146,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionManager.hpp" />
     <ClInclude Include="navigationHandler.hpp" />
     <ClInclude Include="render.hpp" />
     <ClInclude Include="setParameters.hpp" />

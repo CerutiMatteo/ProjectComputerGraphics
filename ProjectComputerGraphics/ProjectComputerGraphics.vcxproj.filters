@@ -29,5 +29,8 @@
     <ClInclude Include="navigationHandler.hpp">
       <Filter>File di risorse</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionManager.hpp">
+      <Filter>File di risorse</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

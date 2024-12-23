@@ -91,8 +91,8 @@ void Game::ObjectsParameters()
 	//WALLS
 	WallPositions[0] = { 27.0f, 0.0f }; WallRotationsX[0] = 90.0f;  WallRotationsZ[0] = -90.0f;
 	WallPositions[1] = { -27.0f, 0.0f }; WallRotationsX[1] = 90.0f;  WallRotationsZ[1] = 90.0f;
-	WallPositions[3] = { 0.0f, -27.0f }; WallRotationsX[3] = 90.0f;  WallRotationsZ[3] = 180.0f;
 	WallPositions[2] = { 0.0f, 27.0f }; WallRotationsX[2] = 90.0f;  WallRotationsZ[2] = 0.0f;
+	WallPositions[3] = { 0.0f, -27.0f }; WallRotationsX[3] = 90.0f;  WallRotationsZ[3] = 180.0f;
 
 	//TOWERS
 	TowerPositions[0] = { 21.0f, 10.0f }; TowerRotationsX[0] = 90.0f; TowerRotationsZ[0] = 90.0f;

@@ -186,8 +186,8 @@ protected:
 	//	float gAnimation = -10.0f;
 	//	int animationCounter = 0;
 
-	// Collision Parameters ??
-	bool xCollision = false, yCollision = false, isCollision = false;
+	// PARAMETRI PER LE COLLISIONI
+	bool xCollision = false, yCollision = false, collision = false;
 	int thresholdIndex = 0;
 	std::tuple<glm::vec2, float> collisionsInfo[numOfCollisions];
 	float towerThreshold = 7.8f;
@@ -825,13 +825,14 @@ protected:
 	void RenderClouds(uint32_t currentImage);
 	/*cosa fa?*/void SetUboDs(uint32_t currentImage, MeshUniformBlock ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
 		float gamma = 80.0f, glm::vec3 sColor = glm::vec3(1.0f));
+	void BorderHandler(glm::vec3& pos, glm::vec3& nextPos);
 	void ObjectsParameters();
 	void Spectate();
 	void PlayerController(uint32_t currentImage);
 };
 
 #include "navigationHandler.hpp"
-//#include "CollisionHandler.hpp"
+#include "collisionManager.hpp"
 #include "render.hpp"
 #include "setParameters.hpp"
 

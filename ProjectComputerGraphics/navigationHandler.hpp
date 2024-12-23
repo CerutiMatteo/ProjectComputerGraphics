@@ -70,6 +70,7 @@ void Game::PlayerController(uint32_t currentImage)
 	getSixAxis(deltaT, m, r, fire);
 
 	static glm::vec3 pos = startingPosition;
+	glm::vec3 nextPos = pos;
 	static float yaw = glm::radians(90.0f),//cosi parto girato verso il centro della mappa
 				 pitch = 0,
 				 roll = 0;
@@ -79,8 +80,6 @@ void Game::PlayerController(uint32_t currentImage)
 	static glm::mat4 finalRy = glm::mat4(1);
 	static float finalYaw = 0;
 	static int counter = 0;
-
-	//glm::vec3 nextPos = pos;
 
 
 
@@ -101,12 +100,12 @@ void Game::PlayerController(uint32_t currentImage)
 	yaw += ANGULAR_SPEED * -r.y * deltaT;
 	roll += ANGULAR_SPEED * r.z * deltaT;
 	//std::cout << pitch << "-";
-	glm::vec2 cp = { 5, 5 }; // CollisionPosition
-	/*nextPos += ux * LINEAR_SPEED * m.x * deltaT;
-	nextPos += uz * LINEAR_SPEED * m.z * deltaT;*/
+	glm::vec2 cp = { 5, 5 };
+	nextPos += ux * LINEAR_SPEED * m.x * deltaT;
+	nextPos += uz * LINEAR_SPEED * m.z * deltaT;
 
-	/*MapBorderCollisionHandler(pos, nextPos);
-	CollisionChecker(nextPos);*/
+	BorderHandler(pos, nextPos);
+	//CollisionChecker(nextPos);*/
 	//std::cout << uy.y;
 	/*if (m.x == 0)
 	{
@@ -116,12 +115,11 @@ void Game::PlayerController(uint32_t currentImage)
 	{
 		characterRot.z = 0;
 	}*/
-	if (!isCollision)
+	if (!collision)
 	{
-		pos += ux * LINEAR_SPEED * m.x * deltaT;
-		pos += uz * LINEAR_SPEED * m.z * deltaT;
-		//std::cout << pos.x << "=" << pos.z << " & ";
+		pos = nextPos;
 	}
+	collision = false;
 
 	//characterRot += realNormX * LINEAR_SPEED * m.x * deltaT;
 	//characterRot += realNormZ * LINEAR_SPEED * m.z * deltaT;
