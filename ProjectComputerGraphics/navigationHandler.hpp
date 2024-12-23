@@ -104,34 +104,12 @@ void Game::PlayerController(uint32_t currentImage)
 	nextPos += ux * LINEAR_SPEED * m.x * deltaT;
 	nextPos += uz * LINEAR_SPEED * m.z * deltaT;
 
-	BorderHandler(pos, nextPos);
-	//CollisionChecker(nextPos);*/
-	//std::cout << uy.y;
-	/*if (m.x == 0)
-	{
-		characterRot.x = 0;
-	}
-	else if (m.z == 0)
-	{
-		characterRot.z = 0;
-	}*/
+	CollisionCheck(pos, nextPos);
 	if (!collision)
 	{
 		pos = nextPos;
 	}
 	collision = false;
-
-	//characterRot += realNormX * LINEAR_SPEED * m.x * deltaT;
-	//characterRot += realNormZ * LINEAR_SPEED * m.z * deltaT;
-
-	/*if (characterRot.x > 180)
-	{
-		characterRot.x -= 360;
-	}
-	else if (characterRot.x < -180)
-	{
-		characterRot.x += 360;
-	}*/
 
 
 	pos += uy * LINEAR_SPEED * m.y * deltaT;
@@ -182,8 +160,19 @@ void Game::PlayerController(uint32_t currentImage)
 	ViewPrjOld = ViewPrj;
 
 
-	//PickItem(pos);
+	FoundChest(pos);
 	//ShowInteractionMessage(currentImage, pos);
 	//CheckLose(pos);
 
+}
+
+void Game::FoundChest(glm::vec3 pos) {
+	for (int i = 0; i < numOfChests; i++) {
+		if (pos.x < ChestPositions[i].x + 1.0f && pos.x > ChestPositions[i].x - 1.0f &&
+			pos.z < ChestPositions[i].y + 1.0f && pos.z > ChestPositions[i].y - 1.0f) {
+			if (glfwGetKey(window, GLFW_KEY_ENTER)) {
+				ChestVisibles[i] = 0.0f;
+			}
+		}
+	}
 }

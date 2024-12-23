@@ -157,6 +157,7 @@ protected:
 
 	glm::vec2 ChestPositions[numOfChests];
 	float ChestRotationsX[numOfChests];
+	float ChestVisibles[numOfChests];
 
 	glm::vec2 Statue1Positions[numOfStatue1];
 	float Statue1RotationsX[numOfStatue1];
@@ -808,24 +809,25 @@ protected:
 	void RenderEnvironment(uint32_t currentImage);
 	void RenderGround(uint32_t currentImage);
 	void RenderHouses(uint32_t currentImage);
-	void RenderAngleHouses(uint32_t currentImage);
+	void RenderAngleHouses(uint32_t currentImage);//m
 	void RenderStones(uint32_t currentImage);
 	void RenderBushes(uint32_t currentImage);
-	void RenderCastle(uint32_t currentImage);
+	void RenderCastle(uint32_t currentImage);//f
 	void RenderWalls(uint32_t currentImage);
 	void RenderLights(uint32_t currentImage);
-	void RenderTowers(uint32_t currentImage);
-	void RenderDoubleHouses(uint32_t currentImage);
-	void RenderBiggerHouses(uint32_t currentImage);
+	void RenderTowers(uint32_t currentImage);//m
+	void RenderDoubleHouses(uint32_t currentImage);//f
+	void RenderBiggerHouses(uint32_t currentImage);//m
 	void RenderFlags(uint32_t currentImage);
 	void RenderChests(uint32_t currentImage);
-	void RenderStatue1(uint32_t currentImage);
-	void RenderStatue2(uint32_t currentImage);
-	void RenderWell(uint32_t currentImage);
+	void RenderStatue1(uint32_t currentImage);//f
+	void RenderStatue2(uint32_t currentImage);//f
+	void RenderWell(uint32_t currentImage);//m
 	void RenderClouds(uint32_t currentImage);
 	/*cosa fa?*/void SetUboDs(uint32_t currentImage, MeshUniformBlock ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
 		float gamma = 80.0f, glm::vec3 sColor = glm::vec3(1.0f));
-	void BorderHandler(glm::vec3& pos, glm::vec3& nextPos);
+	void CollisionCheck(glm::vec3& pos, glm::vec3& nextPos);
+	void FoundChest(glm::vec3 pos);
 	void ObjectsParameters();
 	void Spectate();
 	void PlayerController(uint32_t currentImage);

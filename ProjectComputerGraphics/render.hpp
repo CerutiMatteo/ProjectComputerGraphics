@@ -59,7 +59,10 @@ void Game::RenderHouses(uint32_t currentImage)
 		if (HouseVisible[i] == 1) {
 			GWorld = glm::translate(glm::mat4(1), glm::vec3(HousePositions[i].x, 0, HousePositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(HouseRotationsX[i]), glm::vec3(1, 0, 0)) * glm::rotate(glm::mat4(1.0f), glm::radians(HouseRotationsZ[i]), glm::vec3(0, 0, 1)) * glm::scale(glm::mat4(1), glm::vec3(0.4f));
 		}
-		SetUboDs(currentImage, uboHouses, DSHouses, i, 0.7f);
+		else {
+			GWorld = 0;
+		}
+		SetUboDs(currentImage, uboHouses, DSHouses, i);
 	}
 }
 
@@ -156,8 +159,13 @@ void Game::RenderBiggerHouses(uint32_t currentImage)
 void Game::RenderChests(uint32_t currentImage)
 {
 	for (int i = 0; i < numOfChests; i++)
-	{
-		GWorld = glm::translate(glm::mat4(1), glm::vec3(ChestPositions[i].x, 0, ChestPositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(ChestRotationsX[i]), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1), glm::vec3(0.001f));
+	{	
+		if (ChestVisibles[i] == 1.0f) {
+			GWorld = glm::translate(glm::mat4(1), glm::vec3(ChestPositions[i].x, 0, ChestPositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(ChestRotationsX[i]), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1), glm::vec3(0.001f));
+		}
+		else {
+			GWorld = 0;
+		}
 		SetUboDs(currentImage, uboChests, DSChests, i);
 	}
 }

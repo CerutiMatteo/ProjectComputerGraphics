@@ -127,8 +127,8 @@ void Game::ObjectsParameters()
 	FlagPositions[3] = { 20.0f, 7.0f, 4.0f }; FlagRotationsX[3] = 30.0f; FlagRotationsY[3] = 90.0f; FlagRotationsZ[3] = -90.0f; FlagScales[3] = 2.0f;//castello torre destra
 
 	//CHEST
-	ChestPositions[0] = { 30.0f, 0.0f }; ChestRotationsX[0] = 90.0f;//aggiungere ceste e creare gli "spawn"
-
+	ChestPositions[0] = { 0.0f, 0.0f }; ChestRotationsX[0] = 90.0f;//aggiungere ceste e creare gli "spawn"
+	ChestVisibles[0] = 1.0f;
 	//STATUES 1,2
 	Statue1Positions[0] = { 5.0f,0.0f }; Statue1RotationsX[0] = 0.0f; Statue1RotationsY[0] = -90.0f;
 	Statue2Positions[0] = { -5.0f,0.0f }; Statue2RotationsX[0] = 0.0f; Statue2RotationsY[0] = 90.0f;
@@ -147,7 +147,6 @@ void Game::ObjectsParameters()
 	}
 
 	//DOUBLE HOUSE
-
 	DoubleHousePositions[0] = { -11.75f,-10.0f }; DoubleHousesRotationX[0] = 90.0f; DoubleHousesRotationZ[0] = 180.0f;
 	DoubleHousePositions[1] = { 6.25f,10.0f }; DoubleHousesRotationX[1] = 90.0f; DoubleHousesRotationZ[1] = 0.0f;
 

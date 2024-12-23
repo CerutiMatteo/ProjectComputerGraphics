@@ -1,4 +1,4 @@
-void Game::BorderHandler(glm::vec3 &pos, glm::vec3 &nextPos) {
+void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 	if (nextPos.x > WallPositions[0].x - 1.5f) {
 		nextPos.x = WallPositions[0].x - 1.6f;
 	}
