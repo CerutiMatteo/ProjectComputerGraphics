@@ -47,7 +47,7 @@ protected:
 	static const int objectNumScale = 10;
 	static const int mapSize = 5 * mapScale;
 	static const int numOfAngleHouses = 4;
-	static const int numOfHouses = 5 * objectNumScale - 10;
+	static const int numOfHouses = 18;//5 * objectNumScale - 10;
 	static const int numOfStones = 1300;
 	static const int numOfBushes = 400;
 	static const int numOfCastle = 1;

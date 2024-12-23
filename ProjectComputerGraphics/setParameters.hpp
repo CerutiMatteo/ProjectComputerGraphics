@@ -6,37 +6,43 @@ void Game::ObjectsParameters()
 	std::srand(static_cast<unsigned int>(std::time(nullptr)));
 	float rowSpacing = 10.0f; // Distanza tra le file
 
-	// Houses
+	//HOUSES
 	float baseRotation = 90.0f; // Rotazione costante per tutte le case
-	float spacing = 4.5f; // Spaziatura tra le case
-
-	int housesPerRow = numOfHouses / 5; // numOfHouse > 5
-	for (int row = 0; row < 5; row++) // Tre file
-	{	
-		if (row == 2) {//lascio libero lo spazio nel mezzo
-			continue;
+	float HouseSpacing = 6.0f; // Spaziatura tra le case
+	int cont = 0;
+	int housesPerRow = 0; 
+	for (int row = 0; row < 4; row++) // 4 file, 2 interne e 2 esterne
+	{
+		if (row == 1 || row == 2) {
+			housesPerRow = 3;
 		}
-		for (int i = 0; i < housesPerRow; i++) // Case per fila
-		{
-			HouseVisible[row * housesPerRow + i] = 1;
-			X = i * spacing - 14;
-			Y = row * rowSpacing - 2 * rowSpacing;
-			if ((i == housesPerRow - 1 and row > 0 and row < 4) ||  (i == housesPerRow -2 and ( row == 1 || row == 3))) {
-				HouseVisible[row * housesPerRow + i] = 0;
+		else {
+			housesPerRow = 6;
+		}
+		for (int i = 0; i < housesPerRow; i++) {
+			if (row == 0) {
+				HousePositions[cont] = { i * HouseSpacing - 14, row * rowSpacing - 2 * rowSpacing };
+				HouseRotationsX[cont] = baseRotation; 
+				HouseVisible[cont] = 1;
 			}
-
-			if((i == 0 || i == 1) and row == 1)
-				HouseVisible[row * housesPerRow + i] = 0;
-
-			if((i == housesPerRow - 3 || i == housesPerRow - 4) and row == 3)
-				HouseVisible[row * housesPerRow + i] = 0;
-
-			HouseRotationsZ[row * housesPerRow + i] = 0.0f;
-			if (row == 4 || row == 1) {
-				HouseRotationsZ[row * housesPerRow + i] = 180.0f;
+			if (row == 1) {
+				HousePositions[cont] = { (i+2) * HouseSpacing - 14 , row * rowSpacing - 2 * rowSpacing };
+				HouseRotationsX[cont] = baseRotation;
+				HouseVisible[cont] = 1;
 			}
-			HousePositions[row * housesPerRow + i] = { X, Y };
-			HouseRotationsX[row * housesPerRow + i] = baseRotation;
+			if (row == 2) {
+				HousePositions[cont] = { i * HouseSpacing - 14 , row * rowSpacing - 2 * rowSpacing + rowSpacing };
+				HouseRotationsX[cont] = baseRotation;
+				HouseRotationsZ[cont] = 180.0f;
+				HouseVisible[cont] = 1;
+			}
+			if (row == 3) {
+				HousePositions[cont] = { i * HouseSpacing - 14 , row * rowSpacing - 2 * rowSpacing + rowSpacing };
+				HouseRotationsX[cont] = baseRotation;
+				HouseRotationsZ[cont] = 180.0f;
+				HouseVisible[cont] = 1;
+			}
+			cont++;
 		}
 	}
 
@@ -115,7 +121,7 @@ void Game::ObjectsParameters()
 	//BIGGER_HOUSES
 	for (int i = 0; i < numOfBiggerHouses; i++) {
 		BiggerHousePositions[i].x = -21.5f;
-		BiggerHousePositions[i].y = i * (spacing + 1) - 11.5f;
+		BiggerHousePositions[i].y = i * (HouseSpacing) - 11.5f;
 		BiggerHouseRotationsX[i] = 90.0f;
 		BiggerHouseRotationsZ[i] = -90.0f;
 	}
@@ -147,8 +153,8 @@ void Game::ObjectsParameters()
 	}
 
 	//DOUBLE HOUSE
-	DoubleHousePositions[0] = { -11.75f,-10.0f }; DoubleHousesRotationX[0] = 90.0f; DoubleHousesRotationZ[0] = 180.0f;
-	DoubleHousePositions[1] = { 6.25f,10.0f }; DoubleHousesRotationX[1] = 90.0f; DoubleHousesRotationZ[1] = 0.0f;
+	DoubleHousePositions[0] = { -10.75f,-10.0f }; DoubleHousesRotationX[0] = 90.0f; DoubleHousesRotationZ[0] = 0.0f;
+	DoubleHousePositions[1] = { 6.25f,10.0f }; DoubleHousesRotationX[1] = 90.0f; DoubleHousesRotationZ[1] = 180.0f;
 
 
 }
