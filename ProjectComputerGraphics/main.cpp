@@ -46,12 +46,12 @@ protected:
 	static const int mapScale = 13;
 	static const int objectNumScale = 10;
 	static const int mapSize = 5 * mapScale;
-	static const int numOfAngleHouses = 4;//m
-	static const int numOfHouses = 18;
+	static const int numOfAngleHouses = 4;//fatto
+	static const int numOfHouses = 18;//fatto
 	static const int numOfStones = 1300;
 	static const int numOfBushes = 400;
-	static const int numOfCastle = 1;//f
-	static const int numOfWalls = 4;
+	static const int numOfCastle = 1;//fatto
+	static const int numOfWalls = 4;//fatto
 	static const int numOfTowers = 2;//m
 	static const int numOfLights = 12;
 	static const int numOfBiggerHouses = 5;//f

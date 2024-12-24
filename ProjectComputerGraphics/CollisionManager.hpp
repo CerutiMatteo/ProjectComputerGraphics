@@ -14,8 +14,8 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 
 	//HOUSES
 	for (int i = 0; i < numOfHouses; i++) {
-		if (nextPos.x > HousePositions[i].x - 2.7f && nextPos.x < HousePositions[i].x + 2.7f &&
-			nextPos.z > HousePositions[i].y - 2.0f && nextPos.z < HousePositions[i].y + 2.0f) {
+		if (nextPos.x > HousePositions[i].x - 2.6f && nextPos.x < HousePositions[i].x + 2.6f &&
+			nextPos.z > HousePositions[i].y - 1.9f && nextPos.z < HousePositions[i].y + 1.9f) {
 			collision = true;
 			break;
 		}
@@ -59,5 +59,18 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 				break;
 			}
 		}
+	}
+
+	//CASTLE
+
+	for (int i = 0; i < numOfCastle; i++) {
+		
+		if (nextPos.x > CastlePositions[i].x - 4.5f && nextPos.x < CastlePositions[i].x + 4.0f &&
+			nextPos.z > CastlePositions[i].y - 6.0f && nextPos.z < CastlePositions[i].y + 6.0f) {
+
+			collision = true;
+			break;
+		}
+
 	}
 }
