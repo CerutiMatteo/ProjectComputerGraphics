@@ -73,4 +73,13 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 		}
 
 	}
+
+	//TOWERS
+	for (int i = 0; i < numOfTowers; i++) {
+		if (nextPos.x > TowerPositions[i].x - 3.0f && nextPos.x < TowerPositions[i].x + 3.0f &&
+			nextPos.z > TowerPositions[i].y - 3.0f && nextPos.z < TowerPositions[i].y + 3.0f) {
+			collision = true;
+			break;
+		}
+	}
 }
