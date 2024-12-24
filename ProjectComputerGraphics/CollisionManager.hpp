@@ -62,7 +62,6 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 	}
 
 	//CASTLE
-
 	for (int i = 0; i < numOfCastle; i++) {
 		
 		if (nextPos.x > CastlePositions[i].x - 4.5f && nextPos.x < CastlePositions[i].x + 4.0f &&
@@ -71,13 +70,39 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 			collision = true;
 			break;
 		}
-
 	}
+
+	//DOUBLE_HOUSES
+	for (int i = 0; i < numOfDoubleHouses; i++) {
+		if (nextPos.x > DoubleHousePositions[i].x + 1.0f && nextPos.x < DoubleHousePositions[i].x + 5.0f &&
+			nextPos.z > DoubleHousePositions[i].y - 2.2f && nextPos.z < DoubleHousePositions[i].y + 2.2f) {
+			collision = true;
+			break;
+		}
+		if (nextPos.x > DoubleHousePositions[i].x - 5.0f && nextPos.x < DoubleHousePositions[i].x - 1.0f &&
+			nextPos.z > DoubleHousePositions[i].y - 2.2f && nextPos.z < DoubleHousePositions[i].y + 2.2f) {
+			collision = true;
+			break;
+		}
+	}
+
 
 	//TOWERS
 	for (int i = 0; i < numOfTowers; i++) {
 		if (nextPos.x > TowerPositions[i].x - 3.0f && nextPos.x < TowerPositions[i].x + 3.0f &&
 			nextPos.z > TowerPositions[i].y - 3.0f && nextPos.z < TowerPositions[i].y + 3.0f) {
+			collision = true;
+			break;
+		}
+	}
+
+	//WELL
+	for (int i = 0; i < numOfWell; i++) {
+		float dx = nextPos.x - WellPosition[i].x; // Distanza lungo l'asse X
+		float dz = nextPos.z - WellPosition[i].y; // Distanza lungo l'asse Z
+		float distanceSquared = dx * dx + dz * dz; // Distanza al quadrato
+
+		if (distanceSquared < 1 * 1) { // Confronta con il raggio al quadrato
 			collision = true;
 			break;
 		}
