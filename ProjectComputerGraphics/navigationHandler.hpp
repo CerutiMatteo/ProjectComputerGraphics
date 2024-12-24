@@ -168,10 +168,15 @@ void Game::PlayerController(uint32_t currentImage)
 
 void Game::FoundChest(glm::vec3 pos) {
 	for (int i = 0; i < numOfChests; i++) {
+
 		if (pos.x < ChestPositions[i].x + 1.0f && pos.x > ChestPositions[i].x - 1.0f &&
-			pos.z < ChestPositions[i].y + 1.0f && pos.z > ChestPositions[i].y - 1.0f) {
+			pos.z < ChestPositions[i].y + 1.0f && pos.z > ChestPositions[i].y - 1.0f  && round < 5) {
+
 			if (glfwGetKey(window, GLFW_KEY_ENTER)) {
-				ChestVisibles[i] = 0.0f;
+
+				round++;
+				ChestPositions[0] = ChestSpawn[round];
+				ChestDimension[0] = ChestScale[round];
 			}
 		}
 	}

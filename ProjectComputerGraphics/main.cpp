@@ -157,7 +157,11 @@ protected:
 
 	glm::vec2 ChestPositions[numOfChests];
 	float ChestRotationsX[numOfChests];
-	float ChestVisibles[numOfChests];
+	float ChestDimension[numOfChests];
+	glm::vec2 ChestSpawn[5];
+	float ChestScale[5];
+	int round;
+
 
 	glm::vec2 Statue1Positions[numOfStatue1];
 	float Statue1RotationsX[numOfStatue1];
