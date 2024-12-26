@@ -107,4 +107,38 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 			break;
 		}
 	}
+
+	//BIGGER HOUSES
+
+	for(int i = 0; i < numOfBiggerHouses; i++){
+	
+		if (nextPos.x > BiggerHousePositions[i].x - 2.0f && nextPos.x < BiggerHousePositions[i].x + 2.0f &&
+			nextPos.z > BiggerHousePositions[i].y - 2.5f && nextPos.z < BiggerHousePositions[i].y + 2.65f) {
+
+			collision = true;
+			break;
+		}
+	}
+
+	//STATUE
+
+	for (int i = 0; i < numOfStatue1; i++) {
+
+		if (nextPos.x > Statue1Positions[i].x - 1.10f && nextPos.x < Statue1Positions[i].x + 1.10f &&
+			nextPos.z > Statue1Positions[i].y - 1.10f && nextPos.z < Statue1Positions[i].y + 1.10f) {
+
+			collision = true;
+			break;
+		}
+	}
+
+	for (int i = 0; i < numOfStatue2; i++) {
+
+		if (nextPos.x > Statue2Positions[i].x - 1.10f && nextPos.x < Statue2Positions[i].x + 1.10f &&
+			nextPos.z > Statue2Positions[i].y - 1.10f && nextPos.z < Statue2Positions[i].y + 1.10f) {
+
+			collision = true;
+			break;
+		}
+	}
 }
