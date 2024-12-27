@@ -1,15 +1,15 @@
 void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 	if (nextPos.x > WallPositions[0].x - 1.5f) {
-		nextPos.x = WallPositions[0].x - 1.6f;
+		collision = true;
 	}
 	if (nextPos.x < WallPositions[1].x + 1.5f) {
-		nextPos.x = WallPositions[1].x + 1.6f;
+		collision = true;
 	}
 	if (nextPos.z > WallPositions[2].y - 1.5f) {
-		nextPos.z = WallPositions[2].y - 1.6f;
+		collision = true;
 	}
 	if (nextPos.z < WallPositions[3].y + 1.5f) {
-		nextPos.z = WallPositions[3].y + 1.6f;
+		collision = true; 
 	}
 
 	//HOUSES
@@ -109,7 +109,6 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 	}
 
 	//BIGGER HOUSES
-
 	for(int i = 0; i < numOfBiggerHouses; i++){
 	
 		if (nextPos.x > BiggerHousePositions[i].x - 2.0f && nextPos.x < BiggerHousePositions[i].x + 2.0f &&
@@ -120,8 +119,7 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 		}
 	}
 
-	//STATUE
-
+	//STATUES
 	for (int i = 0; i < numOfStatue1; i++) {
 
 		if (nextPos.x > Statue1Positions[i].x - 1.10f && nextPos.x < Statue1Positions[i].x + 1.10f &&
@@ -131,7 +129,6 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 			break;
 		}
 	}
-
 	for (int i = 0; i < numOfStatue2; i++) {
 
 		if (nextPos.x > Statue2Positions[i].x - 1.10f && nextPos.x < Statue2Positions[i].x + 1.10f &&

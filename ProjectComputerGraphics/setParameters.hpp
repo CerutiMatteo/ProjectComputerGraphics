@@ -131,15 +131,17 @@ void Game::ObjectsParameters()
 	FlagPositions[3] = { 20.0f, 7.0f, 4.0f }; FlagRotationsX[3] = 30.0f; FlagRotationsY[3] = 90.0f; FlagRotationsZ[3] = -90.0f; FlagScales[3] = 2.0f;//castello torre destra
 
 	//CHEST
-
-	ChestSpawn[0] = { 0.0f,0.0f }; ChestScale[0] = 0.002f;
-	ChestSpawn[1] = { 27.0f,0.0f }; ChestScale[1] = 0.0015f;
-	ChestSpawn[2] = { -26.0f,0.0f }; ChestScale[2] = 0.001f;
-	ChestSpawn[3] = { 0.0f,26.0f }; ChestScale[3] = 0.00075f;
-	ChestSpawn[4] = { 0.0f,-26.0f }; ChestScale[4] = 0.0005f;
+	ChestSpawn[0] = { 0.0f,0.0f }; 
+	ChestSpawn[1] = { 27.0f,0.0f };
+	ChestSpawn[2] = { -26.0f,0.0f };
+	ChestSpawn[3] = { 0.0f,26.0f }; 
+	ChestSpawn[4] = { 0.0f,-26.0f };
+	for (int i = 0; i < numOfSpawns; i++) {
+		SpawnsFound[i] = 0;
+	}
 	round = 0;
 
-	ChestPositions[0] = ChestSpawn[0]; ChestRotationsX[0] = 90.0f; ChestDimension[0] = ChestScale[0];
+	ChestPositions[0] = ChestSpawn[0]; ChestRotationsX[0] = 90.0f; ChestDimension[0] = 0.0025;
 	
 	//STATUES 1,2
 	Statue1Positions[0] = { 5.0f,0.0f }; Statue1RotationsX[0] = 0.0f; Statue1RotationsY[0] = -90.0f;
@@ -155,12 +157,9 @@ void Game::ObjectsParameters()
 		CloudsPosition[i].y = 15.0f;
 		CloudsPosition[i].z = -27 + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX) / 54);
 		CloudsSize[i] =  static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX);
-
 	}
 
 	//DOUBLE HOUSE
 	DoubleHousePositions[0] = { -10.75f,-10.0f }; DoubleHousesRotationX[0] = 90.0f; DoubleHousesRotationZ[0] = 0.0f;
 	DoubleHousePositions[1] = { 6.25f,10.0f }; DoubleHousesRotationX[1] = 90.0f; DoubleHousesRotationZ[1] = 180.0f;
-
-
 }

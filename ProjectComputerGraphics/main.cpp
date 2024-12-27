@@ -77,10 +77,10 @@ protected:
 	Model<VertexMesh> MCharacter, MGround, MHouses, MAngleHouses, MStones, MBushes, 
 					  MCastle, MWalls, MTowers, MLights, MBiggerHouses, MDoubleHouses, MFlags, MChests,
 					  MStatue1, MStatue2,MWell, MClouds;
-	Model<VertexOverlay> MStartPanel;
+	Model<VertexOverlay> MStartPanel, MWinPanel;
 
 	// Textures
-	Texture TCharacter, TGround, TMedieval, TStone, TBush, TStartPanel, TWall, TChest, TDungeon, TClouds;
+	Texture TCharacter, TGround, TMedieval, TStone, TBush, TStartPanel, TWall, TChest, TDungeon, TClouds, TWinPanel;
 
 	// Descriptor sets
 	DescriptorSet DSGubo, DSCharacter, DSGround[4], DSHouses[numOfHouses],
@@ -88,7 +88,7 @@ protected:
 		DSCastle[numOfCastle], DSWalls[numOfWalls], DSTowers[numOfTowers], DSLights[numOfLights],
 		DSBiggerHouses[numOfBiggerHouses], DSDoubleHouses[numOfDoubleHouses],
 		DSFlags[numOfFlags], DSChests[numOfChests], DSStatue1[numOfStatue1], DSStatue2[numOfStatue2],DSWell[numOfWell],DSClouds[numOfClouds],
-		DSStartPanel;
+		DSStartPanel, DSWinPanel;
 
 	// Uniform Blocks //altri ?
 	GlobalUniformBlock gubo;
@@ -97,23 +97,13 @@ protected:
 		uboWalls[numOfWalls], uboTowers[numOfTowers], uboLights[numOfLights], uboBiggerHouses[numOfBiggerHouses],
 		uboDoubleHouses[numOfDoubleHouses], uboFlags[numOfFlags], uboChests[numOfChests], uboStatue1[numOfStatue1],
 		uboStatue2[numOfStatue2],uboWell[numOfWell], uboClouds[numOfClouds];
-	OverlayUniformBlock uboStartPanel;
-
-	// Text
-	/*TextMaker txt;
-	int numOfItemsInMap = numOfItems;
-	std::vector<SingleText> text =
-	{
-		{1, {"Spectate", "", "", ""}, 0, 0},
-		{4, {"Main Game", "Total Items = " + std::to_string(numOfItemsInMap), "", "Find the precious gems and avoid the yellow spikes"}, 0, 0}
-	};*/
+	OverlayUniformBlock uboStartPanel, uboWinPanel;
 
 	// Environment Parameters
 	float X, Y, Rot, Z;
 	glm::vec2 groundPositions[4] = { {-1, -1}, {-1, 0}, {0, -1}, {0, 0} };
 
 	glm::vec2 HousePositions[numOfHouses];
-	//float HouseVisible[numOfHouses];
 	float HouseRotationsX[numOfHouses];
 	float HouseRotationsZ[numOfHouses];
 
@@ -155,13 +145,17 @@ protected:
 	float FlagRotationsZ[numOfFlags];
 	float FlagScales[numOfFlags];
 
+	int numOfHiddenChests = 3;//deve essere <= numOfSpawns
 	glm::vec2 ChestPositions[numOfChests];
 	float ChestRotationsX[numOfChests];
 	float ChestDimension[numOfChests];
-	glm::vec2 ChestSpawn[5];
-	float ChestScale[5];
-	int round;
 
+	int const static numOfSpawns = 5;
+	glm::vec2 ChestSpawn[numOfSpawns];
+	int SpawnsFound[numOfSpawns];
+	int round;
+	int gameEnded = 0;
+	int numOfChestsFound = 0;
 
 	glm::vec2 Statue1Positions[numOfStatue1];
 	float Statue1RotationsX[numOfStatue1];
@@ -177,7 +171,16 @@ protected:
 	glm::vec3 CloudsPosition[numOfClouds];
 	float CloudsSize[numOfClouds];
 
-
+	// Text
+	TextMaker txt;
+	std::vector<SingleText> text =
+	{
+		//{1, {"Spectate", "", "", ""}, 0, 0},
+		{2, {"Cerca i tesori nascosti nella mappa", "Ne hai trovati: " + std::to_string(numOfChestsFound) + "/" + std::to_string(numOfHiddenChests)}, 0, 0},
+		{2, {"Cerca i tesori nascosti nella mappa", "Ne hai trovati: " + std::to_string(numOfChestsFound + 1) + "/" + std::to_string(numOfHiddenChests)}, 0, 0},
+		{2, {"Cerca i tesori nascosti nella mappa", "Ne hai trovati: " + std::to_string(numOfChestsFound + 2) + "/" + std::to_string(numOfHiddenChests)}, 0, 0},
+		{3, {"Hai trovato tutti i tesori", "- premi ENTER per continuare ad esplorare la mappa", "- premi ESC per uscire"}, 0, 0}
+	};
 	////Jump params
 	//	bool isJumping = FALSE;
 	//	float VJumpIni = .5f;
@@ -225,9 +228,9 @@ protected:
 
 	void setDescriptorPool()
 	{
-		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 +numOfStatue2 + numOfWell+ numOfClouds) * 2 + 4 + 1;
-		texturesInPool = 10 + 1;
-		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 + numOfStatue2 + numOfWell + numOfClouds + 4 + 1;
+		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 +numOfStatue2 + numOfWell+ numOfClouds) * 2 + 4 + 1 + 1 ;
+		texturesInPool = 11 + 1;
+		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 + numOfStatue2 + numOfWell + numOfClouds + 4 + 1 + 1 ;
 	}
 
 	void localInit()
@@ -297,6 +300,8 @@ protected:
 				// Overlay Models
 				CreateOverlayMesh(MStartPanel.vertices, MStartPanel.indices);
 				MStartPanel.initMesh(this, &VOverlay);
+				CreateOverlayMesh(MWinPanel.vertices, MWinPanel.indices);
+				MWinPanel.initMesh(this, &VOverlay);
 
 				// Initializing Textures
 				TCharacter.init(this, "textures/animals.png");
@@ -309,7 +314,8 @@ protected:
 				TChest.init(this, "textures/chest.png");
 				TDungeon.init(this, "textures/dungeon.png");
 				TClouds.init(this, "textures/clouds.png");
-				//?sistemare txt.init(this, &text, -0.95, -0.95, 1.0 / 1200.0, 1.0 / 800.0);
+				TWinPanel.init(this, "textures/SchermataVittoria.png");
+				txt.init(this, &text, 0.45, -0.95, 1.0 / 1200.0, 1.0 / 800.0);
 
 				// Init local variables
 				/*for (int i = 0; i < numOfItems; i++)
@@ -458,6 +464,11 @@ protected:
 					{0, UNIFORM, sizeof(OverlayUniformBlock), nullptr},
 					{1, TEXTURE, 0, &TStartPanel}
 			});
+		DSWinPanel.init(this, &DSLOverlay, {
+					{0, UNIFORM, sizeof(OverlayUniformBlock), nullptr},
+					{1, TEXTURE, 0, &TWinPanel}
+			});
+		txt.pipelinesAndDescriptorSetsInit();
 	}
 
 	void pipelinesAndDescriptorSetsCleanup()
@@ -506,6 +517,7 @@ protected:
 		for (int i = 0; i < numOfClouds; i++)
 			DSClouds[i].cleanup();
 		DSStartPanel.cleanup();
+		DSWinPanel.cleanup();
 	}
 
 	void localCleanup()
@@ -522,6 +534,7 @@ protected:
 		TClouds.cleanup();
 
 		TStartPanel.cleanup();
+		TWinPanel.cleanup();
 		/*TEndPanel.cleanup();
 		TLosePanel.cleanup();
 		TInteractionMsg.cleanup();*/
@@ -561,7 +574,7 @@ protected:
 		PToonPhong.destroy();
 		POverlay.destroy();
 
-		// ? txt.localCleanup();
+		txt.localCleanup();
 
 	}
 
@@ -711,6 +724,9 @@ protected:
 		DSStartPanel.bind(commandBuffer, POverlay, 0, currentImage);
 		vkCmdDrawIndexed(commandBuffer,
 			static_cast<uint32_t>(MStartPanel.indices.size()), 1, 0, 0, 0);
+		DSWinPanel.bind(commandBuffer, POverlay, 0, currentImage);
+		vkCmdDrawIndexed(commandBuffer,
+			static_cast<uint32_t>(MWinPanel.indices.size()), 1, 0, 0, 0);
 
 		/*MEndPanel.bind(commandBuffer);
 		DSEndPanel.bind(commandBuffer, POverlay, 0, currentImage);
@@ -725,9 +741,9 @@ protected:
 		MInteractionMsg.bind(commandBuffer);
 		DSInteractionMsg.bind(commandBuffer, POverlay, 0, currentImage);
 		vkCmdDrawIndexed(commandBuffer,
-			static_cast<uint32_t>(MInteractionMsg.indices.size()), 1, 0, 0, 0);
+			static_cast<uint32_t>(MInteractionMsg.indices.size()), 1, 0, 0, 0);*/
 
-		txt.populateCommandBuffer(commandBuffer, currentImage, gameState, currentScene);*/
+		txt.populateCommandBuffer(commandBuffer, currentImage, numOfChestsFound, currentScene);
 	}
 
 	void updateUniformBuffer(uint32_t currentImage)
@@ -747,6 +763,12 @@ protected:
 			RebuildPipeline();
 		}
 
+		if (gameEnded == 1 && glfwGetKey(window, GLFW_KEY_ENTER))
+		{
+			gameEnded++;
+			RebuildPipeline();
+		}
+
 		/*if (currentScene != 1 || gameState != 1)
 		{
 			uboInteractionMsg.visible = 0.0f;
@@ -756,10 +778,10 @@ protected:
 		uboStartPanel.visible = (currentScene == 0) ? 1.0f : 0.0f;
 		DSStartPanel.map(currentImage, &uboStartPanel, sizeof(uboStartPanel), 0);
 
-		/*uboEndPanel.visible = (currentScene == 2) ? 1.0f : 0.0f;
-		DSEndPanel.map(currentImage, &uboEndPanel, sizeof(uboEndPanel), 0);
+		uboWinPanel.visible = (gameEnded == 1) ? 1.0f : 0.0f;
+		DSWinPanel.map(currentImage, &uboWinPanel, sizeof(uboWinPanel), 0);
 
-		uboLosePanel.visible = (currentScene == 3) ? 1.0f : 0.0f;
+		/*uboLosePanel.visible = (currentScene == 3) ? 1.0f : 0.0f;
 		DSLosePanel.map(currentImage, &uboLosePanel, sizeof(uboLosePanel), 0);*/
 
 

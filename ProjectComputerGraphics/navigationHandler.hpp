@@ -61,7 +61,7 @@ void Game::PlayerController(uint32_t currentImage)
 	const float minPitch = glm::radians(-60.0f);
 	const float maxPitch = glm::radians(60.0f);
 
-	const float ANGULAR_SPEED = glm::radians(120.0f);
+	const float ANGULAR_SPEED = glm::radians(60.0f);//sensibilità comandi
 	float LINEAR_SPEED = 5.0f;
 
 	float deltaT;
@@ -74,14 +74,13 @@ void Game::PlayerController(uint32_t currentImage)
 	static float yaw = glm::radians(90.0f),//cosi parto girato verso il centro della mappa
 				 pitch = 0,
 				 roll = 0;
+
 	//static glm::quat rot = glm::quat(1, 0, 0, 0);
 	static glm::mat4 ViewPrjOld = glm::mat4(1);
 	static glm::mat4 camRy = glm::mat4(1);
 	static glm::mat4 finalRy = glm::mat4(1);
 	static float finalYaw = 0;
 	static int counter = 0;
-
-
 
 	if (m.x != 0.0)
 	{
@@ -168,15 +167,31 @@ void Game::PlayerController(uint32_t currentImage)
 
 void Game::FoundChest(glm::vec3 pos) {
 	for (int i = 0; i < numOfChests; i++) {
-
-		if (pos.x < ChestPositions[i].x + 1.0f && pos.x > ChestPositions[i].x - 1.0f &&
-			pos.z < ChestPositions[i].y + 1.0f && pos.z > ChestPositions[i].y - 1.0f  && round < 5) {
+		if (pos.x < ChestPositions[i].x + 2.0f && pos.x > ChestPositions[i].x - 2.0f &&
+			pos.z < ChestPositions[i].y + 2.0f && pos.z > ChestPositions[i].y - 2.0f  && round < 5) {
 
 			if (glfwGetKey(window, GLFW_KEY_ENTER)) {
-
-				round++;
+				if (gameEnded == 0) {
+					do {
+						round = rand() % numOfSpawns + 1;
+					} while (SpawnsFound[round] != 0);
+				}
+				SpawnsFound[round] = 1;
+				numOfChestsFound++;
+				RebuildPipeline();
 				ChestPositions[0] = ChestSpawn[round];
-				ChestDimension[0] = ChestScale[round];
+				ChestDimension[0] -= 0.0005;
+
+				//controlla se il gioco è finito
+				int chestsFound = 0;
+				for (int i = 1; i < numOfSpawns; i++) {
+					if (SpawnsFound[i] == 1) {
+						chestsFound++;
+					}
+				}
+				if (chestsFound == numOfHiddenChests) {
+					gameEnded = 1;//sono state trovate tutte le chests
+				}
 			}
 		}
 	}
