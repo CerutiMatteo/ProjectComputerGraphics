@@ -131,17 +131,21 @@ void Game::ObjectsParameters()
 	FlagPositions[3] = { 20.0f, 7.0f, 4.0f }; FlagRotationsX[3] = 30.0f; FlagRotationsY[3] = 90.0f; FlagRotationsZ[3] = -90.0f; FlagScales[3] = 2.0f;//castello torre destra
 
 	//CHEST
-	ChestSpawn[0] = { 0.0f,0.0f }; 
+	ChestSpawn[0] = { 0.0f,0.0f }; ChestVisibles[0] = 1;
 	ChestSpawn[1] = { 27.0f,0.0f };
 	ChestSpawn[2] = { -26.0f,0.0f };
-	ChestSpawn[3] = { 0.0f,26.0f }; 
-	ChestSpawn[4] = { 0.0f,-26.0f };
+	ChestSpawn[3] = {0.0f,26.0f};
+	ChestSpawn[4] = { -26.0f,-26.0f };
+	ChestSpawn[5] = { 26.0f,26.0f };
+	ChestSpawn[6] = { -26.0f,-26.0f };
+	ChestSpawn[7] = { 26.0f,-26.0f };
+	ChestSpawn[8] = { -26.0f,26.0f };
+	ChestSpawn[9] = { -10.75f,-10.0f };// dentro double house
+	ChestSpawn[10] = { 6.25f,10.0f };//   dentro double house
 	for (int i = 0; i < numOfSpawns; i++) {
 		SpawnsFound[i] = 0;
 	}
-	round = 0;
-
-	ChestPositions[0] = ChestSpawn[0]; ChestRotationsX[0] = 90.0f; ChestDimension[0] = 0.0025;
+	ChestPositions[0] = ChestSpawn[0]; ChestRotationsX[0] = 90.0f; ChestDimension[0] = 0.0027;
 	
 	//STATUES 1,2
 	Statue1Positions[0] = { 5.0f,0.0f }; Statue1RotationsX[0] = 0.0f; Statue1RotationsY[0] = -90.0f;

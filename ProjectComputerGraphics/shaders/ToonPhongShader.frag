@@ -36,14 +36,14 @@ vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma) {
 	{
 		Md = Md;	
 	}
-	else if(dot(L, N) < 0.6f && 0 <= dot(L, N))
+	/*else if(dot(L, N) < 0.6f && 0 <= dot(L, N))
 	{
 		Md = Md / 4.0f;	
 	}
 	else if(dot(L, N) < 0)
 	{
 		Md = vec3(0.0f);	
-	}
+	}*/
 	vec3 Hlx = normalize(L + V);
 	vec3 specular = Ms * pow(clamp(dot(N, Hlx), 0.0, 1.0), gamma);
 	vec3 diffuse = Md;

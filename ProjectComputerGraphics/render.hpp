@@ -155,10 +155,13 @@ void Game::RenderChests(uint32_t currentImage)
 {
 	for (int i = 0; i < numOfChests; i++)
 	{	
-
-		GWorld = glm::translate(glm::mat4(1), glm::vec3(ChestPositions[i].x, 0, ChestPositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(ChestRotationsX[i]), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1), glm::vec3(ChestDimension[0]));
-		
-		SetUboDs(currentImage, uboChests, DSChests, i);
+		if (ChestVisibles[i] == 1) {
+			GWorld = glm::translate(glm::mat4(1), glm::vec3(ChestPositions[i].x, 0, ChestPositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(ChestRotationsX[i]), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1), glm::vec3(ChestDimension[0]));
+			SetUboDs(currentImage, uboChests, DSChests, i);
+		}
+		else {
+			GWorld = 0;
+		}
 	}
 }
 

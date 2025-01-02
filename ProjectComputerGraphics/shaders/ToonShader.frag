@@ -32,32 +32,40 @@ vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma) {
 	//vec3 L  - light vector (from the light model)
 	//vec3 Md - main color of the surface
 	//vec3 Ms - specular color of the surface
-	if(dot(L, N) >= 0.6f)
-	{
-		Md = Md;	
+	
+	float dGradient = 0; float sGradient = 0;
+	
+	float cosAlpha = clamp(dot(N, L), 0.0, 1.0);
+	float cosBeta = clamp(dot(V, -reflect(L, N)), 0.0, 1.0);
+
+	if (cosAlpha <= 0) {
+        dGradient = 0.0;
+    } else if (cosAlpha > 0 && cosAlpha <= 0.1) {
+        dGradient = 0.15 * (cosAlpha / 0.1);
+    } else if (cosAlpha > 0.1 && cosAlpha <= 0.7) {
+        dGradient = 0.15;
+    } else if (cosAlpha > 0.7 && cosAlpha <= 0.8) {
+        dGradient = 0.15 + (0.85 * (cosAlpha - 0.7) / 0.1);
+    } else { // cosAlpha > 0.8
+        dGradient = 1.0;
+    }
+
+	/*if(cosBeta<=0.9){
+		sGradient = 0;
 	}
-	else if(dot(L, N) < 0.6f && 0 <= dot(L, N))
-	{
-		Md = Md / 4.0f;	
+	if(cosBeta>0.9 && cosBeta<=0.95){
+		sGradient = 0.5 * (cosBeta-0.9)/0.05;
 	}
-	else if(dot(L, N) < 0)
-	{
-		Md = vec3(0.0f);	
-	}
-	vec3 Rlx = 2 * N * dot(L, N) - L;
-	vec3 Hlx = normalize(L + V);
-	float specularCoefficient = pow(clamp(dot(N, Hlx), 0.0, 1.0), gamma);
-	if(specularCoefficient >= 0.8f)
-	{
-		Ms = Ms;
-	}
-	else if(specularCoefficient < 0.8f)
-	{
-		Ms = vec3(0.0f);	
-	}
-	vec3 specular = Ms;
-	vec3 diffuse = Md;
-	return specular + diffuse;
+	if(cosBeta>0.95){
+		sGradient = 0.5;
+	}*/
+
+
+
+	vec3 Diffuse = Md * dGradient;
+	vec3 Specular = Ms * sGradient;
+	
+	return (Diffuse + Specular);
 }
 
 void main() {

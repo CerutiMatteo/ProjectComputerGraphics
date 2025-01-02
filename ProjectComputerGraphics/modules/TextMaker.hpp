@@ -1,7 +1,7 @@
 
 struct SingleText {
 	int usedLines;
-	std::string l[4];
+	std::string l[6];//inizialmente era 4 adesso 6
 	int start;
 	int len;
 };
@@ -39,7 +39,7 @@ struct TextVertex {
 	glm::vec3 color;
 };
 
-glm::vec3 textColor = { 0, .8f, .3f };
+glm::vec3 textColor = { 1.0f, 1.0f, 1.0f };//colore text
 
 struct TextMaker {
 	VertexDescriptor VD;

@@ -113,7 +113,6 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 	
 		if (nextPos.x > BiggerHousePositions[i].x - 2.0f && nextPos.x < BiggerHousePositions[i].x + 2.0f &&
 			nextPos.z > BiggerHousePositions[i].y - 2.5f && nextPos.z < BiggerHousePositions[i].y + 2.65f) {
-
 			collision = true;
 			break;
 		}
@@ -124,7 +123,6 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 
 		if (nextPos.x > Statue1Positions[i].x - 1.10f && nextPos.x < Statue1Positions[i].x + 1.10f &&
 			nextPos.z > Statue1Positions[i].y - 1.10f && nextPos.z < Statue1Positions[i].y + 1.10f) {
-
 			collision = true;
 			break;
 		}
@@ -133,7 +131,15 @@ void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
 
 		if (nextPos.x > Statue2Positions[i].x - 1.10f && nextPos.x < Statue2Positions[i].x + 1.10f &&
 			nextPos.z > Statue2Positions[i].y - 1.10f && nextPos.z < Statue2Positions[i].y + 1.10f) {
+			collision = true;
+			break;
+		}
+	}
 
+	//CHEST
+	for (int i = 0; i < numOfChests; i++) {
+		if (nextPos.x > ChestPositions[i].x - 0.5f && nextPos.x < ChestPositions[i].x + 0.5f &&
+			nextPos.z > ChestPositions[i].y - 0.5f && nextPos.z < ChestPositions[i].y + 0.5f) {
 			collision = true;
 			break;
 		}

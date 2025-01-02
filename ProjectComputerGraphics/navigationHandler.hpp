@@ -160,38 +160,40 @@ void Game::PlayerController(uint32_t currentImage)
 
 
 	FoundChest(pos);
-	//ShowInteractionMessage(currentImage, pos);
-	//CheckLose(pos);
-
 }
 
-void Game::FoundChest(glm::vec3 pos) {
-	for (int i = 0; i < numOfChests; i++) {
-		if (pos.x < ChestPositions[i].x + 2.0f && pos.x > ChestPositions[i].x - 2.0f &&
-			pos.z < ChestPositions[i].y + 2.0f && pos.z > ChestPositions[i].y - 2.0f  && round < 5) {
-
-			if (glfwGetKey(window, GLFW_KEY_ENTER)) {
-				if (gameEnded == 0) {
+void Game::FoundChest(glm::vec3 pos) {// se il gioco non è finito controlla se il personaggio è vicino ad una chest
+	float chestRange = 2.0f;
+	if (round < numOfHiddenChests) {
+		for (int i = 0; i < numOfChests; i++) {
+			if (pos.x < ChestPositions[i].x + chestRange && pos.x > ChestPositions[i].x - chestRange &&
+				pos.z < ChestPositions[i].y + chestRange && pos.z > ChestPositions[i].y - chestRange) {
+				isNearChest = 1;
+				if (glfwGetKey(window, GLFW_KEY_ENTER)) {
+					isNearChest = 0;
 					do {
-						round = rand() % numOfSpawns + 1;
-					} while (SpawnsFound[round] != 0);
-				}
-				SpawnsFound[round] = 1;
-				numOfChestsFound++;
-				RebuildPipeline();
-				ChestPositions[0] = ChestSpawn[round];
-				ChestDimension[0] -= 0.0005;
+						spawnIndex = rand() % (numOfSpawns - 1) + 1;// 1 - (numOfSpawns-1) (devo evitare che sorteggi zero) 
+					} while (SpawnsFound[spawnIndex] != 0);
+					SpawnsFound[spawnIndex] = 1;
+					round++;
+					if (gameState != 1) {
+						gameState++;
+					}
+					RebuildPipeline();
+					ChestPositions[0] = ChestSpawn[spawnIndex];
+					ChestDimension[0] -= 0.0003;//fattore scala Chest
 
-				//controlla se il gioco è finito
-				int chestsFound = 0;
-				for (int i = 1; i < numOfSpawns; i++) {
-					if (SpawnsFound[i] == 1) {
-						chestsFound++;
+					//controlla se il gioco è finito, sono state trovate tutte le chests
+					if (round == numOfHiddenChests) {
+						gameEnded = 1;
+						gameState = 11;
+						round = numOfHiddenChests;
+						ChestVisibles[0] = 0;
 					}
 				}
-				if (chestsFound == numOfHiddenChests) {
-					gameEnded = 1;//sono state trovate tutte le chests
-				}
+			}
+			else {
+				isNearChest = 0;
 			}
 		}
 	}

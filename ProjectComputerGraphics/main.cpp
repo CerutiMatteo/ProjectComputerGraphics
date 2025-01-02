@@ -75,12 +75,13 @@ protected:
 
 	// Models
 	Model<VertexMesh> MCharacter, MGround, MHouses, MAngleHouses, MStones, MBushes, 
-					  MCastle, MWalls, MTowers, MLights, MBiggerHouses, MDoubleHouses, MFlags, MChests,
-					  MStatue1, MStatue2,MWell, MClouds;
-	Model<VertexOverlay> MStartPanel, MWinPanel;
+		MCastle, MWalls, MTowers, MLights, MBiggerHouses, MDoubleHouses, MFlags, MChests,
+		MStatue1, MStatue2,MWell, MClouds;
+	Model<VertexOverlay> MStartPanel, MWinPanel, MPressEnterPanel;
 
 	// Textures
-	Texture TCharacter, TGround, TMedieval, TStone, TBush, TStartPanel, TWall, TChest, TDungeon, TClouds, TWinPanel;
+	Texture TCharacter, TGround, TMedieval, TStone, TBush, TStartPanel, TWall, 
+		TChest, TDungeon, TClouds, TWinPanel, TPressEnterPanel;
 
 	// Descriptor sets
 	DescriptorSet DSGubo, DSCharacter, DSGround[4], DSHouses[numOfHouses],
@@ -88,7 +89,7 @@ protected:
 		DSCastle[numOfCastle], DSWalls[numOfWalls], DSTowers[numOfTowers], DSLights[numOfLights],
 		DSBiggerHouses[numOfBiggerHouses], DSDoubleHouses[numOfDoubleHouses],
 		DSFlags[numOfFlags], DSChests[numOfChests], DSStatue1[numOfStatue1], DSStatue2[numOfStatue2],DSWell[numOfWell],DSClouds[numOfClouds],
-		DSStartPanel, DSWinPanel;
+		DSStartPanel, DSWinPanel,DSPressEnterPanel;
 
 	// Uniform Blocks //altri ?
 	GlobalUniformBlock gubo;
@@ -97,7 +98,7 @@ protected:
 		uboWalls[numOfWalls], uboTowers[numOfTowers], uboLights[numOfLights], uboBiggerHouses[numOfBiggerHouses],
 		uboDoubleHouses[numOfDoubleHouses], uboFlags[numOfFlags], uboChests[numOfChests], uboStatue1[numOfStatue1],
 		uboStatue2[numOfStatue2],uboWell[numOfWell], uboClouds[numOfClouds];
-	OverlayUniformBlock uboStartPanel, uboWinPanel;
+	OverlayUniformBlock uboStartPanel, uboWinPanel, uboPressEnterPanel;
 
 	// Environment Parameters
 	float X, Y, Rot, Z;
@@ -145,17 +146,14 @@ protected:
 	float FlagRotationsZ[numOfFlags];
 	float FlagScales[numOfFlags];
 
-	int numOfHiddenChests = 3;//deve essere <= numOfSpawns
 	glm::vec2 ChestPositions[numOfChests];
 	float ChestRotationsX[numOfChests];
 	float ChestDimension[numOfChests];
+	float ChestVisibles[numOfChests];
 
-	int const static numOfSpawns = 5;
+	int const static numOfSpawns = 10;
 	glm::vec2 ChestSpawn[numOfSpawns];
 	int SpawnsFound[numOfSpawns];
-	int round;
-	int gameEnded = 0;
-	int numOfChestsFound = 0;
 
 	glm::vec2 Statue1Positions[numOfStatue1];
 	float Statue1RotationsX[numOfStatue1];
@@ -174,40 +172,31 @@ protected:
 	// Text
 	TextMaker txt;
 	std::vector<SingleText> text =
-	{
-		//{1, {"Spectate", "", "", ""}, 0, 0},
-		{2, {"Cerca i tesori nascosti nella mappa", "Ne hai trovati: " + std::to_string(numOfChestsFound) + "/" + std::to_string(numOfHiddenChests)}, 0, 0},
-		{2, {"Cerca i tesori nascosti nella mappa", "Ne hai trovati: " + std::to_string(numOfChestsFound + 1) + "/" + std::to_string(numOfHiddenChests)}, 0, 0},
-		{2, {"Cerca i tesori nascosti nella mappa", "Ne hai trovati: " + std::to_string(numOfChestsFound + 2) + "/" + std::to_string(numOfHiddenChests)}, 0, 0},
-		{3, {"Hai trovato tutti i tesori", "- premi ENTER per continuare ad esplorare la mappa", "- premi ESC per uscire"}, 0, 0}
+	{	// appare il messaggio che corrisponde al valore di gameState. (round, endGame, extraGame, spectate)
+		{1, {"Freecam", "", "", ""}, 0, 0},
+		{1, {"- press TAB to show", "", "", ""}, 0, 0},
+		{6, {"RULES: Every chest found unlocks", "a smaller one to search for on the map","Search for the hidden treasures on the map", "You have found : " + std::to_string(0) + " chest" ," - press TAB to hide"," - press ESC to exit"}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(1) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(2) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(3) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(4) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(5) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(6) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(7) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(8) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"You have found all the treasures, Congratulations!", " - Press ENTER to continue exploring the map", " - press ESC to exit", " - restart the game to begin again"}, 0, 0},
+		{3, {"- press ESC to exit", "- restart the game to begin again", "", ""}, 0, 0},
 	};
-	////Jump params
-	//	bool isJumping = FALSE;
-	//	float VJumpIni = .5f;
-	//	float VJump = VJumpIni;
-	//	float g = -1.1f;
 
-	//	//Animation params
-	//	bool pickAnimation = false;
-	//	float VpickJumpIni = 1.5f;
-	//	float VpickJump = VpickJumpIni;
-	//	float gAnimation = -10.0f;
-	//	int animationCounter = 0;
-
-	// PARAMETRI PER LE COLLISIONI
-	bool xCollision = false, yCollision = false, collision = false;
-	int thresholdIndex = 0;
-	std::tuple<glm::vec2, float> collisionsInfo[numOfCollisions];
-	float towerThreshold = 7.8f;
-	float towerThresholdCoefficient = 10;
-	float HouseThreshold = 0.4f;
-	float HouseThresholdCoefficient = 8;
-	float AngleHouseThreshold = 0.4f;
-	float AngleHouseThresholdCoefficient = 1;
-
-	// Other game Parameters
-	int gameState = 1;
-	int currentScene = 0;
+	// game Parameters
+	int gameState = 2;//         0: freecam/ 1: nascondi text/ 2-10: hai trovato 0-8 chest/ 11: endGame/ 12: extraGame 
+	int round = 0;//	         tiene traccia delle casse trovate
+	int currentScene = 0;//      0: overlay iniziale/ 1 altrimenti
+	int gameEnded = 0;//         0: partita in corso/ 1: game finito/ >1: extra game
+	int isNearChest = 0;//		 1: personaggio vicinio ad una cesta/ 0: no
+	int spawnIndex = 0;//		 indica in quale spawn è la chest al momento 
+	int numOfHiddenChests = 0;// deve essere < numOfSpawns, per ora vien efinito dall'utente tra 1-9
+	bool collision = 0;//		 1: se viene rilevata una collision/ 0: altrimenti      
 	float Ar;
 	glm::mat4 World, ViewPrj, GWorld;
 
@@ -217,7 +206,7 @@ protected:
 		windowHeight = 1080;
 		windowTitle = "GAME";
 		windowResizable = GLFW_TRUE;
-		initialBackgroundColor = { 0.5f, 0.8f, 0.9f, 1.0f };//colore cielo ?
+		initialBackgroundColor = { 0.5f, 0.8f, 0.9f, 1.0f };//colore cielo 
 
 		Ar = (float)windowWidth / (float)windowHeight;
 	}
@@ -229,7 +218,7 @@ protected:
 	void setDescriptorPool()
 	{
 		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 +numOfStatue2 + numOfWell+ numOfClouds) * 2 + 4 + 1 + 1 ;
-		texturesInPool = 11 + 1;
+		texturesInPool = 12 + 1;
 		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 + numOfStatue2 + numOfWell + numOfClouds + 4 + 1 + 1 ;
 	}
 
@@ -263,14 +252,14 @@ protected:
 				{0, 2, VK_FORMAT_R32G32_SFLOAT, offsetof(VertexMesh, uv),
 					   sizeof(glm::vec2), UV}
 			});
-			VOverlay.init(this, {
+		VOverlay.init(this, {
 					  {0, sizeof(VertexOverlay), VK_VERTEX_INPUT_RATE_VERTEX}
-				}, {
-				  {0, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(VertexOverlay, pos),
-						 sizeof(glm::vec2), OTHER},
-				  {0, 1, VK_FORMAT_R32G32_SFLOAT, offsetof(VertexOverlay, UV),
-						 sizeof(glm::vec2), UV}
-				});
+			}, {
+				{0, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(VertexOverlay, pos),
+						sizeof(glm::vec2), OTHER},
+				{0, 1, VK_FORMAT_R32G32_SFLOAT, offsetof(VertexOverlay, UV),
+						sizeof(glm::vec2), UV}
+			});
 
 				// Initializing Pipelines
 				PToon.init(this, &VMesh, "shaders/ToonVert.spv", "shaders/ToonFrag.spv", { &DSLGubo, &DSLToon });
@@ -302,6 +291,8 @@ protected:
 				MStartPanel.initMesh(this, &VOverlay);
 				CreateOverlayMesh(MWinPanel.vertices, MWinPanel.indices);
 				MWinPanel.initMesh(this, &VOverlay);
+				CreateOverlayMesh(MPressEnterPanel.vertices, MPressEnterPanel.indices, 0.1f, 0.6f, -0.0f, -0.2f);//l,r,t,b
+				MPressEnterPanel.initMesh(this, &VOverlay);
 
 				// Initializing Textures
 				TCharacter.init(this, "textures/animals.png");
@@ -315,14 +306,9 @@ protected:
 				TDungeon.init(this, "textures/dungeon.png");
 				TClouds.init(this, "textures/clouds.png");
 				TWinPanel.init(this, "textures/SchermataVittoria.png");
-				txt.init(this, &text, 0.45, -0.95, 1.0 / 1200.0, 1.0 / 800.0);
+				TPressEnterPanel.init(this, "textures/SchermataPressEnter.png");
+				txt.init(this, &text, -0.95, 0.50, 1.0 / 1200.0, 1.0 / 800.0);
 
-				// Init local variables
-				/*for (int i = 0; i < numOfItems; i++)
-				{
-					isItemPicked[i] = false;
-				}
-				CalculateEnvironmentObjectsPositionsAndRotations();*/
 				ObjectsParameters();
 	}
 
@@ -468,6 +454,10 @@ protected:
 					{0, UNIFORM, sizeof(OverlayUniformBlock), nullptr},
 					{1, TEXTURE, 0, &TWinPanel}
 			});
+		DSPressEnterPanel.init(this, &DSLOverlay, {
+					{0, UNIFORM, sizeof(OverlayUniformBlock), nullptr},
+					{1, TEXTURE, 0, &TPressEnterPanel}
+			});
 		txt.pipelinesAndDescriptorSetsInit();
 	}
 
@@ -518,6 +508,7 @@ protected:
 			DSClouds[i].cleanup();
 		DSStartPanel.cleanup();
 		DSWinPanel.cleanup();
+		DSPressEnterPanel.cleanup();
 	}
 
 	void localCleanup()
@@ -532,12 +523,9 @@ protected:
 		TChest.cleanup();
 		TDungeon.cleanup();
 		TClouds.cleanup();
-
 		TStartPanel.cleanup();
 		TWinPanel.cleanup();
-		/*TEndPanel.cleanup();
-		TLosePanel.cleanup();
-		TInteractionMsg.cleanup();*/
+		TPressEnterPanel.cleanup();
 
 		// Cleanup Models
 		MCharacter.cleanup();
@@ -559,9 +547,7 @@ protected:
 		MStatue2.cleanup();
 		MWell.cleanup();
 		MClouds.cleanup();
-		/*MEndPanel.cleanup();
-		MLosePanel.cleanup();
-		MInteractionMsg.cleanup();*/
+		MPressEnterPanel.cleanup();
 
 		// Cleanup Descriptor Set Layouts
 		DSLGubo.cleanup();
@@ -575,7 +561,6 @@ protected:
 		POverlay.destroy();
 
 		txt.localCleanup();
-
 	}
 
 	void populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage)
@@ -706,14 +691,14 @@ protected:
 				static_cast<uint32_t>(MClouds.indices.size()), 1, 0, 0, 0);
 		}
 
-		DSGubo.bind(commandBuffer, PToonPhong, 0, currentImage);
+		DSGubo.bind(commandBuffer, PToon, 0, currentImage);
 
 		// Ground
-		PToonPhong.bind(commandBuffer);
+		//PToonPhong.bind(commandBuffer);
 		MGround.bind(commandBuffer);
 		for (int i = 0; i < 4; i++)
 		{
-			DSGround[i].bind(commandBuffer, PToonPhong, 1, currentImage);
+			DSGround[i].bind(commandBuffer, PToon, 1, currentImage);
 			vkCmdDrawIndexed(commandBuffer,
 				static_cast<uint32_t>(MGround.indices.size()), 1, 0, 0, 0);
 		}
@@ -724,74 +709,143 @@ protected:
 		DSStartPanel.bind(commandBuffer, POverlay, 0, currentImage);
 		vkCmdDrawIndexed(commandBuffer,
 			static_cast<uint32_t>(MStartPanel.indices.size()), 1, 0, 0, 0);
+
+		MWinPanel.bind(commandBuffer);
 		DSWinPanel.bind(commandBuffer, POverlay, 0, currentImage);
 		vkCmdDrawIndexed(commandBuffer,
 			static_cast<uint32_t>(MWinPanel.indices.size()), 1, 0, 0, 0);
 
-		/*MEndPanel.bind(commandBuffer);
-		DSEndPanel.bind(commandBuffer, POverlay, 0, currentImage);
+		MPressEnterPanel.bind(commandBuffer);
+		DSPressEnterPanel.bind(commandBuffer, POverlay, 0, currentImage);
 		vkCmdDrawIndexed(commandBuffer,
-			static_cast<uint32_t>(MEndPanel.indices.size()), 1, 0, 0, 0);
+			static_cast<uint32_t>(MPressEnterPanel.indices.size()), 1, 0, 0, 0);
 
-		MLosePanel.bind(commandBuffer);
-		DSLosePanel.bind(commandBuffer, POverlay, 0, currentImage);
-		vkCmdDrawIndexed(commandBuffer,
-			static_cast<uint32_t>(MLosePanel.indices.size()), 1, 0, 0, 0);
-
-		MInteractionMsg.bind(commandBuffer);
-		DSInteractionMsg.bind(commandBuffer, POverlay, 0, currentImage);
-		vkCmdDrawIndexed(commandBuffer,
-			static_cast<uint32_t>(MInteractionMsg.indices.size()), 1, 0, 0, 0);*/
-
-		txt.populateCommandBuffer(commandBuffer, currentImage, numOfChestsFound, currentScene);
+		txt.populateCommandBuffer(commandBuffer, currentImage, gameState, currentScene);
 	}
 
 	void updateUniformBuffer(uint32_t currentImage)
 	{
 		static bool press = false;
 		static int curPress = 0;
+		static bool tabPress = true;
 
-		// Standard procedure to quit when the ESC key is pressed
+		//esc
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE)) {
 			glfwSetWindowShouldClose(window, GL_TRUE);
 		}
 
-
-		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_ENTER))
+		//overlay iniziale, scelta durata game
+		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_1))
 		{
 			currentScene++;
+			numOfHiddenChests = 1;
+			RebuildPipeline();
+		}
+		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_2))
+		{
+			currentScene++;
+			numOfHiddenChests = 2;
+			RebuildPipeline();
+		}
+		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_3))
+		{
+			currentScene++;
+			numOfHiddenChests = 3;
+			RebuildPipeline();
+		}
+		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_3))
+		{
+			currentScene++;
+			numOfHiddenChests = 3;
+			RebuildPipeline();
+		}
+		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_4))
+		{
+			currentScene++;
+			numOfHiddenChests = 4;
+			RebuildPipeline();
+		}
+		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_5))
+		{
+			currentScene++;
+			numOfHiddenChests = 5;
+			RebuildPipeline();
+		}
+		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_6))
+		{
+			currentScene++;
+			numOfHiddenChests = 6;
+			RebuildPipeline();
+		}
+		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_7))
+		{
+			currentScene++;
+			numOfHiddenChests = 7;
+			RebuildPipeline();
+		}
+		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_8))
+		{
+			currentScene++;
+			numOfHiddenChests = 8;
+			RebuildPipeline();
+		}
+		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_9))
+		{
+			currentScene++;
+			numOfHiddenChests = 9;
 			RebuildPipeline();
 		}
 
+		//gestione mostra/nascondi menu
+		if (tabPress == true) {
+			if (gameState >= 2 && gameState <= 2 + numOfHiddenChests - 1 && glfwGetKey(window, GLFW_KEY_TAB))
+			{
+				gameState = 1;
+				//round = numOfHiddenChests + 2;
+				RebuildPipeline();
+			}
+			else {
+				if (gameState == 1 && glfwGetKey(window, GLFW_KEY_TAB))
+				{
+					gameState = 2 + round;
+					RebuildPipeline();
+				}
+			}
+		}
+		else {
+			tabPress = true;
+		}
+
+		//endGame -> extraGame
 		if (gameEnded == 1 && glfwGetKey(window, GLFW_KEY_ENTER))
 		{
+			gameState = 12;
+			round++;
 			gameEnded++;
 			RebuildPipeline();
 		}
 
-		/*if (currentScene != 1 || gameState != 1)
-		{
-			uboInteractionMsg.visible = 0.0f;
-			DSInteractionMsg.map(currentImage, &uboInteractionMsg, sizeof(uboInteractionMsg), 0);
-		}*/
-
+		//overlay iniziale visibile all'inizio
 		uboStartPanel.visible = (currentScene == 0) ? 1.0f : 0.0f;
 		DSStartPanel.map(currentImage, &uboStartPanel, sizeof(uboStartPanel), 0);
-
+		//overlay finale visible solo quando finisce il gioco, scompare se si decide extra game
 		uboWinPanel.visible = (gameEnded == 1) ? 1.0f : 0.0f;
 		DSWinPanel.map(currentImage, &uboWinPanel, sizeof(uboWinPanel), 0);
+		//overlay press enter visible solo quando vicini a un tesoro 
+		uboPressEnterPanel.visible = (isNearChest == 1) ? 1.0f : 0.0f;
+		DSPressEnterPanel.map(currentImage, &uboPressEnterPanel, sizeof(uboPressEnterPanel), 0);
 
-		/*uboLosePanel.visible = (currentScene == 3) ? 1.0f : 0.0f;
-		DSLosePanel.map(currentImage, &uboLosePanel, sizeof(uboLosePanel), 0);*/
-
-
-
+		//player <-> spectator
 		if (glfwGetKey(window, GLFW_KEY_M)) {
 			if (!press) {
 				press = true;
 				curPress = GLFW_KEY_M;
-				gameState = (gameState + 1) % 2;
-				//std::cout << "Scene : " << currentScene << "\n";
+				if (gameState == 0) {
+					gameState = 2 + round;
+				}
+				else {
+					gameState = 0;
+				}
 				RebuildPipeline();
 			}
 		}
@@ -803,17 +857,11 @@ protected:
 		}
 		if (currentScene == 1)
 		{
-			switch (gameState)
-			{
-			case 0:
+			if (gameState == 0) {
 				Spectate();
-				break;
-			case 1:
+			}
+			else {
 				PlayerController(currentImage);
-				break;
-			default:
-				break;
-
 			}
 		}
 
@@ -822,9 +870,7 @@ protected:
 		gubo.AmbLightColor = glm::vec3(0.2f);
 		gubo.eyePos = glm::vec3(100.0, 100.0, 100.0);
 
-
 		DSGubo.map(currentImage, &gubo, sizeof(gubo), 0);
-
 
 		RenderCharacter(currentImage);
 		RenderEnvironment(currentImage);
@@ -835,20 +881,20 @@ protected:
 	void RenderEnvironment(uint32_t currentImage);
 	void RenderGround(uint32_t currentImage);
 	void RenderHouses(uint32_t currentImage);
-	void RenderAngleHouses(uint32_t currentImage);//m
+	void RenderAngleHouses(uint32_t currentImage);
 	void RenderStones(uint32_t currentImage);
 	void RenderBushes(uint32_t currentImage);
-	void RenderCastle(uint32_t currentImage);//f
+	void RenderCastle(uint32_t currentImage);
 	void RenderWalls(uint32_t currentImage);
 	void RenderLights(uint32_t currentImage);
-	void RenderTowers(uint32_t currentImage);//m
-	void RenderDoubleHouses(uint32_t currentImage);//f
-	void RenderBiggerHouses(uint32_t currentImage);//m
+	void RenderTowers(uint32_t currentImage);
+	void RenderDoubleHouses(uint32_t currentImage);
+	void RenderBiggerHouses(uint32_t currentImage);
 	void RenderFlags(uint32_t currentImage);
 	void RenderChests(uint32_t currentImage);
-	void RenderStatue1(uint32_t currentImage);//f
-	void RenderStatue2(uint32_t currentImage);//f
-	void RenderWell(uint32_t currentImage);//m
+	void RenderStatue1(uint32_t currentImage);
+	void RenderStatue2(uint32_t currentImage);
+	void RenderWell(uint32_t currentImage);
 	void RenderClouds(uint32_t currentImage);
 	/*cosa fa?*/void SetUboDs(uint32_t currentImage, MeshUniformBlock ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
 		float gamma = 80.0f, glm::vec3 sColor = glm::vec3(1.0f));
@@ -870,7 +916,6 @@ void Game::CreateOverlayMesh(std::vector<VertexOverlay>& vDef, std::vector<uint3
 			 {{right, bottom}, {1.0f,0.0f}}, {{right, top}, {1.0f,1.0f}} };
 	vIdx = { 0, 1, 2,    1, 2, 3 };
 }
-
 
 int main() {
 	Game app;
