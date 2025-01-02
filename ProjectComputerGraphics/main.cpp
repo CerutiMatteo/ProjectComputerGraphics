@@ -298,7 +298,7 @@ protected:
 				TCharacter.init(this, "textures/animals.png");
 				TGround.init(this, "textures/street2.png");
 				TMedieval.init(this, "textures/medieval.png");
-				TStartPanel.init(this, "textures/SchermataIniziale.png");
+				TStartPanel.init(this, "textures/inizio.png");
 				TStone.init(this, "textures/street.png");
 				TBush.init(this, "textures/bush.png");
 				TWall.init(this, "textures/wall.png");
