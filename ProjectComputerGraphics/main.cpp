@@ -305,7 +305,7 @@ protected:
 				TChest.init(this, "textures/chest.png");
 				TDungeon.init(this, "textures/dungeon.png");
 				TClouds.init(this, "textures/clouds.png");
-				TWinPanel.init(this, "textures/SchermataVittoria.png");
+				TWinPanel.init(this, "textures/fine.png");
 				TPressEnterPanel.init(this, "textures/SchermataPressEnter.png");
 				txt.init(this, &text, -0.95, 0.50, 1.0 / 1200.0, 1.0 / 800.0);
 
