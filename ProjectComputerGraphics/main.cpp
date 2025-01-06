@@ -175,7 +175,7 @@ protected:
 	{	// appare il messaggio che corrisponde al valore di gameState. (round, endGame, extraGame, spectate)
 		{1, {"Freecam", "", "", ""}, 0, 0},
 		{1, {"- press TAB to show", "", "", ""}, 0, 0},
-		{6, {"RULES: Every chest found unlocks", "a smaller one to search for on the map","Search for the hidden treasures on the map", "You have found : " + std::to_string(0) + " chest" ," - press TAB to hide"," - press ESC to exit"}, 0, 0},
+		{6, {"RULES: Every chest found unlocks", "a smaller one to search for on the map.","Search for the hidden treasures on the map", "You have found : " + std::to_string(0) + " chest" ," - press TAB to hide"," - press ESC to exit"}, 0, 0},
 		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(1) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
 		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(2) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
 		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(3) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
@@ -204,7 +204,7 @@ protected:
 	{
 		windowWidth = 1920;
 		windowHeight = 1080;
-		windowTitle = "GAME";
+		windowTitle = "LET'S FIND THE CHEST";
 		windowResizable = GLFW_TRUE;
 		initialBackgroundColor = { 0.5f, 0.8f, 0.9f, 1.0f };//colore cielo 
 
@@ -298,7 +298,7 @@ protected:
 				TCharacter.init(this, "textures/animals.png");
 				TGround.init(this, "textures/street2.png");
 				TMedieval.init(this, "textures/medieval.png");
-				TStartPanel.init(this, "textures/inizio.png");
+				TStartPanel.init(this, "textures/inizio2.png");
 				TStone.init(this, "textures/street.png");
 				TBush.init(this, "textures/bush.png");
 				TWall.init(this, "textures/wall.png");
@@ -307,7 +307,7 @@ protected:
 				TClouds.init(this, "textures/clouds.png");
 				TWinPanel.init(this, "textures/fine.png");
 				TPressEnterPanel.init(this, "textures/SchermataPressEnter.png");
-				txt.init(this, &text, -0.95, 0.50, 1.0 / 1200.0, 1.0 / 800.0);
+				txt.init(this, &text, -0.95, 0.70, 1.0 / 1200.0, 1.0 / 800.0);
 
 				ObjectsParameters();
 	}
