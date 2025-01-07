@@ -151,7 +151,7 @@ protected:
 	float ChestDimension[numOfChests];
 	float ChestVisibles[numOfChests];
 
-	int const static numOfSpawns = 10;
+	int const static numOfSpawns = 11;
 	glm::vec2 ChestSpawn[numOfSpawns];
 	int SpawnsFound[numOfSpawns];
 
@@ -174,17 +174,17 @@ protected:
 	std::vector<SingleText> text =
 	{	// appare il messaggio che corrisponde al valore di gameState. (round, endGame, extraGame, spectate)
 		{1, {"Freecam", "", "", ""}, 0, 0},
-		{1, {"- press TAB to show", "", "", ""}, 0, 0},
+		{1, {"- press TAB or O to show", "", "", ""}, 0, 0},
 		{6, {"RULES: Every chest found unlocks", "a smaller one to search for on the map.","Search for the hidden treasures on the map", "You have found : " + std::to_string(0) + " chest" ," - press TAB to hide"," - press ESC to exit"}, 0, 0},
-		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(1) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
-		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(2) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
-		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(3) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
-		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(4) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
-		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(5) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
-		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(6) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
-		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(7) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
-		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(8) + " chests" ," - press TAB to hide"," - press ESC to exit","",""}, 0, 0},
-		{4, {"You have found all the treasures, Congratulations!", " - Press ENTER to continue exploring the map", " - press ESC to exit", " - restart the game to begin again"}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(1) + " chests" ," - press TAB or O to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(2) + " chests" ," - press TAB or O to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(3) + " chests" ," - press TAB or O to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(4) + " chests" ," - press TAB or O to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(5) + " chests" ," - press TAB or O to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(6) + " chests" ," - press TAB or O to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(7) + " chests" ," - press TAB or O to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"Search for the hidden treasures on the map", "You have found : " + std::to_string(8) + " chests" ," - press TAB or O to hide"," - press ESC to exit","",""}, 0, 0},
+		{4, {"You have found all the treasures, Congratulations!", " - Press ENTER or X to continue exploring the map", " - press ESC to exit", " - restart the game to begin again"}, 0, 0},
 		{3, {"- press ESC to exit", "- restart the game to begin again", "", ""}, 0, 0},
 	};
 
@@ -196,8 +196,9 @@ protected:
 	int isNearChest = 0;//		 1: personaggio vicinio ad una cesta/ 0: no
 	int spawnIndex = 0;//		 indica in quale spawn è la chest al momento 
 	int numOfHiddenChests = 0;// deve essere < numOfSpawns, per ora vien efinito dall'utente tra 1-9
-	bool collision = 0;//		 1: se viene rilevata una collision/ 0: altrimenti      
+	bool collision = 0;//		 1: se viene rilevata una collision/ 0: altrimenti   
 	float Ar;
+	GLFWgamepadstate state;
 	glm::mat4 World, ViewPrj, GWorld;
 
 	void setWindowParameters()
@@ -306,7 +307,7 @@ protected:
 				TDungeon.init(this, "textures/dungeon.png");
 				TClouds.init(this, "textures/clouds.png");
 				TWinPanel.init(this, "textures/fine.png");
-				TPressEnterPanel.init(this, "textures/SchermataPressEnter.png");
+				TPressEnterPanel.init(this, "textures/PressEnter.png");
 				txt.init(this, &text, -0.95, 0.70, 1.0 / 1200.0, 1.0 / 800.0);
 
 				ObjectsParameters();
@@ -771,6 +772,14 @@ protected:
 			numOfHiddenChests = 5;
 			RebuildPipeline();
 		}
+		if (currentScene == 0 && (glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
+			glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
+			state.buttons[GLFW_GAMEPAD_BUTTON_A] == GLFW_PRESS))
+		{
+			currentScene++;
+			numOfHiddenChests = 5;
+			RebuildPipeline();
+		}
 		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_6))
 		{
 			currentScene++;
@@ -798,14 +807,20 @@ protected:
 
 		//gestione mostra/nascondi menu
 		if (tabPress == true) {
-			if (gameState >= 2 && gameState <= 2 + numOfHiddenChests - 1 && glfwGetKey(window, GLFW_KEY_TAB))
+			if (gameState >= 2 && gameState <= 2 + numOfHiddenChests - 1 && (glfwGetKey(window, GLFW_KEY_TAB) ||
+				(glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
+					glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
+					state.buttons[GLFW_GAMEPAD_BUTTON_B] == GLFW_PRESS)))
 			{
 				gameState = 1;
 				//round = numOfHiddenChests + 2;
 				RebuildPipeline();
 			}
 			else {
-				if (gameState == 1 && glfwGetKey(window, GLFW_KEY_TAB))
+				if (gameState == 1 && (glfwGetKey(window, GLFW_KEY_TAB) ||
+					(glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
+						glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
+						state.buttons[GLFW_GAMEPAD_BUTTON_B] == GLFW_PRESS)))
 				{
 					gameState = 2 + round;
 					RebuildPipeline();
@@ -817,7 +832,10 @@ protected:
 		}
 
 		//endGame -> extraGame
-		if (gameEnded == 1 && glfwGetKey(window, GLFW_KEY_ENTER))
+		if (gameEnded == 1 && (glfwGetKey(window, GLFW_KEY_ENTER)||
+			(glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
+			glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
+			state.buttons[GLFW_GAMEPAD_BUTTON_A] == GLFW_PRESS)))
 		{
 			gameState = 12;
 			round++;
@@ -836,12 +854,20 @@ protected:
 		DSPressEnterPanel.map(currentImage, &uboPressEnterPanel, sizeof(uboPressEnterPanel), 0);
 
 		//player <-> spectator
-		if (glfwGetKey(window, GLFW_KEY_M)) {
+		if (glfwGetKey(window, GLFW_KEY_M) ||
+			(glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
+				glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
+				state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER] == GLFW_PRESS)) {
 			if (!press) {
 				press = true;
 				curPress = GLFW_KEY_M;
 				if (gameState == 0) {
-					gameState = 2 + round;
+					if (gameEnded > 0) {
+						gameState = 12;
+					}
+					else {
+						gameState = 2 + round;
+					}
 				}
 				else {
 					gameState = 0;

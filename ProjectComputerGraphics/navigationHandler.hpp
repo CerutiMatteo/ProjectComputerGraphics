@@ -169,7 +169,10 @@ void Game::FoundChest(glm::vec3 pos) {// se il gioco non è finito controlla se i
 			if (pos.x < ChestPositions[i].x + chestRange && pos.x > ChestPositions[i].x - chestRange &&
 				pos.z < ChestPositions[i].y + chestRange && pos.z > ChestPositions[i].y - chestRange) {
 				isNearChest = 1;
-				if (glfwGetKey(window, GLFW_KEY_ENTER)) {
+				if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS ||
+					(glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
+						glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
+						state.buttons[GLFW_GAMEPAD_BUTTON_A] == GLFW_PRESS)) {
 					isNearChest = 0;
 					do {
 						spawnIndex = rand() % (numOfSpawns - 1) + 1;// 1 - (numOfSpawns-1) (devo evitare che sorteggi zero) 

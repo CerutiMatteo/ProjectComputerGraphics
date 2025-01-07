@@ -6,3 +6,9 @@ Vincoli per modificare il numero di forzieri nella mappa:
 		e come viene decrementato il fattore di scala nella funzione FoundChest
 		al momento parte da 0.0027 e viene decrementata di 0.0003 ogni volta.
 		Maggiore è il numero di chest da cercare più la cassa diventa piccola
+	- se inizi il gioco da pad le casse sono 5
+
+Comandi
+	- enter == X
+	- Tab == O
+	- M == R1

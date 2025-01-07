@@ -141,7 +141,7 @@ void Game::ObjectsParameters()
 	ChestSpawn[7] = { 26.0f,-26.0f };
 	ChestSpawn[8] = { -26.0f,26.0f };
 	ChestSpawn[9] = { -10.75f,-10.0f };// dentro double house
-	ChestSpawn[10] = { 6.25f,10.0f };//   dentro double house
+	ChestSpawn[10] = { 6.25f,10.0f };  // dentro double house
 	for (int i = 0; i < numOfSpawns; i++) {
 		SpawnsFound[i] = 0;
 	}

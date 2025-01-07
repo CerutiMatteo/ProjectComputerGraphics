@@ -1798,10 +1798,10 @@ protected:
 				if (fabs(state.axes[GLFW_GAMEPAD_AXIS_LEFT_Y]) > deadZone) {
 					m.z -= state.axes[GLFW_GAMEPAD_AXIS_LEFT_Y];
 				}
-				if (fabs(state.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER]) > deadZone) {
+				if (fabs(state.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER]) > deadZone && scene == 1) {
 					m.y -= state.axes[GLFW_GAMEPAD_AXIS_LEFT_TRIGGER];
 				}
-				if (fabs(state.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER]) > deadZone) {
+				if (fabs(state.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER]) > deadZone && scene == 1) {
 					m.y += state.axes[GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER];
 				}
 
@@ -1821,6 +1821,7 @@ protected:
 	void getSixAxis(float& deltaT, glm::vec3& m, glm::vec3& r, bool& fire) {
 		static auto startTime = std::chrono::high_resolution_clock::now();
 		static float lastTime = 0.0f;
+		GLFWgamepadstate state;
 
 		auto currentTime = std::chrono::high_resolution_clock::now();
 		float time = std::chrono::duration<float, std::chrono::seconds::period>
@@ -1864,12 +1865,14 @@ protected:
 			r.z = -1.0f;
 		}
 
-		if (glfwGetKey(window, GLFW_KEY_M)) {
+		if (glfwGetKey(window, GLFW_KEY_M) || (glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
+			glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
+			state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER] == GLFW_PRESS)) {
 
 			if (scene == 0)
-				scene = 1;
+				scene = 1;//spectatate
 			else if (scene == 1)
-				scene = 0;
+				scene = 0;//game
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_A) && glfwGetKey(window, GLFW_KEY_W) && scene == 0 ) {

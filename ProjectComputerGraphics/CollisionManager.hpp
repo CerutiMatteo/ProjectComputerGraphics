@@ -1,14 +1,16 @@
 void Game::CollisionCheck(glm::vec3 &pos, glm::vec3 &nextPos) {
-	if (nextPos.x > WallPositions[0].x - 1.5f) {
+
+	//WALLS
+	if (nextPos.x > WallPositions[0].x - 1.25f) {
 		collision = true;
 	}
-	if (nextPos.x < WallPositions[1].x + 1.5f) {
+	if (nextPos.x < WallPositions[1].x + 1.25f) {
 		collision = true;
 	}
-	if (nextPos.z > WallPositions[2].y - 1.5f) {
+	if (nextPos.z > WallPositions[2].y - 1.25f) {
 		collision = true;
 	}
-	if (nextPos.z < WallPositions[3].y + 1.5f) {
+	if (nextPos.z < WallPositions[3].y + 1.25f) {
 		collision = true; 
 	}
 
