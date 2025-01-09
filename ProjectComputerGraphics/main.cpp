@@ -2,12 +2,20 @@
 #include "TextMaker.hpp"
 
 
-struct GlobalUniformBlock//luce
+struct GlobalUniformBufferObject//luce
 {
+	struct {
+		alignas(16) glm::vec3 v;
+	} PointlightDir[12];
+	struct {
+		alignas(16) glm::vec3 v;
+	} PointlightPos[12];
+	alignas(16) glm::vec4 PointlightColor[12];
 	alignas(16) glm::vec3 DlightDir;
 	alignas(16) glm::vec3 DlightColor;
 	alignas(16) glm::vec3 AmbLightColor;
 	alignas(16) glm::vec3 eyePos;//dove punta telecamera
+	alignas(16) glm::vec3 pointLightsOn;
 };
 
 struct MeshUniformBlock
@@ -92,7 +100,7 @@ protected:
 		DSStartPanel, DSWinPanel,DSPressEnterPanel;
 
 	// Uniform Blocks //altri ?
-	GlobalUniformBlock gubo;
+	GlobalUniformBufferObject gubo;
 	MeshUniformBlock uboCharacter, uboGround[4], uboHouses[numOfHouses],
 		uboAngleHouses[numOfAngleHouses], uboStones[numOfStones], uboBushes[numOfBushes], uboCastle[numOfCastle],
 		uboWalls[numOfWalls], uboTowers[numOfTowers], uboLights[numOfLights], uboBiggerHouses[numOfBiggerHouses],
@@ -196,7 +204,9 @@ protected:
 	int isNearChest = 0;//		 1: personaggio vicinio ad una cesta/ 0: no
 	int spawnIndex = 0;//		 indica in quale spawn è la chest al momento 
 	int numOfHiddenChests = 0;// deve essere < numOfSpawns, per ora vien efinito dall'utente tra 1-9
-	bool collision = 0;//		 1: se viene rilevata una collision/ 0: altrimenti   
+	bool collision = 0;//		 1: se viene rilevata una collision/ 0: altrimenti  
+	int dayPhase = 0;//			 0: day/ 1:sunset/ 2:night
+	glm::vec3 pointLightsOn =glm::vec3(0, 0, 0);
 	float Ar;
 	GLFWgamepadstate state;
 	glm::mat4 World, ViewPrj, GWorld;
@@ -322,7 +332,7 @@ protected:
 
 		// Defining the Descriptor Sets
 		DSGubo.init(this, &DSLGubo, {
-					{0, UNIFORM, sizeof(GlobalUniformBlock), nullptr}
+					{0, UNIFORM, sizeof(GlobalUniformBufferObject), nullptr}
 			});
 		DSCharacter.init(this, &DSLToon, {
 						{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
@@ -726,13 +736,19 @@ protected:
 
 	void updateUniformBuffer(uint32_t currentImage)
 	{
-		static bool press = false;
-		static int curPress = 0;
+		static bool pressM = false;
+		static int curPressM = 0;
+		static bool pressC = false;
+		static int curPressC = 0;
 		static bool tabPress = true;
 
 		//esc
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE)) {
 			glfwSetWindowShouldClose(window, GL_TRUE);
+		}
+
+		if (currentScene == 0) {
+			gubo.DlightColor = glm::vec4(1.0f, 0.95f, 0.8f, 1.0f);
 		}
 
 		//overlay iniziale, scelta durata game
@@ -858,9 +874,9 @@ protected:
 			(glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
 				glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
 				state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER] == GLFW_PRESS)) {
-			if (!press) {
-				press = true;
-				curPress = GLFW_KEY_M;
+			if (!pressM) {
+				pressM = true;
+				curPressM = GLFW_KEY_M;
 				if (gameState == 0) {
 					if (gameEnded > 0) {
 						gameState = 12;
@@ -876,9 +892,9 @@ protected:
 			}
 		}
 		else {
-			if ((curPress == GLFW_KEY_M) && press) {
-				press = false;
-				curPress = 0;
+			if ((curPressM == GLFW_KEY_M) && pressM) {
+				pressM = false;
+				curPressM = 0;
 			}
 		}
 		if (currentScene == 1)
@@ -891,10 +907,47 @@ protected:
 			}
 		}
 
+		//day<->sunlight
+		if (glfwGetKey(window, GLFW_KEY_C)) {
+			if (!pressC) {
+				pressC = true;
+				curPressC = GLFW_KEY_C;
+				if (dayPhase == 0) {      //day->sunset
+					initialBackgroundColor = { 1.0f, 0.5f, 0.3f, 1.0f };
+					gubo.DlightColor = glm::vec4(1.0f, 0.5f, 0.3f, 1.0f);
+					dayPhase++;
+				}
+				else if (dayPhase == 1) { //Sunset->Night
+					initialBackgroundColor = { 0.0f, 0.05f, 0.1f, 1.0f }; 
+					gubo.DlightColor = glm::vec4(0.2f, 0.3f, 0.4f, 1.0f); 
+					dayPhase++;
+					pointLightsOn.x = 1;
+				}
+				else if (dayPhase == 2) { //night->day
+					initialBackgroundColor = { 0.5f, 0.8f, 0.9f, 1.0f };
+					gubo.DlightColor = glm::vec4(1.0f, 0.95f, 0.8f, 1.0f);
+					dayPhase=0;
+					pointLightsOn.x = 0;
+				}
+				RebuildPipeline();
+			}
+		}
+		else {
+			if ((curPressC == GLFW_KEY_C) && pressC) {
+				pressC = false;
+				curPressC = 0;
+			}
+		}
+
 		gubo.DlightDir = glm::vec3(cos(glm::radians(135.0f)) * cos(glm::radians(210.0f)), sin(glm::radians(135.0f)), cos(glm::radians(135.0f)) * sin(glm::radians(210.0f)));
-		gubo.DlightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		//gubo.DlightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		gubo.AmbLightColor = glm::vec3(0.2f);
 		gubo.eyePos = glm::vec3(100.0, 100.0, 100.0);
+		gubo.pointLightsOn = pointLightsOn;
+		for (int i = 0; i < 12; i++) {
+			gubo.PointlightDir[i].v = glm::vec3(0.0f, -1.0f, 0.0f);
+			gubo.PointlightColor[i] = glm::vec4(1.0f, 1.0f, 1.0f, 5.0f);
+		}
 
 		DSGubo.map(currentImage, &gubo, sizeof(gubo), 0);
 

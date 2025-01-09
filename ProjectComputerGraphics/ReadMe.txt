@@ -8,6 +8,9 @@ Vincoli per modificare il numero di forzieri nella mappa:
 		Maggiore è il numero di chest da cercare più la cassa diventa piccola
 	- se inizi il gioco da pad le casse sono 5
 
+Comandi per Compilare Shaders .vert, .frag in spv da terminale
+	- C:\Users\Utente\Documents\VisualStudio\projects\ProjectComputerGraphics\ProjectComputerGraphics\shaders>glslc ToonShader.frag -o ToonFrag.spv
+
 Comandi
 	- enter == X
 	- Tab == O

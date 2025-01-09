@@ -113,6 +113,7 @@ void Game::ObjectsParameters()
 			Y = row * rowSpacing - 1.5 * rowSpacing;
 			LightPositions[row * lightsPerRow + i] = {X,Y};
 			LightRotationsX[row * lightsPerRow + i] = 90.0f;
+			gubo.PointlightPos[row * lightsPerRow + i].v = glm::vec3(X, 2.5f, Y);
 		}
 	}
 

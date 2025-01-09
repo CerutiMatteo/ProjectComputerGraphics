@@ -8,23 +8,37 @@ layout(location = 2) in vec2 fragUV;
 layout(location = 0) out vec4 outColor;
 
 layout(set = 0, binding = 0) uniform GlobalUniformBufferObject {
-	vec3 DlightDir;		// direction of the direct light
-	vec3 DlightColor;	// color of the direct light
-	vec3 AmbLightColor;	// ambient light
-	vec3 eyePos;		// position of the viewer
+    vec3 PointlightDir[12];
+    vec3 PointlightPos[12];
+    vec4 PointlightColor[12];
+    vec3 DlightDir;
+    vec4 DlightColor;
+    vec3 AmbLightColor;
+    vec3 eyePos;
+    vec3 pointLightsOn; 
 } gubo;
 
 layout(set = 1, binding = 0) uniform UniformBufferObject {
-	float visible;
-	float amb;
-	float gamma;
-	vec3 sColor;
-	mat4 mvpMat;
-	mat4 mMat;
-	mat4 nMat;
+    float visible;
+    float amb;
+    float gamma;
+    vec3 sColor;
+    mat4 mvpMat;
+    mat4 mMat;
+    mat4 nMat;
 } ubo;
 
 layout(set = 1, binding = 1) uniform sampler2D tex;
+
+vec3 compute_point_light_dir(vec3 pos, int i) {
+    return normalize(gubo.PointlightPos[i] - pos);
+}
+
+vec3 compute_point_light_color(vec3 pos, int i) {
+    float distance = length(gubo.PointlightPos[i] - pos);
+    float attenuation = gubo.PointlightColor[i].a / (distance * distance);
+    return gubo.PointlightColor[i].rgb * attenuation;
+}
 
 vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma) {
 	//vec3 V  - direction of the viewer
@@ -60,8 +74,6 @@ vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma) {
 		sGradient = 0.5;
 	}*/
 
-
-
 	vec3 Diffuse = Md * dGradient;
 	vec3 Specular = Ms * sGradient;
 	
@@ -69,14 +81,23 @@ vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma) {
 }
 
 void main() {
-	vec3 Norm = normalize(fragNorm);
-	vec3 EyeDir = normalize(gubo.eyePos - fragPos);
-	
-	vec3 lightDir = gubo.DlightDir;
-	vec3 lightColor = gubo.DlightColor.rgb;
+    vec3 Norm = normalize(fragNorm);
+    vec3 EyeDir = normalize(gubo.eyePos - fragPos);
+    vec3 FinalColor = vec3(0);
 
-	vec3 DiffSpec = BRDF(EyeDir, Norm, lightDir, texture(tex, fragUV).rgb, ubo.sColor, ubo.gamma);
-	vec3 Ambient = texture(tex, fragUV).rgb * ubo.amb * gubo.AmbLightColor;
-	
-	outColor = vec4(clamp(0.95 * (DiffSpec) * lightColor.rgb + Ambient,0.0,1.0), 1.0f);
+    vec3 dirLightDir = gubo.DlightDir;
+    FinalColor += BRDF(EyeDir, Norm, dirLightDir, texture(tex, fragUV).rgb, ubo.sColor, ubo.gamma) * gubo.DlightColor.rgb;
+
+    for (int i = 0; i < 12; i++) {
+        if(gubo.pointLightsOn.x>0){
+            vec3 pointLightDir = compute_point_light_dir(fragPos, i);
+            vec3 pointLightColor = compute_point_light_color(fragPos, i);
+            FinalColor += BRDF(EyeDir, Norm, pointLightDir, texture(tex, fragUV).rgb, ubo.sColor, ubo.gamma) * pointLightColor;
+        }
+    }
+
+    vec3 ambientLight = texture(tex, fragUV).rgb * ubo.amb * gubo.AmbLightColor;
+    FinalColor += ambientLight;
+
+    outColor = vec4(FinalColor, 1.0);
 }
