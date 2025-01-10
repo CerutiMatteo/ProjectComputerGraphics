@@ -140,7 +140,7 @@ void Game::ObjectsParameters()
 	ChestSpawn[1] = { 26.0f,0.0f };
 	ChestSpawn[2] = { -25.0f,0.0f };
 	ChestSpawn[3] = {0.0f,25.0f};
-	ChestSpawn[4] = { -25.0f,-25.0f };
+	ChestSpawn[4] = { 0.0f,-25.0f };
 	ChestSpawn[5] = { 25.0f,25.0f };
 	ChestSpawn[6] = { -25.0f,-25.0f };
 	ChestSpawn[7] = { 25.0f,-25.0f };
