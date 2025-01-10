@@ -18,6 +18,7 @@ void Game::ObjectsParameters()
 		}
 		else {
 			housesPerRow = 6;
+
 		}
 		for (int i = 0; i < housesPerRow; i++) {
 			if (row == 0) {
@@ -136,16 +137,22 @@ void Game::ObjectsParameters()
 
 	//CHEST
 	ChestSpawn[0] = { 0.0f,0.0f }; ChestVisibles[0] = 1;
-	ChestSpawn[1] = { 27.0f,0.0f };
-	ChestSpawn[2] = { -26.0f,0.0f };
-	ChestSpawn[3] = {0.0f,26.0f};
-	ChestSpawn[4] = { -26.0f,-26.0f };
-	ChestSpawn[5] = { 26.0f,26.0f };
-	ChestSpawn[6] = { -26.0f,-26.0f };
-	ChestSpawn[7] = { 26.0f,-26.0f };
-	ChestSpawn[8] = { -26.0f,26.0f };
+	ChestSpawn[1] = { 26.0f,0.0f };
+	ChestSpawn[2] = { -25.0f,0.0f };
+	ChestSpawn[3] = {0.0f,25.0f};
+	ChestSpawn[4] = { -25.0f,-25.0f };
+	ChestSpawn[5] = { 25.0f,25.0f };
+	ChestSpawn[6] = { -25.0f,-25.0f };
+	ChestSpawn[7] = { 25.0f,-25.0f };
+	ChestSpawn[8] = { -25.0f,25.0f };
 	ChestSpawn[9] = { -10.75f,-10.0f };// dentro double house
-	ChestSpawn[10] = { 6.25f,10.0f };  // dentro double house
+	ChestSpawn[10] = { 6.25f,10.0f }; // dentro double house
+	ChestSpawn[11] = { 16.0f,0.0f }; // di fronte al castello
+	ChestSpawn[12] = { 7.0f,-10.0f }; // tra due case nella fila a destra
+	ChestSpawn[13] = {-5.75f,10.0f}; // tra due case nella fila a sinistra
+	ChestSpawn[14] = { 21.0f,-6.6f }; // tra castello e torre a sinistra ( fronte al castello)
+	ChestSpawn[15] = { 21.0f,6.6f }; // tra castello e torre a destra ( fronte al castello)
+
 	for (int i = 0; i < numOfSpawns; i++) {
 		SpawnsFound[i] = 0;
 	}

@@ -159,7 +159,7 @@ protected:
 	float ChestDimension[numOfChests];
 	float ChestVisibles[numOfChests];
 
-	int const static numOfSpawns = 11;
+	int const static numOfSpawns = 16;
 	glm::vec2 ChestSpawn[numOfSpawns];
 	int SpawnsFound[numOfSpawns];
 
