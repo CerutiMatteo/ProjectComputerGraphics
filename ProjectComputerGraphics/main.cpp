@@ -1,5 +1,7 @@
 #include "Starter.hpp"
 #include "TextMaker.hpp"
+#include "iostream"
+#include "ctime"
 
 
 struct GlobalUniformBufferObject//luce
@@ -217,9 +219,36 @@ protected:
 		windowHeight = 1080;
 		windowTitle = "LET'S FIND THE CHEST";
 		windowResizable = GLFW_TRUE;
-		initialBackgroundColor = { 0.5f, 0.8f, 0.9f, 1.0f };//colore cielo 
 
 		Ar = (float)windowWidth / (float)windowHeight;
+
+		std::time_t now = std::time(nullptr);
+		std::tm localTime;
+
+		if (localtime_s(&localTime, &now) != 0) {
+			std::cerr << "Errore nel calcolo dell'ora locale!" << std::endl;
+			return;
+		}
+
+		int hour = localTime.tm_hour;
+
+		// Determina i parametri in base all'ora corrente
+		if (hour >= 5 && hour <= 12) { // morning
+			initialBackgroundColor = { 0.5f, 0.8f, 0.9f, 1.0f };
+			gubo.DlightColor = glm::vec4(1.0f, 0.95f, 0.8f, 1.0f);
+			dayPhase = 0;
+		}
+		else if (hour >= 12 && hour <= 19) { // afternoon
+			initialBackgroundColor = { 1.0f, 0.5f, 0.3f, 1.0f };
+			gubo.DlightColor = glm::vec4(1.0f, 0.5f, 0.3f, 1.0f);
+			dayPhase = 1;
+		}
+		else { // night
+			initialBackgroundColor = { 0.0f, 0.05f, 0.1f, 1.0f };
+			gubo.DlightColor = glm::vec4(0.2f, 0.3f, 0.4f, 1.0f);
+			dayPhase = 2;
+			pointLightsOn.x = 1;
+		}
 	}
 
 	void onWindowResize(int w, int h) {
@@ -853,6 +882,7 @@ protected:
 			state.buttons[GLFW_GAMEPAD_BUTTON_A] == GLFW_PRESS)))
 		{
 			gameState = 12;
+			ChestVisibles[0] = 0;
 			round++;
 			gameEnded++;
 			RebuildPipeline();
