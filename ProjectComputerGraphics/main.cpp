@@ -6,11 +6,11 @@ struct GlobalUniformBufferObject//luce
 {
 	struct {
 		alignas(16) glm::vec3 v;
-	} PointlightDir[12];
+	} PointlightDir[6];
 	struct {
 		alignas(16) glm::vec3 v;
-	} PointlightPos[12];
-	alignas(16) glm::vec4 PointlightColor[12];
+	} PointlightPos[6];
+	alignas(16) glm::vec4 PointlightColor[6];
 	alignas(16) glm::vec3 DlightDir;
 	alignas(16) glm::vec3 DlightColor;
 	alignas(16) glm::vec3 AmbLightColor;
@@ -949,7 +949,7 @@ protected:
 		gubo.AmbLightColor = glm::vec3(0.2f);
 		gubo.eyePos = glm::vec3(100.0, 100.0, 100.0);
 		gubo.pointLightsOn = pointLightsOn;
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < 6; i++) {
 			gubo.PointlightDir[i].v = glm::vec3(0.0f, -1.0f, 0.0f);
 			gubo.PointlightColor[i] = glm::vec4(1.0f, 1.0f, 1.0f, 5.0f);
 		}

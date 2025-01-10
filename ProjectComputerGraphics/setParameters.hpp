@@ -105,6 +105,7 @@ void Game::ObjectsParameters()
 	//LIGHTS
 	float lightsSpacing = 10.0f; // Spaziatura tra i lampioni
 	int lightsPerRow = numOfLights / 4; //lampioni per riga
+	int size = 0;
 	for (int row = 0; row < 4; row++) 
 	{
 		for (int i = 0; i < lightsPerRow; i++) 
@@ -113,7 +114,12 @@ void Game::ObjectsParameters()
 			Y = row * rowSpacing - 1.5 * rowSpacing;
 			LightPositions[row * lightsPerRow + i] = {X,Y};
 			LightRotationsX[row * lightsPerRow + i] = 90.0f;
-			gubo.PointlightPos[row * lightsPerRow + i].v = glm::vec3(X, 2.5f, Y);
+
+			if (row == 1 || row == 2) {
+
+				gubo.PointlightPos[size].v = glm::vec3(X, 2.5f, Y);
+				size++;
+			}
 		}
 	}
 

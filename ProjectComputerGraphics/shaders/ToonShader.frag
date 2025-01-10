@@ -8,9 +8,9 @@ layout(location = 2) in vec2 fragUV;
 layout(location = 0) out vec4 outColor;
 
 layout(set = 0, binding = 0) uniform GlobalUniformBufferObject {
-    vec3 PointlightDir[12];
-    vec3 PointlightPos[12];
-    vec4 PointlightColor[12];
+    vec3 PointlightDir[6];
+    vec3 PointlightPos[6];
+    vec4 PointlightColor[6];
     vec3 DlightDir;
     vec4 DlightColor;
     vec3 AmbLightColor;
@@ -88,8 +88,9 @@ void main() {
     vec3 dirLightDir = gubo.DlightDir;
     FinalColor += BRDF(EyeDir, Norm, dirLightDir, texture(tex, fragUV).rgb, ubo.sColor, ubo.gamma) * gubo.DlightColor.rgb;
 
-    for (int i = 0; i < 12; i++) {
+    for (int i = 0; i < 6; i++) {
         if(gubo.pointLightsOn.x>0){
+            
             vec3 pointLightDir = compute_point_light_dir(fragPos, i);
             vec3 pointLightColor = compute_point_light_color(fragPos, i);
             FinalColor += BRDF(EyeDir, Norm, pointLightDir, texture(tex, fragUV).rgb, ubo.sColor, ubo.gamma) * pointLightColor;
