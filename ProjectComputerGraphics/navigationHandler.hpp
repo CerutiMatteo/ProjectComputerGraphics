@@ -113,16 +113,6 @@ void Game::PlayerController(uint32_t currentImage)
 
 	pos += uy * LINEAR_SPEED * m.y * deltaT;
 
-	//std::cout << "post before: \n" << pos.y;
-	//PickAnimation(deltaT, pos);
-	//std::cout << "post after: \n"<< pos.y;
-
-	/*if (pos.y < 0.0f) {
-		isJumping = FALSE;
-		VJump = VJumpIni;
-	}
-	isCollision = false;*/
-
 
 	glm::mat4 T = glm::translate(glm::mat4(1.0), pos);
 	if (pitch <= minPitch)

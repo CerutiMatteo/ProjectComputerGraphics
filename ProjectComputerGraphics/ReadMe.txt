@@ -15,3 +15,4 @@ Comandi
 	- enter == X
 	- Tab == O
 	- M == R1
+	- C == Triangolo

@@ -56,8 +56,8 @@ protected:
 	static const int mapSize = 5 * mapScale;
 	static const int numOfAngleHouses = 4;//fatto
 	static const int numOfHouses = 18;//fatto
-	static const int numOfStones = 1300;
-	static const int numOfBushes = 400;
+	//static const int numOfStones = 1300;
+	/*static const int numOfBushes = 400;*/
 	static const int numOfCastle = 1;//fatto
 	static const int numOfWalls = 4;//fatto
 	static const int numOfTowers = 2;//m
@@ -82,7 +82,7 @@ protected:
 	Pipeline PToon, PToonPhong, POverlay;
 
 	// Models
-	Model<VertexMesh> MCharacter, MGround, MHouses, MAngleHouses, MStones, MBushes, 
+	Model<VertexMesh> MCharacter, MGround, MHouses, MAngleHouses, /*MStones,*/ /*MBushes,*/ 
 		MCastle, MWalls, MTowers, MLights, MBiggerHouses, MDoubleHouses, MFlags, MChests,
 		MStatue1, MStatue2,MWell, MClouds;
 	Model<VertexOverlay> MStartPanel, MWinPanel, MPressEnterPanel;
@@ -93,7 +93,7 @@ protected:
 
 	// Descriptor sets
 	DescriptorSet DSGubo, DSCharacter, DSGround[4], DSHouses[numOfHouses],
-		DSAngleHouses[numOfAngleHouses], DSStones[numOfStones], DSBushes[numOfBushes],
+		DSAngleHouses[numOfAngleHouses], /*DSStones[numOfStones],*/ /*DSBushes[numOfBushes],*/
 		DSCastle[numOfCastle], DSWalls[numOfWalls], DSTowers[numOfTowers], DSLights[numOfLights],
 		DSBiggerHouses[numOfBiggerHouses], DSDoubleHouses[numOfDoubleHouses],
 		DSFlags[numOfFlags], DSChests[numOfChests], DSStatue1[numOfStatue1], DSStatue2[numOfStatue2],DSWell[numOfWell],DSClouds[numOfClouds],
@@ -102,7 +102,7 @@ protected:
 	// Uniform Blocks //altri ?
 	GlobalUniformBufferObject gubo;
 	MeshUniformBlock uboCharacter, uboGround[4], uboHouses[numOfHouses],
-		uboAngleHouses[numOfAngleHouses], uboStones[numOfStones], uboBushes[numOfBushes], uboCastle[numOfCastle],
+		uboAngleHouses[numOfAngleHouses],/* uboStones[numOfStones],*/ /*uboBushes[numOfBushes],*/ uboCastle[numOfCastle],
 		uboWalls[numOfWalls], uboTowers[numOfTowers], uboLights[numOfLights], uboBiggerHouses[numOfBiggerHouses],
 		uboDoubleHouses[numOfDoubleHouses], uboFlags[numOfFlags], uboChests[numOfChests], uboStatue1[numOfStatue1],
 		uboStatue2[numOfStatue2],uboWell[numOfWell], uboClouds[numOfClouds];
@@ -120,10 +120,10 @@ protected:
 	float AngleHouseRotationsX[numOfAngleHouses];
 	float AngleHouseRotationsZ[numOfAngleHouses];
 
-	glm::vec2 StonePositions[numOfStones];
+	/*glm::vec2 StonePositions[numOfStones];*/
 
-	glm::vec2 BushPositions[numOfBushes];
-	float BushRotationsX[numOfBushes];
+	/*glm::vec2 BushPositions[numOfBushes];
+	float BushRotationsX[numOfBushes];*/
 
 	glm::vec2 CastlePositions[numOfCastle];
 	float CastleRotationsX[numOfCastle];
@@ -228,9 +228,9 @@ protected:
 
 	void setDescriptorPool()
 	{
-		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 +numOfStatue2 + numOfWell+ numOfClouds) * 2 + 4 + 1 + 1 ;
+		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + /*numOfStones +*/ /*numOfBushes +*/ numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 +numOfStatue2 + numOfWell+ numOfClouds) * 2 + 4 + 1 + 1 ;
 		texturesInPool = 12 + 1;
-		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + numOfStones + numOfBushes + numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 + numOfStatue2 + numOfWell + numOfClouds + 4 + 1 + 1 ;
+		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + /*numOfStones +*/ /*numOfBushes +*/ numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 + numOfStatue2 + numOfWell + numOfClouds + 4 + 1 + 1 ;
 	}
 
 	void localInit()
@@ -283,8 +283,8 @@ protected:
 				MGround.init(this, &VMesh, "Models/ground.obj", OBJ);
 				MHouses.init(this, &VMesh, "Models/house1.mgcg", MGCG);
 				MAngleHouses.init(this, &VMesh, "Models/house2.mgcg", MGCG);
-				MStones.init(this, &VMesh, "Models/Stone1.mgcg", MGCG);
-				MBushes.init(this, &VMesh, "Models/Bush.mgcg", MGCG);
+				/*MStones.init(this, &VMesh, "Models/Stone1.mgcg", MGCG);*/
+				/*MBushes.init(this, &VMesh, "Models/Bush.mgcg", MGCG);*/
 				MCastle.init(this, &VMesh, "Models/castle1.mgcg", MGCG);
 				MWalls.init(this, &VMesh, "Models/CastleWall.mgcg", MGCG);
 				MTowers.init(this, &VMesh, "Models/tower.mgcg", MGCG);
@@ -310,8 +310,8 @@ protected:
 				TGround.init(this, "textures/street2.png");
 				TMedieval.init(this, "textures/medieval.png");
 				TStartPanel.init(this, "textures/inizio2.png");
-				TStone.init(this, "textures/street.png");
-				TBush.init(this, "textures/bush.png");
+				/*TStone.init(this, "textures/street.png");*/
+				/*TBush.init(this, "textures/bush.png");*/
 				TWall.init(this, "textures/wall.png");
 				TChest.init(this, "textures/chest.png");
 				TDungeon.init(this, "textures/dungeon.png");
@@ -359,20 +359,20 @@ protected:
 					{1, TEXTURE, 0, &TMedieval},
 				});
 		}
-		for (int i = 0; i < numOfStones; i++)
+		/*for (int i = 0; i < numOfStones; i++)
 		{
 			DSStones[i].init(this, &DSLToon, {
 					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
 					{1, TEXTURE, 0, &TStone},
 				});
-		}
-		for (int i = 0; i < numOfBushes; i++)
+		}*/
+		/*for (int i = 0; i < numOfBushes; i++)
 		{
 			DSBushes[i].init(this, &DSLToon, {
 					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
 					{1, TEXTURE, 0, &TBush},
 				});
-		}
+		}*/
 		for (int i = 0; i < numOfCastle; i++)
 		{
 			DSCastle[i].init(this, &DSLToon, {
@@ -489,10 +489,10 @@ protected:
 			DSHouses[i].cleanup();
 		for (int i = 0; i < numOfAngleHouses; i++)
 			DSAngleHouses[i].cleanup();
-		for (int i = 0; i < numOfStones; i++)
-			DSStones[i].cleanup();
-		for (int i = 0; i < numOfBushes; i++)
-			DSBushes[i].cleanup();
+		/*for (int i = 0; i < numOfStones; i++)
+			DSStones[i].cleanup();*/
+		/*for (int i = 0; i < numOfBushes; i++)
+			DSBushes[i].cleanup();*/
 		for (int i = 0; i < numOfCastle; i++)
 			DSCastle[i].cleanup();
 		for (int i = 0; i < numOfWalls; i++)
@@ -528,8 +528,8 @@ protected:
 		TCharacter.cleanup();
 		TGround.cleanup();
 		TMedieval.cleanup();
-		TStone.cleanup();
-		TBush.cleanup();
+		/*TStone.cleanup();*/
+		/*TBush.cleanup();*/
 		TWall.cleanup();
 		TChest.cleanup();
 		TDungeon.cleanup();
@@ -543,8 +543,8 @@ protected:
 		MGround.cleanup();
 		MHouses.cleanup();
 		MAngleHouses.cleanup();
-		MStones.cleanup();
-		MBushes.cleanup();
+		/*MStones.cleanup();*/
+		/*MBushes.cleanup();*/
 		MCastle.cleanup();
 		MWalls.cleanup();
 		MTowers.cleanup();
@@ -604,19 +604,19 @@ protected:
 				static_cast<uint32_t>(MAngleHouses.indices.size()), 1, 0, 0, 0);
 		}
 
-		MStones.bind(commandBuffer);
+		/*MStones.bind(commandBuffer);
 		for (int i = 0; i < numOfStones; i++) {
 			DSStones[i].bind(commandBuffer, PToon, 1, currentImage);
 			vkCmdDrawIndexed(commandBuffer,
 				static_cast<uint32_t>(MStones.indices.size()), 1, 0, 0, 0);
-		}
+		}*/
 
-		MBushes.bind(commandBuffer);
+		/*MBushes.bind(commandBuffer);
 		for (int i = 0; i < numOfBushes; i++) {
 			DSBushes[i].bind(commandBuffer, PToon, 1, currentImage);
 			vkCmdDrawIndexed(commandBuffer,
 				static_cast<uint32_t>(MBushes.indices.size()), 1, 0, 0, 0);
-		}
+		}*/
 
 		MCastle.bind(commandBuffer);
 		for (int i = 0; i < numOfCastle; i++) {
@@ -705,7 +705,6 @@ protected:
 		DSGubo.bind(commandBuffer, PToon, 0, currentImage);
 
 		// Ground
-		//PToonPhong.bind(commandBuffer);
 		MGround.bind(commandBuffer);
 		for (int i = 0; i < 4; i++)
 		{
@@ -908,7 +907,10 @@ protected:
 		}
 
 		//day<->sunlight
-		if (glfwGetKey(window, GLFW_KEY_C)) {
+		if (glfwGetKey(window, GLFW_KEY_C) || ((glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
+			glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
+			state.buttons[GLFW_GAMEPAD_BUTTON_Y] == GLFW_PRESS))){
+
 			if (!pressC) {
 				pressC = true;
 				curPressC = GLFW_KEY_C;
@@ -916,20 +918,23 @@ protected:
 					initialBackgroundColor = { 1.0f, 0.5f, 0.3f, 1.0f };
 					gubo.DlightColor = glm::vec4(1.0f, 0.5f, 0.3f, 1.0f);
 					dayPhase++;
+					RebuildPipeline();
 				}
 				else if (dayPhase == 1) { //Sunset->Night
 					initialBackgroundColor = { 0.0f, 0.05f, 0.1f, 1.0f }; 
 					gubo.DlightColor = glm::vec4(0.2f, 0.3f, 0.4f, 1.0f); 
 					dayPhase++;
 					pointLightsOn.x = 1;
+					RebuildPipeline();
 				}
 				else if (dayPhase == 2) { //night->day
 					initialBackgroundColor = { 0.5f, 0.8f, 0.9f, 1.0f };
 					gubo.DlightColor = glm::vec4(1.0f, 0.95f, 0.8f, 1.0f);
 					dayPhase=0;
 					pointLightsOn.x = 0;
+					RebuildPipeline();
 				}
-				RebuildPipeline();
+				
 			}
 		}
 		else {
@@ -961,8 +966,8 @@ protected:
 	void RenderGround(uint32_t currentImage);
 	void RenderHouses(uint32_t currentImage);
 	void RenderAngleHouses(uint32_t currentImage);
-	void RenderStones(uint32_t currentImage);
-	void RenderBushes(uint32_t currentImage);
+	/*void RenderStones(uint32_t currentImage);*/
+	/*void RenderBushes(uint32_t currentImage);*/
 	void RenderCastle(uint32_t currentImage);
 	void RenderWalls(uint32_t currentImage);
 	void RenderLights(uint32_t currentImage);

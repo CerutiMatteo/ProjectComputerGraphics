@@ -27,8 +27,8 @@ void Game::RenderEnvironment(uint32_t currentImage)
 	RenderGround(currentImage);
 	RenderHouses(currentImage);
 	RenderAngleHouses(currentImage);
-	RenderStones(currentImage);
-	RenderBushes(currentImage);
+	/*RenderStones(currentImage);*/
+	/*RenderBushes(currentImage);*/
 	RenderCastle(currentImage);
 	RenderWalls(currentImage);
 	RenderLights(currentImage);
@@ -70,23 +70,23 @@ void Game::RenderAngleHouses(uint32_t currentImage)
 	}
 }
 
-void Game::RenderStones(uint32_t currentImage)
-{
-	for (int i = 0; i < numOfStones; i++)
-	{
-		GWorld = glm::translate(glm::mat4(1), glm::vec3(StonePositions[i].x, 0, StonePositions[i].y)) * glm::scale(glm::mat4(1), glm::vec3(0.02f));
-		SetUboDs(currentImage, uboStones, DSStones, i);
-	}
-}
+//void Game::RenderStones(uint32_t currentImage)
+//{
+//	for (int i = 0; i < numOfStones; i++)
+//	{
+//		GWorld = glm::translate(glm::mat4(1), glm::vec3(StonePositions[i].x, 0, StonePositions[i].y)) * glm::scale(glm::mat4(1), glm::vec3(0.02f));
+//		SetUboDs(currentImage, uboStones, DSStones, i);
+//	}
+//}
 
-void Game::RenderBushes(uint32_t currentImage)
-{
-	for (int i = 0; i < numOfBushes; i++)
-	{
-		GWorld = glm::translate(glm::mat4(1), glm::vec3(BushPositions[i].x, 0, BushPositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(BushRotationsX[i]), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1), glm::vec3(0.3f));
-		SetUboDs(currentImage, uboBushes, DSBushes, i);
-	}
-}
+//void Game::RenderBushes(uint32_t currentImage)
+//{
+//	for (int i = 0; i < numOfBushes; i++)
+//	{
+//		GWorld = glm::translate(glm::mat4(1), glm::vec3(BushPositions[i].x, 0, BushPositions[i].y)) * glm::rotate(glm::mat4(1.0f), glm::radians(BushRotationsX[i]), glm::vec3(1, 0, 0)) * glm::scale(glm::mat4(1), glm::vec3(0.3f));
+//		SetUboDs(currentImage, uboBushes, DSBushes, i);
+//	}
+//}
 
 void Game::RenderCastle(uint32_t currentImage)
 {

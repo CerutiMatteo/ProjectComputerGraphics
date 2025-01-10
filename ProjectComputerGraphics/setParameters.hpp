@@ -73,17 +73,17 @@ void Game::ObjectsParameters()
 	}
 
 	//STONES
-	for (int i = 0; i < numOfStones; i++) {
+	/*for (int i = 0; i < numOfStones; i++) {
 		StonePositions[i].x = -27 + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX) / 54);
 		StonePositions[i].y = -27 + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX) / 54);
-	}
+	}*/
 
 	//BUSHES
-	for (int i = 0; i < numOfBushes; i++) {
+	/*for (int i = 0; i < numOfBushes; i++) {
 		BushPositions[i].x = -27 + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX) / 54);
 		BushPositions[i].y = -27 + static_cast<float>(std::rand()) / (static_cast<float>(RAND_MAX) / 54);
 		BushRotationsX[i] = 90.0f;
-	}
+	}*/
 
 	//CASTLE
 	for (int i = 0; i < numOfCastle; i++) {
