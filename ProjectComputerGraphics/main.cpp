@@ -61,7 +61,7 @@ protected:
 	static const int numOfCastle = 1;//fatto
 	static const int numOfWalls = 4;//fatto
 	static const int numOfTowers = 2;//m
-	static const int numOfLights = 12;
+	static const int numOfLights = 6;
 	static const int numOfBiggerHouses = 5;//f
 	static const int numOfDoubleHouses = 2;//m
 	static const int numOfFlags = 4;
