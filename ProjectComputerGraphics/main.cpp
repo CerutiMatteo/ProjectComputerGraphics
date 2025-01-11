@@ -895,7 +895,7 @@ protected:
 		uboWinPanel.visible = (gameEnded == 1) ? 1.0f : 0.0f;
 		DSWinPanel.map(currentImage, &uboWinPanel, sizeof(uboWinPanel), 0);
 		//overlay press enter visible solo quando vicini a un tesoro 
-		uboPressEnterPanel.visible = (isNearChest == 1) ? 1.0f : 0.0f;
+		uboPressEnterPanel.visible = (isNearChest == 1 && ChestVisibles[0] == 1) ? 1.0f : 0.0f;
 		DSPressEnterPanel.map(currentImage, &uboPressEnterPanel, sizeof(uboPressEnterPanel), 0);
 
 		//player <-> spectator
