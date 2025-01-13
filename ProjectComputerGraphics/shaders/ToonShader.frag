@@ -36,11 +36,13 @@ vec3 compute_point_light_dir(vec3 pos, int i) {
 
 vec3 compute_point_light_color(vec3 pos, int i) {
     float distance = length(gubo.PointlightPos[i] - pos);
-    float attenuation = gubo.PointlightColor[i].a / (distance * distance);
+    float g = gubo.PointlightColor[i].a;                //distance which it the light reduction is 1
+    float b = 2.0f;                                     //decay factor
+    float attenuation = pow(g / distance, b);
     return gubo.PointlightColor[i].rgb * attenuation;
 }
 
-vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma) {
+vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma, bool isLamp) {
 	//vec3 V  - direction of the viewer
 	//vec3 N  - normal vector to the surface
 	//vec3 L  - light vector (from the light model)
@@ -64,15 +66,17 @@ vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma) {
         dGradient = 1.0;
     }
 
-	/*if(cosBeta<=0.9){
-		sGradient = 0;
-	}
-	if(cosBeta>0.9 && cosBeta<=0.95){
-		sGradient = 0.5 * (cosBeta-0.9)/0.05;
-	}
-	if(cosBeta>0.95){
-		sGradient = 0.5;
-	}*/
+    if(isLamp == false){
+        if(cosBeta<=0.9){
+		    sGradient = 0;
+	    }
+	    if(cosBeta>0.9 && cosBeta<=0.95){
+		    sGradient = 0.5 * (cosBeta-0.9)/0.05;
+	    }
+	    if(cosBeta>0.95){
+		    sGradient = 0.5;
+	    }
+    }
 
 	vec3 Diffuse = Md * dGradient;
 	vec3 Specular = Ms * sGradient;
@@ -81,19 +85,20 @@ vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma) {
 }
 
 void main() {
+    bool isLamp = false;
     vec3 Norm = normalize(fragNorm);
     vec3 EyeDir = normalize(gubo.eyePos - fragPos);
     vec3 FinalColor = vec3(0);
 
     vec3 dirLightDir = gubo.DlightDir;
-    FinalColor += BRDF(EyeDir, Norm, dirLightDir, texture(tex, fragUV).rgb, ubo.sColor, ubo.gamma) * gubo.DlightColor.rgb;
+    FinalColor += BRDF(EyeDir, Norm, dirLightDir, texture(tex, fragUV).rgb, ubo.sColor, ubo.gamma, isLamp) * gubo.DlightColor.rgb;
 
     for (int i = 0; i < 6; i++) {
         if(gubo.pointLightsOn.x>0){
-            
+            isLamp = true;
             vec3 pointLightDir = compute_point_light_dir(fragPos, i);
             vec3 pointLightColor = compute_point_light_color(fragPos, i);
-            FinalColor += BRDF(EyeDir, Norm, pointLightDir, texture(tex, fragUV).rgb, ubo.sColor, ubo.gamma) * pointLightColor;
+            FinalColor += BRDF(EyeDir, Norm, pointLightDir, texture(tex, fragUV).rgb, ubo.sColor, ubo.gamma, isLamp) * pointLightColor;
         }
     }
 

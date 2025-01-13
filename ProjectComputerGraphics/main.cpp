@@ -20,7 +20,7 @@ struct GlobalUniformBufferObject//luce
 	alignas(16) glm::vec3 pointLightsOn;
 };
 
-struct MeshUniformBlock
+struct UniformBlockObject
 {
 	alignas(4) float visible;
 	alignas(4) float amb;
@@ -103,7 +103,7 @@ protected:
 
 	// Uniform Blocks //altri ?
 	GlobalUniformBufferObject gubo;
-	MeshUniformBlock uboCharacter, uboGround[4], uboHouses[numOfHouses],
+	UniformBlockObject uboCharacter, uboGround[4], uboHouses[numOfHouses],
 		uboAngleHouses[numOfAngleHouses],/* uboStones[numOfStones],*/ /*uboBushes[numOfBushes],*/ uboCastle[numOfCastle],
 		uboWalls[numOfWalls], uboTowers[numOfTowers], uboLights[numOfLights], uboBiggerHouses[numOfBiggerHouses],
 		uboDoubleHouses[numOfDoubleHouses], uboFlags[numOfFlags], uboChests[numOfChests], uboStatue1[numOfStatue1],
@@ -220,8 +220,6 @@ protected:
 		windowTitle = "LET'S FIND THE CHEST";
 		windowResizable = GLFW_TRUE;
 
-		Ar = (float)windowWidth / (float)windowHeight;
-
 		std::time_t now = std::time(nullptr);
 		std::tm localTime;
 
@@ -249,6 +247,8 @@ protected:
 			dayPhase = 2;
 			pointLightsOn.x = 1;
 		}
+
+		Ar = (float)windowWidth / (float)windowHeight;
 	}
 
 	void onWindowResize(int w, int h) {
@@ -303,7 +303,7 @@ protected:
 
 				// Initializing Pipelines
 				PToon.init(this, &VMesh, "shaders/ToonVert.spv", "shaders/ToonFrag.spv", { &DSLGubo, &DSLToon });
-				PToonPhong.init(this, &VMesh, "shaders/ToonPhongVert.spv", "shaders/ToonPhongFrag.spv", { &DSLGubo, &DSLToonPhong });
+				//PToonPhong.init(this, &VMesh, "shaders/ToonPhongVert.spv", "shaders/ToonPhongFrag.spv", { &DSLGubo, &DSLToonPhong });
 				POverlay.init(this, &VOverlay, "shaders/OverlayVert.spv", "shaders/OverlayFrag.spv", { &DSLOverlay });
 				POverlay.setAdvancedFeatures(VK_COMPARE_OP_LESS_OR_EQUAL, VK_POLYGON_MODE_FILL, VK_CULL_MODE_NONE, false);
 
@@ -356,7 +356,7 @@ protected:
 	{
 		// Creating Pipelines
 		PToon.create();
-		PToonPhong.create();
+		//PToonPhong.create();
 		POverlay.create();
 
 		// Defining the Descriptor Sets
@@ -364,27 +364,27 @@ protected:
 					{0, UNIFORM, sizeof(GlobalUniformBufferObject), nullptr}
 			});
 		DSCharacter.init(this, &DSLToon, {
-						{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+						{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 						{1, TEXTURE, 0, &TCharacter}
 			});
 		for (int i = 0; i < 4; i++)
 		{
-			DSGround[i].init(this, &DSLToonPhong, {
-						{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+			DSGround[i].init(this, &DSLToon, {
+						{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 						{1, TEXTURE, 0, &TGround}
 				});
 		}
 		for (int i = 0; i < numOfHouses; i++)
 		{
 			DSHouses[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TMedieval},
 				});
 		}
 		for (int i = 0; i < numOfAngleHouses; i++)
 		{
 			DSAngleHouses[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TMedieval},
 				});
 		}
@@ -405,84 +405,84 @@ protected:
 		for (int i = 0; i < numOfCastle; i++)
 		{
 			DSCastle[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TMedieval},
 				});
 		}
 		for (int i = 0; i < numOfWalls; i++)
 		{
 			DSWalls[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TWall},
 				});
 		}
 		for (int i = 0; i < numOfTowers; i++)
 		{
 			DSTowers[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TMedieval},
 				});
 		}
 		for (int i = 0; i < numOfLights; i++)
 		{
 			DSLights[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TMedieval},
 				});
 		}
 		for (int i = 0; i < numOfDoubleHouses; i++)
 		{
 			DSDoubleHouses[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TMedieval},
 				});
 		}
 		for (int i = 0; i < numOfBiggerHouses; i++)
 		{
 			DSBiggerHouses[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TMedieval},
 				});
 		}
 		for (int i = 0; i < numOfFlags; i++)
 		{
 			DSFlags[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TMedieval},
 				});
 		}
 		for (int i = 0; i < numOfChests; i++)
 		{
 			DSChests[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TChest},
 				});
 		}
 		for (int i = 0; i < numOfStatue1; i++)
 		{
 			DSStatue1[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TDungeon},
 				});
 		}
 		for (int i = 0; i < numOfStatue2; i++)
 		{
 			DSStatue2[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TDungeon},
 				});
 		}
 		for (int i = 0; i < numOfWell; i++)
 		{
 			DSWell[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TMedieval},
 				});
 		}
 		for (int i = 0; i < numOfClouds; i++)
 		{
 			DSClouds[i].init(this, &DSLToon, {
-					{0, UNIFORM, sizeof(MeshUniformBlock), nullptr},
+					{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 					{1, TEXTURE, 0, &TClouds},
 				});
 		}
@@ -505,7 +505,7 @@ protected:
 	{
 		// Cleanup Pipelines
 		PToon.cleanup();
-		PToonPhong.cleanup();
+		//PToonPhong.cleanup();
 
 		// Cleanup Descriptor Sets
 		DSGubo.cleanup();
@@ -597,7 +597,7 @@ protected:
 
 		// Destroying the Pipeline
 		PToon.destroy();
-		PToonPhong.destroy();
+		//PToonPhong.destroy();
 		POverlay.destroy();
 
 		txt.localCleanup();
@@ -1010,7 +1010,7 @@ protected:
 	void RenderStatue2(uint32_t currentImage);
 	void RenderWell(uint32_t currentImage);
 	void RenderClouds(uint32_t currentImage);
-	/*cosa fa?*/void SetUboDs(uint32_t currentImage, MeshUniformBlock ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
+	/*cosa fa?*/void SetUboDs(uint32_t currentImage, UniformBlockObject ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
 		float gamma = 80.0f, glm::vec3 sColor = glm::vec3(1.0f));
 	void CollisionCheck(glm::vec3& pos, glm::vec3& nextPos);
 	void FoundChest(glm::vec3 pos);

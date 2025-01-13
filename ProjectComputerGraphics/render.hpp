@@ -204,7 +204,7 @@ void Game::RenderClouds(uint32_t currentImage) {
 
 
 
-void Game::SetUboDs(uint32_t currentImage, MeshUniformBlock ubo[], DescriptorSet DS[], int index, float visible, float amb, float gamma, glm::vec3 sColor)
+void Game::SetUboDs(uint32_t currentImage, UniformBlockObject ubo[], DescriptorSet DS[], int index, float visible, float amb, float gamma, glm::vec3 sColor)
 {
 	ubo[index].visible = visible;
 	ubo[index].amb = amb;

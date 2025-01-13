@@ -405,12 +405,12 @@ protected:
 	std::vector<VkFence> imagesInFlight;
 
 	void initWindow() {
-		glfwInit();
+		glfwInit();//init the library
 
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		glfwWindowHint(GLFW_RESIZABLE, windowResizable);
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);//disable graphics api by default
+		glfwWindowHint(GLFW_RESIZABLE, windowResizable);//window resizable if windowResizable is true
 
-		window = glfwCreateWindow(windowWidth, windowHeight, windowTitle.c_str(), nullptr, nullptr);
+		window = glfwCreateWindow(windowWidth, windowHeight, windowTitle.c_str(), nullptr, nullptr);//create window with its parameters
 
 		glfwSetWindowUserPointer(window, this);
 		glfwSetFramebufferSizeCallback(window, framebufferResizeCallback);
@@ -632,7 +632,7 @@ protected:
 	}
 
 	void createSurface() {
-		if (glfwCreateWindowSurface(instance, window, nullptr, &surface)
+		if (glfwCreateWindowSurface(instance, window, nullptr, &surface)//creates the window (presentation surface) in which the image is rendered
 			!= VK_SUCCESS) {
 			throw std::runtime_error("failed to create window surface!");
 		}
@@ -728,7 +728,7 @@ protected:
 
 		uint32_t queueFamilyCount = 0;
 		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount,
-			nullptr);
+			nullptr);//allows you to get a list of queue families supported by a physical device, with details on what types of operations (graphics, computation, transfers) each queue family can perform, how many queues are in each family, and other characteristics
 
 		std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
 		vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount,
@@ -793,7 +793,7 @@ protected:
 		}
 
 		uint32_t presentModeCount;
-		vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface,
+		vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface,// get the presentation modes
 			&presentModeCount, nullptr);
 
 		if (presentModeCount != 0) {
@@ -831,7 +831,7 @@ protected:
 		{ indices.graphicsFamily.value(), indices.presentFamily.value() };
 
 		float queuePriority = 1.0f;
-		for (uint32_t queueFamily : uniqueQueueFamilies) {
+		for (uint32_t queueFamily : uniqueQueueFamilies) {//create logical device queues
 			VkDeviceQueueCreateInfo queueCreateInfo{};
 			queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
 			queueCreateInfo.queueFamilyIndex = queueFamily;
@@ -844,7 +844,7 @@ protected:
 		deviceFeatures.samplerAnisotropy = VK_TRUE;
 		deviceFeatures.sampleRateShading = VK_TRUE;
 
-		VkDeviceCreateInfo createInfo{};
+		VkDeviceCreateInfo createInfo{}; //create logical device
 		createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
 
 		createInfo.pQueueCreateInfos = queueCreateInfos.data();
@@ -867,7 +867,7 @@ protected:
 			throw std::runtime_error("failed to create logical device!");
 		}
 
-		vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);
+		vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &graphicsQueue);//retrive device queue families
 		vkGetDeviceQueue(device, indices.presentFamily.value(), 0, &presentQueue);
 	}
 
@@ -1132,7 +1132,7 @@ protected:
 		poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily.value();
 		poolInfo.flags = 0; // Optional
 
-		VkResult result = vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool);
+		VkResult result = vkCreateCommandPool(device, &poolInfo, nullptr, &commandPool);//create command pool
 		if (result != VK_SUCCESS) {
 			PrintVkError(result);
 			throw std::runtime_error("failed to create command pool!");
@@ -1617,8 +1617,8 @@ protected:
 
 	void mainLoop() {
 		while (!glfwWindowShouldClose(window)) {
-			glfwPollEvents();
-			drawFrame();
+			glfwPollEvents();//process all user events in the queue
+			drawFrame();//manages the entire rendering lifecycle of a single frame
 		}
 
 		vkDeviceWaitIdle(device);
@@ -1647,7 +1647,7 @@ protected:
 		}
 		imagesInFlight[imageIndex] = inFlightFences[currentFrame];
 
-		updateUniformBuffer(imageIndex);
+		updateUniformBuffer(imageIndex);//logic
 
 		VkSubmitInfo submitInfo{};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -1766,16 +1766,16 @@ protected:
 			vkDestroyFence(device, inFlightFences[i], nullptr);
 		}
 
-		vkDestroyCommandPool(device, commandPool, nullptr);
+		vkDestroyCommandPool(device, commandPool, nullptr);//destroy command pool
 
-		vkDestroyDevice(device, nullptr);
+		vkDestroyDevice(device, nullptr);//destroy logical device
 
 		DestroyDebugUtilsMessengerEXT(instance, debugMessenger, nullptr);
 
-		vkDestroySurfaceKHR(instance, surface, nullptr);
+		vkDestroySurfaceKHR(instance, surface, nullptr);//destroy the presentation surface
 		vkDestroyInstance(instance, nullptr);
 
-		glfwDestroyWindow(window);
+		glfwDestroyWindow(window);//destroy the window 
 
 		glfwTerminate();
 	}
