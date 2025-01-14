@@ -66,22 +66,11 @@ vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma, bool isLamp) {
         dGradient = 1.0;
     }
 
-    if(isLamp == false){
-        if(cosBeta<=0.9){
-		    sGradient = 0;
-	    }
-	    if(cosBeta>0.9 && cosBeta<=0.95){
-		    sGradient = pow(0.9 * (cosBeta-0.9)/0.05,gamma);
-	    }
-	    if(cosBeta>0.95){
-		    sGradient = pow(0.9,gamma);
-	    }
-    }
+   
 
 	vec3 Diffuse = Md * dGradient;
-	vec3 Specular = Ms * sGradient;
 	
-	return (Diffuse + Specular);
+	return Diffuse;
 }
 
 void main() {

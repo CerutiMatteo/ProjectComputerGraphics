@@ -606,7 +606,7 @@ protected:
 	void populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage)
 	{
 		// Set Gubo
-		DSGubo.bind(commandBuffer, PToon, 0, currentImage);
+		//DSGubo.bind(commandBuffer, PToon, 0, currentImage);
 
 		// Character
 		// Binding the Pipeline
