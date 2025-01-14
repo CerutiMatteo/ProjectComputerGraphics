@@ -1011,7 +1011,7 @@ protected:
 	void RenderWell(uint32_t currentImage);
 	void RenderClouds(uint32_t currentImage);
 	/*cosa fa?*/void SetUboDs(uint32_t currentImage, UniformBlockObject ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
-		float gamma = 80.0f, glm::vec3 sColor = glm::vec3(1.0f));
+		float gamma = 11.0f, glm::vec3 sColor = glm::vec3(1.0f));
 	void CollisionCheck(glm::vec3& pos, glm::vec3& nextPos);
 	void FoundChest(glm::vec3 pos);
 	void ObjectsParameters();

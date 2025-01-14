@@ -71,10 +71,10 @@ vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma, bool isLamp) {
 		    sGradient = 0;
 	    }
 	    if(cosBeta>0.9 && cosBeta<=0.95){
-		    sGradient = 0.5 * (cosBeta-0.9)/0.05;
+		    sGradient = pow(0.9 * (cosBeta-0.9)/0.05,gamma);
 	    }
 	    if(cosBeta>0.95){
-		    sGradient = 0.5;
+		    sGradient = pow(0.9,gamma);
 	    }
     }
 

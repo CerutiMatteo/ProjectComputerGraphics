@@ -11,7 +11,7 @@ void Game::RenderCharacter(uint32_t currentImage)
 
 	uboCharacter.visible = 1.0f;
 	uboCharacter.amb = 1.0f;
-	uboCharacter.gamma = 20.0f;
+	uboCharacter.gamma = 8.0f;
 	uboCharacter.sColor = glm::vec3(1.0f);
 	uboCharacter.mvpMat = ViewPrj * GWorld;
 	uboCharacter.mMat = GWorld;
