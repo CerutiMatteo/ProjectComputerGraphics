@@ -66,8 +66,7 @@ vec3 BRDF(vec3 V, vec3 N, vec3 L, vec3 Md, vec3 Ms, float gamma, bool isLamp) {
         dGradient = 1.0;
     }
 
-   
-
+  
 	vec3 Diffuse = Md * dGradient;
 	
 	return Diffuse;

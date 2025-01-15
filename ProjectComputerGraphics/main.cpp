@@ -94,16 +94,17 @@ protected:
 		TChest, TDungeon, TClouds, TWinPanel, TPressEnterPanel;
 
 	// Descriptor sets
-	DescriptorSet DSGubo, DSCharacter, DSGround[4], DSHouses[numOfHouses],
+	DescriptorSet DSGubo, DSCharacter[1], DSGround[4], DSHouses[numOfHouses],
 		DSAngleHouses[numOfAngleHouses], /*DSStones[numOfStones],*/ /*DSBushes[numOfBushes],*/
 		DSCastle[numOfCastle], DSWalls[numOfWalls], DSTowers[numOfTowers], DSLights[numOfLights],
 		DSBiggerHouses[numOfBiggerHouses], DSDoubleHouses[numOfDoubleHouses],
 		DSFlags[numOfFlags], DSChests[numOfChests], DSStatue1[numOfStatue1], DSStatue2[numOfStatue2],DSWell[numOfWell],DSClouds[numOfClouds],
 		DSStartPanel, DSWinPanel,DSPressEnterPanel;
 
-	// Uniform Blocks //altri ?
+	// Uniform Blocks
 	GlobalUniformBufferObject gubo;
-	UniformBlockObject uboCharacter, uboGround[4], uboHouses[numOfHouses],
+
+	UniformBlockObject uboCharacter[1], uboGround[4], uboHouses[numOfHouses],
 		uboAngleHouses[numOfAngleHouses],/* uboStones[numOfStones],*/ /*uboBushes[numOfBushes],*/ uboCastle[numOfCastle],
 		uboWalls[numOfWalls], uboTowers[numOfTowers], uboLights[numOfLights], uboBiggerHouses[numOfBiggerHouses],
 		uboDoubleHouses[numOfDoubleHouses], uboFlags[numOfFlags], uboChests[numOfChests], uboStatue1[numOfStatue1],
@@ -182,7 +183,7 @@ protected:
 	// Text
 	TextMaker txt;
 	std::vector<SingleText> text =
-	{	// appare il messaggio che corrisponde al valore di gameState. (round, endGame, extraGame, spectate)
+	{	// appare il messaggio che corrisponde al valore di textIndex
 		{1, {"Freecam", "", "", ""}, 0, 0},
 		{1, {"- press TAB or O to show", "", "", ""}, 0, 0},
 		{6, {"RULES: Every chest found unlocks", "a smaller one to search for on the map.","Search for the hidden treasures on the map", "You have found : " + std::to_string(0) + " chest" ," - press TAB to hide"," - press ESC to exit"}, 0, 0},
@@ -199,7 +200,7 @@ protected:
 	};
 
 	// game Parameters
-	int gameState = 2;//         0: freecam/ 1: nascondi text/ 2-10: hai trovato 0-8 chest/ 11: endGame/ 12: extraGame 
+	int textIndex = 2;//         0: freecam/ 1: nascondi text/ 2-10: hai trovato 0-8 chest/ 11: endGame/ 12: extraGame 
 	int round = 0;//	         tiene traccia delle casse trovate
 	int currentScene = 0;//      0: overlay iniziale/ 1 altrimenti
 	int gameEnded = 0;//         0: partita in corso/ 1: game finito/ >1: extra game
@@ -211,7 +212,7 @@ protected:
 	glm::vec3 pointLightsOn =glm::vec3(0, 0, 0);
 	float Ar;
 	GLFWgamepadstate state;
-	glm::mat4 World, ViewPrj, GWorld;
+	glm::mat4 Mw_character, Mvp, Mworld;
 
 	void setWindowParameters()
 	{
@@ -348,6 +349,7 @@ protected:
 				TWinPanel.init(this, "textures/fine.png");
 				TPressEnterPanel.init(this, "textures/PressEnter.png");
 				txt.init(this, &text, -0.95, 0.70, 1.0 / 1200.0, 1.0 / 800.0);
+				//colore text: nel TextMaker.hpp
 
 				ObjectsParameters();
 	}
@@ -363,7 +365,7 @@ protected:
 		DSGubo.init(this, &DSLGubo, {
 					{0, UNIFORM, sizeof(GlobalUniformBufferObject), nullptr}
 			});
-		DSCharacter.init(this, &DSLToonPhong, {
+		DSCharacter[0].init(this, &DSLToonPhong, {
 						{0, UNIFORM, sizeof(UniformBlockObject), nullptr},
 						{1, TEXTURE, 0, &TCharacter}
 			});
@@ -509,7 +511,7 @@ protected:
 
 		// Cleanup Descriptor Sets
 		DSGubo.cleanup();
-		DSCharacter.cleanup();
+		DSCharacter[0].cleanup();
 		for (int i = 0; i < 4; i++)
 		{
 			DSGround[i].cleanup();
@@ -613,7 +615,7 @@ protected:
 		PToonPhong.bind(commandBuffer);
 		// Binding the Model
 		MCharacter.bind(commandBuffer);
-		DSCharacter.bind(commandBuffer, PToonPhong, 1, currentImage);
+		DSCharacter[0].bind(commandBuffer, PToonPhong, 1, currentImage);
 		vkCmdDrawIndexed(commandBuffer,
 			static_cast<uint32_t>(MCharacter.indices.size()), 1, 0, 0, 0);
 
@@ -759,7 +761,7 @@ protected:
 		vkCmdDrawIndexed(commandBuffer,
 			static_cast<uint32_t>(MPressEnterPanel.indices.size()), 1, 0, 0, 0);
 
-		txt.populateCommandBuffer(commandBuffer, currentImage, gameState, currentScene);
+		txt.populateCommandBuffer(commandBuffer, currentImage, textIndex, currentScene);
 	}
 
 	void updateUniformBuffer(uint32_t currentImage)
@@ -851,22 +853,22 @@ protected:
 
 		//gestione mostra/nascondi menu
 		if (tabPress == true) {
-			if (gameState >= 2 && gameState <= 2 + numOfHiddenChests - 1 && (glfwGetKey(window, GLFW_KEY_TAB) ||
+			if (textIndex >= 2 && textIndex <= 2 + numOfHiddenChests - 1 && (glfwGetKey(window, GLFW_KEY_TAB) ||
 				(glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
 					glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
 					state.buttons[GLFW_GAMEPAD_BUTTON_B] == GLFW_PRESS)))
 			{
-				gameState = 1;
+				textIndex = 1;
 				//round = numOfHiddenChests + 2;
 				RebuildPipeline();
 			}
 			else {
-				if (gameState == 1 && (glfwGetKey(window, GLFW_KEY_TAB) ||
+				if (textIndex == 1 && (glfwGetKey(window, GLFW_KEY_TAB) ||
 					(glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
 						glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
 						state.buttons[GLFW_GAMEPAD_BUTTON_B] == GLFW_PRESS)))
 				{
-					gameState = 2 + round;
+					textIndex = 2 + round;
 					RebuildPipeline();
 				}
 			}
@@ -881,7 +883,7 @@ protected:
 			glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
 			state.buttons[GLFW_GAMEPAD_BUTTON_A] == GLFW_PRESS)))
 		{
-			gameState = 12;
+			textIndex = 12;
 			ChestVisibles[0] = 0;
 			round++;
 			gameEnded++;
@@ -906,16 +908,16 @@ protected:
 			if (!pressM) {
 				pressM = true;
 				curPressM = GLFW_KEY_M;
-				if (gameState == 0) {
+				if (textIndex == 0) {
 					if (gameEnded > 0) {
-						gameState = 12;
+						textIndex = 12;
 					}
 					else {
-						gameState = 2 + round;
+						textIndex = 2 + round;
 					}
 				}
 				else {
-					gameState = 0;
+					textIndex = 0;
 				}
 				RebuildPipeline();
 			}
@@ -926,9 +928,10 @@ protected:
 				curPressM = 0;
 			}
 		}
+
 		if (currentScene == 1)
 		{
-			if (gameState == 0) {
+			if (textIndex == 0) {
 				Spectate();
 			}
 			else {
@@ -986,7 +989,6 @@ protected:
 
 		DSGubo.map(currentImage, &gubo, sizeof(gubo), 0);
 
-		RenderCharacter(currentImage);
 		RenderEnvironment(currentImage);
 	}
 
@@ -1010,7 +1012,7 @@ protected:
 	void RenderStatue2(uint32_t currentImage);
 	void RenderWell(uint32_t currentImage);
 	void RenderClouds(uint32_t currentImage);
-	/*cosa fa?*/void SetUboDs(uint32_t currentImage, UniformBlockObject ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
+	void SetUboDs(uint32_t currentImage, UniformBlockObject ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
 		float gamma = 11.0f, glm::vec3 sColor = glm::vec3(1.0f));
 	void CollisionCheck(glm::vec3& pos, glm::vec3& nextPos);
 	void FoundChest(glm::vec3 pos);
