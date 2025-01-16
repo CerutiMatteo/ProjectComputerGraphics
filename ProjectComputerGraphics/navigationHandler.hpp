@@ -1,5 +1,4 @@
-//bool canPickItem = false;
-//bool isLost = false;
+
 glm::vec3 camPosition = glm::vec3(0.0, 1.5, 0.0);
 float Alpha = 0.0f, Beta = 0.0f;
 const float FOV = glm::radians(45.0f);

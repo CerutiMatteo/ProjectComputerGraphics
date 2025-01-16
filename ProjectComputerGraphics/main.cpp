@@ -214,7 +214,7 @@ protected:
 	GLFWgamepadstate state;
 	glm::mat4 Mw_character, Mvp, Mworld;
 
-	void setWindowParameters()
+	void setWindowParameters() // At the beginning in run() method
 	{
 		windowWidth = 1920;
 		windowHeight = 1080;
@@ -256,14 +256,14 @@ protected:
 		Ar = (float)w / (float)h;
 	}
 
-	void setDescriptorPool()
+	void setDescriptorPool() // after setWindow() method in run() method
 	{
 		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + /*numOfStones +*/ /*numOfBushes +*/ numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 +numOfStatue2 + numOfWell+ numOfClouds) * 2 + 4 + 1 + 1 ;
 		texturesInPool = 12 + 1;
 		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + /*numOfStones +*/ /*numOfBushes +*/ numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 + numOfStatue2 + numOfWell + numOfClouds + 4 + 1 + 1 ;
 	}
 
-	void localInit()
+	void localInit() // in initVulkan() method in run() method
 	{
 		// Initializing Descriptor Set Layouts
 		DSLGubo.init(this, {
@@ -354,7 +354,7 @@ protected:
 				ObjectsParameters();
 	}
 
-	void pipelinesAndDescriptorSetsInit()
+	void pipelinesAndDescriptorSetsInit() // after localInit()
 	{
 		// Creating Pipelines
 		PToon.create();
@@ -503,7 +503,7 @@ protected:
 		txt.pipelinesAndDescriptorSetsInit();
 	}
 
-	void pipelinesAndDescriptorSetsCleanup()
+	void pipelinesAndDescriptorSetsCleanup() // in cleanUpSwapChain() method that is in cleanUp() method at the end of run()
 	{
 		// Cleanup Pipelines
 		PToon.cleanup();
@@ -553,7 +553,7 @@ protected:
 		DSPressEnterPanel.cleanup();
 	}
 
-	void localCleanup()
+	void localCleanup() //in cleanUp() method at the end of run() method
 	{
 		// Cleanup Textures
 		TCharacter.cleanup();
@@ -605,7 +605,8 @@ protected:
 		txt.localCleanup();
 	}
 
-	void populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage)
+	void populateCommandBuffer(VkCommandBuffer commandBuffer, int currentImage) // in createCommandBuffer() method that is in
+		//recreateSwapChain() and in localInit()
 	{
 		// Set Gubo
 		DSGubo.bind(commandBuffer, PToon, 0, currentImage);
@@ -764,7 +765,7 @@ protected:
 		txt.populateCommandBuffer(commandBuffer, currentImage, textIndex, currentScene);
 	}
 
-	void updateUniformBuffer(uint32_t currentImage)
+	void updateUniformBuffer(uint32_t currentImage) // in drawFrame() method that is in mainLoop() method ( in run() method))
 	{
 		static bool pressM = false;
 		static int curPressM = 0;
@@ -965,7 +966,7 @@ protected:
 					gubo.DlightColor = glm::vec4(1.0f, 0.95f, 0.8f, 1.0f);
 					dayPhase=0;
 					pointLightsOn.x = 0;
-					RebuildPipeline();
+					RebuildPipeline(); // in drawFrame() we can call recreateSwapChain() if we call rebuildPipeline()
 				}
 				
 			}
