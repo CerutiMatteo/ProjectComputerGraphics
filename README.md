@@ -11,9 +11,9 @@ RULES:
 
 COMMAND (Keyboard - joystick):
   - enter - X            (to collect the chests and go beyond the overlays)
-	- Tab   - O            (to hide or show the txt at the bottom left)
-	- M     - R1           (to switch from freecam mode to game mode and vice versa)
-	- C     - Triangolo    (to change the color of the sky and direct light)
+  - Tab   - O            (to hide or show the txt at the bottom left)
+  - M     - R1           (to switch from freecam mode to game mode and vice versa)
+  - C     - Triangolo    (to change the color of the sky and direct light)
   - R,F   - L2,L1        (to go up and down in freecam mode)
   - ESC                  (to quit)
   - To move use W, W+A, W+D, S or the left joystick
