@@ -3,7 +3,7 @@ glm::vec3 camPosition = glm::vec3(0.0, 1.5, 0.0);
 float Alpha = 0.0f, Beta = 0.0f;
 const float FOV = glm::radians(45.0f);
 const float nearPlane = 0.1f;
-const float farPlane = 250.f;
+const float farPlane = 250.0f;
 
 void Game::Spectate()
 {
@@ -55,7 +55,7 @@ void Game::PlayerController(uint32_t currentImage)
 	const float minPitch = glm::radians(-60.0f);
 	const float maxPitch = glm::radians(60.0f);
 
-	const float ANGULAR_SPEED = glm::radians(60.0f);//sensibilità comandi
+	const float ANGULAR_SPEED = glm::radians(90.0f);//sensibilità comandi
 	float LINEAR_SPEED = 5.0f;
 
 	float deltaT;
