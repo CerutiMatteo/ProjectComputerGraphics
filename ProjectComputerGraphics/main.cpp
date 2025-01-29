@@ -87,11 +87,11 @@ protected:
 	Model<VertexMesh> MCharacter, MGround, MHouses, MAngleHouses, /*MStones,*/ /*MBushes,*/ 
 		MCastle, MWalls, MTowers, MLights, MBiggerHouses, MDoubleHouses, MFlags, MChests,
 		MStatue1, MStatue2,MWell, MClouds;
-	Model<VertexOverlay> MStartPanel, MWinPanel, MPressEnterPanel;
+	Model<VertexOverlay> Mtableau, MWinPanel, Mindicator00, Mindicator01;
 
 	// Textures
-	Texture TCharacter, TGround, TMedieval, TStone, TBush, TStartPanel, TWall, 
-		TChest, TDungeon, TClouds, TWinPanel, TPressEnterPanel;
+	Texture TCharacter, TGround, TMedieval, TStone, TBush, Ttableau, TWall, 
+		TChest, TDungeon, TClouds, TWinPanel, Tindicator;
 
 	// Descriptor sets
 	DescriptorSet DSGubo, DSCharacter[1], DSGround[4], DSHouses[numOfHouses],
@@ -99,7 +99,7 @@ protected:
 		DSCastle[numOfCastle], DSWalls[numOfWalls], DSTowers[numOfTowers], DSLights[numOfLights],
 		DSBiggerHouses[numOfBiggerHouses], DSDoubleHouses[numOfDoubleHouses],
 		DSFlags[numOfFlags], DSChests[numOfChests], DSStatue1[numOfStatue1], DSStatue2[numOfStatue2],DSWell[numOfWell],DSClouds[numOfClouds],
-		DSStartPanel, DSWinPanel,DSPressEnterPanel;
+		DStableau, DSWinPanel,DSindicator00, DSindicator01;
 
 	// Uniform Blocks
 	GlobalUniformBufferObject gubo;
@@ -109,7 +109,7 @@ protected:
 		uboWalls[numOfWalls], uboTowers[numOfTowers], uboLights[numOfLights], uboBiggerHouses[numOfBiggerHouses],
 		uboDoubleHouses[numOfDoubleHouses], uboFlags[numOfFlags], uboChests[numOfChests], uboStatue1[numOfStatue1],
 		uboStatue2[numOfStatue2],uboWell[numOfWell], uboClouds[numOfClouds];
-	OverlayUniformBlock uboStartPanel, uboWinPanel, uboPressEnterPanel;
+	OverlayUniformBlock uboTableau, uboWinPanel, uboindicator00, uboindicator01;
 
 	// Environment Parameters
 	float X, Y, Rot, Z;
@@ -204,7 +204,8 @@ protected:
 	int round = 0;//	         tiene traccia delle casse trovate
 	int currentScene = 0;//      0: overlay iniziale/ 1 altrimenti
 	int gameEnded = 0;//         0: partita in corso/ 1: game finito/ >1: extra game
-	int isNearChest = 0;//		 1: personaggio vicinio ad una cesta/ 0: no
+	int xTableau = 0;
+	int yTableau = 0;
 	int spawnIndex = 0;//		 indica in quale spawn è la chest al momento 
 	int numOfHiddenChests = 0;// deve essere < numOfSpawns, per ora vien efinito dall'utente tra 1-9
 	bool collision = 0;//		 1: se viene rilevata una collision/ 0: altrimenti  
@@ -259,7 +260,7 @@ protected:
 	void setDescriptorPool() // after setWindow() method in run() method
 	{
 		uniformBlocksInPool = 2 + 4 + (numOfHouses + numOfAngleHouses + /*numOfStones +*/ /*numOfBushes +*/ numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 +numOfStatue2 + numOfWell+ numOfClouds) * 2 + 4 + 1 + 1 ;
-		texturesInPool = 12 + 1;
+		texturesInPool = 12 + 100;
 		setsInPool = 2 + 4 + numOfHouses + numOfAngleHouses + /*numOfStones +*/ /*numOfBushes +*/ numOfCastle + numOfWalls + numOfTowers + numOfLights + numOfDoubleHouses + numOfBiggerHouses + numOfFlags + numOfChests + numOfStatue1 + numOfStatue2 + numOfWell + numOfClouds + 4 + 1 + 1 ;
 	}
 
@@ -328,18 +329,20 @@ protected:
 				MWell.init(this, &VMesh, "Models/Pozzo.mgcg", MGCG);
 				MClouds.init(this, &VMesh, "Models/cloud.obj", OBJ);
 				// Overlay Models
-				CreateOverlayMesh(MStartPanel.vertices, MStartPanel.indices);
-				MStartPanel.initMesh(this, &VOverlay);
+				CreateOverlayMesh(Mtableau.vertices, Mtableau.indices);
+				Mtableau.initMesh(this, &VOverlay);
 				CreateOverlayMesh(MWinPanel.vertices, MWinPanel.indices);
 				MWinPanel.initMesh(this, &VOverlay);
-				CreateOverlayMesh(MPressEnterPanel.vertices, MPressEnterPanel.indices, 0.1f, 0.6f, -0.0f, -0.2f);//l,r,t,b
-				MPressEnterPanel.initMesh(this, &VOverlay);
-
+				//sulla x indicator si sposta di 0.27
+				CreateOverlayMesh(Mindicator00.vertices, Mindicator00.indices, -0.7f, -0.6f, -0.175f, -0.3f);//l,r,t,b
+				Mindicator00.initMesh(this, &VOverlay);
+				CreateOverlayMesh(Mindicator01.vertices, Mindicator01.indices, -0.43f, -0.33f, -0.175f, -0.3f);//l,r,t,b
+				Mindicator01.initMesh(this, &VOverlay);
 				// Initializing Textures
 				TCharacter.init(this, "textures/animals.png");
 				TGround.init(this, "textures/street2.png");
 				TMedieval.init(this, "textures/medieval.png");
-				TStartPanel.init(this, "textures/inizio2.png");
+				Ttableau.init(this, "textures/tableau.png");
 				/*TStone.init(this, "textures/street.png");*/
 				/*TBush.init(this, "textures/bush.png");*/
 				TWall.init(this, "textures/wall.png");
@@ -347,7 +350,7 @@ protected:
 				TDungeon.init(this, "textures/dungeon.png");
 				TClouds.init(this, "textures/clouds.png");
 				TWinPanel.init(this, "textures/fine.png");
-				TPressEnterPanel.init(this, "textures/PressEnter.png");
+				Tindicator.init(this, "textures/indicator.png");
 				txt.init(this, &text, -0.95, 0.70, 1.0 / 1200.0, 1.0 / 800.0);
 				//colore text: nel TextMaker.hpp
 
@@ -488,17 +491,21 @@ protected:
 					{1, TEXTURE, 0, &TClouds},
 				});
 		}
-		DSStartPanel.init(this, &DSLOverlay, {
+		DStableau.init(this, &DSLOverlay, {
 					{0, UNIFORM, sizeof(OverlayUniformBlock), nullptr},
-					{1, TEXTURE, 0, &TStartPanel}
+					{1, TEXTURE, 0, &Ttableau}
 			});
 		DSWinPanel.init(this, &DSLOverlay, {
 					{0, UNIFORM, sizeof(OverlayUniformBlock), nullptr},
 					{1, TEXTURE, 0, &TWinPanel}
 			});
-		DSPressEnterPanel.init(this, &DSLOverlay, {
+		DSindicator00.init(this, &DSLOverlay, {
 					{0, UNIFORM, sizeof(OverlayUniformBlock), nullptr},
-					{1, TEXTURE, 0, &TPressEnterPanel}
+					{1, TEXTURE, 0, &Tindicator}
+			});
+		DSindicator01.init(this, &DSLOverlay, {
+					{0, UNIFORM, sizeof(OverlayUniformBlock), nullptr},
+					{1, TEXTURE, 0, &Tindicator}
 			});
 		txt.pipelinesAndDescriptorSetsInit();
 	}
@@ -548,9 +555,10 @@ protected:
 			DSWell[i].cleanup();
 		for (int i = 0; i < numOfClouds; i++)
 			DSClouds[i].cleanup();
-		DSStartPanel.cleanup();
+		DStableau.cleanup();
 		DSWinPanel.cleanup();
-		DSPressEnterPanel.cleanup();
+		DSindicator00.cleanup();
+		DSindicator01.cleanup();
 	}
 
 	void localCleanup() //in cleanUp() method at the end of run() method
@@ -565,9 +573,9 @@ protected:
 		TChest.cleanup();
 		TDungeon.cleanup();
 		TClouds.cleanup();
-		TStartPanel.cleanup();
+		Ttableau.cleanup();
 		TWinPanel.cleanup();
-		TPressEnterPanel.cleanup();
+		Tindicator.cleanup();
 
 		// Cleanup Models
 		MCharacter.cleanup();
@@ -584,12 +592,13 @@ protected:
 		MBiggerHouses.cleanup();
 		MFlags.cleanup();
 		MChests.cleanup();
-		MStartPanel.cleanup();
+		Mindicator00.cleanup();
+		Mindicator01.cleanup();
 		MStatue1.cleanup();
 		MStatue2.cleanup();
 		MWell.cleanup();
 		MClouds.cleanup();
-		MPressEnterPanel.cleanup();
+		Mtableau.cleanup();
 
 		// Cleanup Descriptor Set Layouts
 		DSLGubo.cleanup();
@@ -747,20 +756,25 @@ protected:
 
 		// Overlays ??
 		POverlay.bind(commandBuffer);
-		MStartPanel.bind(commandBuffer);
-		DSStartPanel.bind(commandBuffer, POverlay, 0, currentImage);
+		Mtableau.bind(commandBuffer);
+		DStableau.bind(commandBuffer, POverlay, 0, currentImage);
 		vkCmdDrawIndexed(commandBuffer,
-			static_cast<uint32_t>(MStartPanel.indices.size()), 1, 0, 0, 0);
+			static_cast<uint32_t>(Mtableau.indices.size()), 1, 0, 0, 0);
 
 		MWinPanel.bind(commandBuffer);
 		DSWinPanel.bind(commandBuffer, POverlay, 0, currentImage);
 		vkCmdDrawIndexed(commandBuffer,
 			static_cast<uint32_t>(MWinPanel.indices.size()), 1, 0, 0, 0);
 
-		MPressEnterPanel.bind(commandBuffer);
-		DSPressEnterPanel.bind(commandBuffer, POverlay, 0, currentImage);
+		Mindicator00.bind(commandBuffer);
+		DSindicator00.bind(commandBuffer, POverlay, 0, currentImage);
 		vkCmdDrawIndexed(commandBuffer,
-			static_cast<uint32_t>(MPressEnterPanel.indices.size()), 1, 0, 0, 0);
+			static_cast<uint32_t>(Mindicator00.indices.size()), 1, 0, 0, 0);
+
+		Mindicator01.bind(commandBuffer);
+		DSindicator01.bind(commandBuffer, POverlay, 0, currentImage);
+		vkCmdDrawIndexed(commandBuffer,
+			static_cast<uint32_t>(Mindicator01.indices.size()), 1, 0, 0, 0);
 
 		txt.populateCommandBuffer(commandBuffer, currentImage, textIndex, currentScene);
 	}
@@ -778,78 +792,22 @@ protected:
 			glfwSetWindowShouldClose(window, GL_TRUE);
 		}
 
-		if (currentScene == 0) {
-			gubo.DlightColor = glm::vec4(1.0f, 0.95f, 0.8f, 1.0f);
+		if (xTableau != 4 && glfwGetKey(window, GLFW_KEY_S)) {
+			xTableau++;
+			Sleep(300);
+		}
+		if (xTableau != 0 && glfwGetKey(window, GLFW_KEY_W)) {
+			xTableau--;
+			Sleep(300);
 		}
 
-		//overlay iniziale, scelta durata game
-		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_1))
-		{
-			currentScene++;
-			numOfHiddenChests = 1;
-			RebuildPipeline();
+		if (yTableau != 4 && glfwGetKey(window, GLFW_KEY_D)) {
+			yTableau++;
+			Sleep(300);
 		}
-		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_2))
-		{
-			currentScene++;
-			numOfHiddenChests = 2;
-			RebuildPipeline();
-		}
-		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_3))
-		{
-			currentScene++;
-			numOfHiddenChests = 3;
-			RebuildPipeline();
-		}
-		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_3))
-		{
-			currentScene++;
-			numOfHiddenChests = 3;
-			RebuildPipeline();
-		}
-		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_4))
-		{
-			currentScene++;
-			numOfHiddenChests = 4;
-			RebuildPipeline();
-		}
-		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_5))
-		{
-			currentScene++;
-			numOfHiddenChests = 5;
-			RebuildPipeline();
-		}
-		if (currentScene == 0 && (glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
-			glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
-			state.buttons[GLFW_GAMEPAD_BUTTON_A] == GLFW_PRESS))
-		{
-			currentScene++;
-			numOfHiddenChests = 5;
-			RebuildPipeline();
-		}
-		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_6))
-		{
-			currentScene++;
-			numOfHiddenChests = 6;
-			RebuildPipeline();
-		}
-		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_7))
-		{
-			currentScene++;
-			numOfHiddenChests = 7;
-			RebuildPipeline();
-		}
-		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_8))
-		{
-			currentScene++;
-			numOfHiddenChests = 8;
-			RebuildPipeline();
-		}
-		if (currentScene == 0 && glfwGetKey(window, GLFW_KEY_9))
-		{
-			currentScene++;
-			numOfHiddenChests = 9;
-			RebuildPipeline();
+		if (yTableau != 0 && glfwGetKey(window, GLFW_KEY_A)) {
+			yTableau--;
+			Sleep(300);
 		}
 
 		//gestione mostra/nascondi menu
@@ -892,53 +850,19 @@ protected:
 		}
 
 		//overlay iniziale visibile all'inizio
-		uboStartPanel.visible = (currentScene == 0) ? 1.0f : 0.0f;
-		DSStartPanel.map(currentImage, &uboStartPanel, sizeof(uboStartPanel), 0);
+		uboTableau.visible = (currentScene == 0) ? 1.0f : 0.0f;
+		DStableau.map(currentImage, &uboTableau, sizeof(uboTableau), 0);
 		//overlay finale visible solo quando finisce il gioco, scompare se si decide extra game
 		uboWinPanel.visible = (gameEnded == 1) ? 1.0f : 0.0f;
 		DSWinPanel.map(currentImage, &uboWinPanel, sizeof(uboWinPanel), 0);
 		//overlay press enter visible solo quando vicini a un tesoro 
-		uboPressEnterPanel.visible = (isNearChest == 1 && ChestVisibles[0] == 1) ? 1.0f : 0.0f;
-		DSPressEnterPanel.map(currentImage, &uboPressEnterPanel, sizeof(uboPressEnterPanel), 0);
+		uboindicator00.visible = (xTableau == 0 && yTableau == 0) ? 1.0f : 0.0f;
+		DSindicator00.map(currentImage, &uboindicator00, sizeof(uboindicator00), 0);
 
-		//player <-> spectator
-		if (glfwGetKey(window, GLFW_KEY_M) ||
-			(glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
-				glfwGetGamepadState(GLFW_JOYSTICK_1, &state) &&
-				state.buttons[GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER] == GLFW_PRESS)) {
-			if (!pressM) {
-				pressM = true;
-				curPressM = GLFW_KEY_M;
-				if (textIndex == 0) {
-					if (gameEnded > 0) {
-						textIndex = 12;
-					}
-					else {
-						textIndex = 2 + round;
-					}
-				}
-				else {
-					textIndex = 0;
-				}
-				RebuildPipeline();
-			}
-		}
-		else {
-			if ((curPressM == GLFW_KEY_M) && pressM) {
-				pressM = false;
-				curPressM = 0;
-			}
-		}
+		uboindicator01.visible = (xTableau == 0 && yTableau == 1) ? 1.0f : 0.0f;
+		DSindicator01.map(currentImage, &uboindicator01, sizeof(uboindicator01), 0);
 
-		if (currentScene == 1)
-		{
-			if (textIndex == 0) {
-				Spectate();
-			}
-			else {
-				PlayerController(currentImage);
-			}
-		}
+		
 
 		//day<->sunlight
 		if (glfwGetKey(window, GLFW_KEY_C) || ((glfwJoystickIsGamepad(GLFW_JOYSTICK_1) &&
@@ -1016,13 +940,10 @@ protected:
 	void SetUboDs(uint32_t currentImage, UniformBlockObject ubo[], DescriptorSet DS[], int index, float visible = 1.0f, float amb = 1.0f,
 		float gamma = 11.0f, glm::vec3 sColor = glm::vec3(1.0f));
 	void CollisionCheck(glm::vec3& pos, glm::vec3& nextPos);
-	void FoundChest(glm::vec3 pos);
 	void ObjectsParameters();
 	void Spectate();
 	void PlayerController(uint32_t currentImage);
 };
-
-#include "navigationHandler.hpp"
 #include "collisionManager.hpp"
 #include "render.hpp"
 #include "setParameters.hpp"
